@@ -1,35 +1,141 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 
 void main() {
   // runApp(const MyApp());
   runApp(MaterialApp(
-    home: Scaffold(
+    home: Home(),
+  ));
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       appBar: AppBar(
         title: Text('Welcome to Ment Care'),
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: Center(
-        child: Text(
-          'Hello and welcome to Counseling we are delighted that you visited',
-          style: TextStyle( //allows us to style the text style
-          fontSize: 20.0,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 1.5,
-          color: Colors.grey[600],
-          fontFamily: 'Roboto',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('This is the Text'),
+              Text('This is the second text'),
+              Text('This is the third'),
+              RaisedButton(
+                onPressed: (){},
+                child: Text('Click Me'),
+              )
+            ],
           ),
+          Container(
+            padding: EdgeInsets.all(23.0),
+            margin: EdgeInsets.all(50.0),
+            color: Colors.green,
+            child: Text('This is a Column'),
           ),
-        ),
+          Container(
+            padding: EdgeInsets.all(30.0),
+            margin: EdgeInsets.all(50.0),
+            color: Colors.amber,
+            child: Text('This is a 2nd Column'),
+          ),
+          Container(
+            padding: EdgeInsets.all(40.0),
+            margin: EdgeInsets.all(50.0),
+            color: Colors.red,
+            child: Text('This is a 3rd Column'),
+          ),
+        ],
+      ),
+
+      // Flutter Rows 
+      // Row(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Text('Hello World'),
+      //     FlatButton(
+      //       onPressed: (){},
+      //       color: Colors.amber,
+      //       child: Text('This is a button'),
+      //     ),
+      //     Container(
+      //       color: Colors.cyan,
+      //       padding: EdgeInsets.all(30.0),
+      //       child: Text('Inside the container'),
+      //     ),
+      //   ],
+      // ),
+      
+      // Flutter Containers
+      // Container(
+      //   padding: EdgeInsets.all(30.0),
+      //   margin: EdgeInsets.all(90.0),
+      //   color: Colors.grey[400],
+      //   child: Text('My Text'),
+      // ),
+      // Centers contents at the center of the app
+      // Center(
+      //   child: IconButton(
+      //     onPressed: (){},
+      //     icon: Icon(
+      //       Icons.alternate_email,
+      //     ),
+      //     color: Colors.amber,
+      //   ),
+        // Using Buttons with icons
+        // RaisedButton.icon(
+        //   onPressed: (){},
+        //   icon: Icon(
+        //     Icons.mail
+        //   ),
+        //   label: Text('Mail me'),
+        //   color: Colors.amber,
+        // ),
+        // RaisedButton(
+        //   onPressed: () {},
+        //   child: Text('Click Me'),
+        //   color: Colors.red[600],
+        // ),
+        // FlatButton(
+        //   onPressed: () {},
+        //   child: Text('Click Me'),
+        //   color: Colors.red[600],
+        // ),
+        // Icon(
+        //   Icons.phone,
+        //   color: Colors.red[600],
+        //   size: 50.0,
+        // ),
+        //  Text(
+        //   'Hello and welcome to Counseling we are delighted that you visited',
+        //   style: TextStyle( //allows us to style the text style
+        //   fontSize: 15.0,
+        //   fontWeight: FontWeight.bold,
+        //   letterSpacing: 1.5,
+        //   color: Colors.grey[600],
+        //   fontFamily: 'Roboto',
+        //   ),
+        //   ),
+        // ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: Text('More'),
           backgroundColor: Colors.red[600],
         ),
-    ),
-  ));
+    );
+  }
 }
-
 
 // class MyApp extends StatelessWidget {
 //   const MyApp({Key? key}) : super(key: key);
