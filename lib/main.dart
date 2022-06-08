@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:careapp/screens/signup.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,43 +21,70 @@ class Home extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: Row(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('This is the Text'),
-              Text('This is the second text'),
-              Text('This is the third'),
-              RaisedButton(
-                onPressed: (){},
-                child: Text('Click Me'),
-              )
-            ],
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(30.0),
+              color: Colors.amber,
+              child: Text('1'),
+            ),
           ),
-          Container(
-            padding: EdgeInsets.all(23.0),
-            margin: EdgeInsets.all(50.0),
-            color: Colors.green,
-            child: Text('This is a Column'),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(30.0),
+              color: Colors.black,
+              child: Text('2'),
+            ),
           ),
-          Container(
-            padding: EdgeInsets.all(30.0),
-            margin: EdgeInsets.all(50.0),
-            color: Colors.amber,
-            child: Text('This is a 2nd Column'),
-          ),
-          Container(
-            padding: EdgeInsets.all(40.0),
-            margin: EdgeInsets.all(50.0),
-            color: Colors.red,
-            child: Text('This is a 3rd Column'),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(30.0),
+              color: Colors.red,
+              child: Text('3'),
+            ),
           ),
         ],
       ),
+
+      // flutter Columns
+      // Column(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Row(
+      //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //       crossAxisAlignment: CrossAxisAlignment.stretch,
+      //       children: [
+      //         Text('This is the Text'),
+      //         Text('This is the second text'),
+      //         Text('This is the third'),
+      //         RaisedButton(
+      //           onPressed: (){},
+      //           child: Text('Click Me'),
+      //         )
+      //       ],
+      //     ),
+      //     Container(
+      //       padding: EdgeInsets.all(23.0),
+      //       margin: EdgeInsets.all(50.0),
+      //       color: Colors.green,
+      //       child: Text('This is a Column'),
+      //     ),
+      //     Container(
+      //       padding: EdgeInsets.all(30.0),
+      //       margin: EdgeInsets.all(50.0),
+      //       color: Colors.amber,
+      //       child: Text('This is a 2nd Column'),
+      //     ),
+      //     Container(
+      //       padding: EdgeInsets.all(40.0),
+      //       margin: EdgeInsets.all(50.0),
+      //       color: Colors.red,
+      //       child: Text('This is a 3rd Column'),
+      //     ),
+      //   ],
+      // ),
 
       // Flutter Rows 
       // Row(
