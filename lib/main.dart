@@ -6,7 +6,13 @@ import 'package:flutter/material.dart';
 void main() {
   // runApp(const MyApp());
   runApp(MaterialApp(
-    home: Home(),
+    // Overwriting the initial route
+    initialRoute: '/home',
+    // redirections
+    routes: {
+      '/':(context) => SignUp(),
+      '/home':(context) => Home(),
+    },
   ));
 }
 
