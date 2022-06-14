@@ -20,7 +20,7 @@ class SignUp extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
+        padding: EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,63 +34,92 @@ class SignUp extends StatelessWidget {
               height: 60.0,
               color: Colors.grey[400],
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                    'Your Full Name',
-                    ),
-                    SizedBox(width: 10.0,),
-                    Text(
-                    'Raphael Tildai',
-                    ),
-                    SizedBox(height: 20.0,),
-                  ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 0.0, 30.0, 0.0),
+              child: TextField(
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Full Name',
+                  icon: Icon(Icons.abc),
                 ),
-              ],
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                    'Registration number',
-                    ),
-                    SizedBox(width: 10.0,),
-                    Text(
-                    'CT201/0005/18',
-                    ),
-                    SizedBox(height: 20.0,),
-                  ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
+              child: TextField(
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Email Address',
+                  icon: Icon(Icons.mail),
                 ),
-              ],
+              ),
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                    'Your Department',
-                    ),
-                    SizedBox(width: 10.0,),
-                    Text(
-                    'Computer Science',
-                    ),
-                    SizedBox(height: 20.0,),
-                  ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
+              child: TextField(
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Registration Number',
+                  icon: Icon(Icons.numbers),
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
+              child: TextField(
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Your Course',
+                  icon: Icon(Icons.abc),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
+              child: TextField(
+                obscureText: true,
+                textAlign: TextAlign.start,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Your Password',
+                  icon: Icon(Icons.password),
+                ),
+                autocorrect: false,
+              ),
+            ),
+            SizedBox(height: 20.0,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: (){
+                      Navigator.of(context).pushReplacementNamed('/login');
+                    }, 
+                    icon: Icon(Icons.app_registration),
+                    label: Text('Registration'),
+                    ),
+                ),
+                SizedBox(width: 20.0,),
+                Center(
+              child: ElevatedButton.icon(
+                onPressed: (){
+                  Navigator.of(context).pushReplacementNamed('/home');
+                }, 
+                icon: Icon(Icons.login),
+                label: Text('Login'),
+                ),
+            ),
               ],
             ),
           ],
         ),
-        ),
+      ),
+              
     );
   }
 }

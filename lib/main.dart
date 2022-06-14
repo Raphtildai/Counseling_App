@@ -1,5 +1,6 @@
 import 'dart:html';
 
+import 'package:careapp/screens/login.dart';
 import 'package:careapp/screens/signup.dart';
 import 'package:flutter/material.dart';
 
@@ -7,11 +8,12 @@ void main() {
   // runApp(const MyApp());
   runApp(MaterialApp(
     // Overwriting the initial route
-    initialRoute: '/home',
+    initialRoute: '/signup',
     // redirections
     routes: {
       '/':(context) => SignUp(),
       '/home':(context) => Home(),
+      '/login':(context) => LoginPage(),
     },
   ));
 }
