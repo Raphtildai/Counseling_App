@@ -1,15 +1,41 @@
 import 'dart:html';
 
+import 'package:careapp/screens/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  // calling the register page
+  final VoidCallback = void ShowRegisterPage();
+  const LoginPage({Key? key, required this.ShowRegisterPage}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  // Text controllers
+  final _emailcontroller = TextEditingController();
+  final _passwordcontroller = TextEditingController();
+
+  // Sign in function
+  Future signIn() async{
+    // This allows the user to login using email and password
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailcontroller.text.trim(), 
+      password: _passwordcontroller.text.trim(),
+      );
+  }
+
+  // we dispose the above controlles to help our memory management
+  @override
+  void dispose() {
+    _emailcontroller.dispose();
+    _passwordcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,55 +46,157 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Padding(
         padding: EdgeInsets.fromLTRB(30.0, 40.0, 30.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/flutter.png'),
-                radius: 40.0,
-              ),
-            ),
-            Divider(
-              height: 60.0,
-              color: Colors.grey[400],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
-              child: TextField(
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Registration Number',
-                  icon: Icon(Icons.abc),
+
+        // SingleChildScrollView removes the overflow
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/flutter.png'),
+                  radius: 40.0,
                 ),
               ),
-            ),
-            SizedBox(height: 20.0,),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
-              child: TextField(
-                obscureText: true,
-                textAlign: TextAlign.start,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Your Password',
-                  icon: Icon(Icons.password),
+              SizedBox(height: 20.0,),
+              // Text to display at the top
+              Center(
+                child: Text(
+                  'Hello! and Welcome',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
                 ),
-                autocorrect: false,
               ),
-            ),
-            SizedBox(height: 20.0,),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: (){
-                  Navigator.of(context).pushReplacementNamed('/home');
-                }, 
-                icon: Icon(Icons.login),
-                label: Text('Login'),
+              Divider(
+                height: 60.0,
+                color: Colors.grey[400],
+              ),
+        
+              
+        
+              // email text field
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: TextField(
+                      controller: _emailcontroller,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Email Address',
+                      ),
+                    ),
+                  ),
                 ),
-            ),
-          ],
+              ),
+        
+              SizedBox(height: 20.0,),
+        
+              // password text field
+               Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: TextField(
+                      controller: _passwordcontroller,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Password',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        
+              SizedBox(height: 20.0,),
+        
+              // sign in button
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                child: GestureDetector(    
+                  onTap: (){
+                    signIn();
+                  },             
+                  child: Container(
+                    padding: EdgeInsets.all(20.0),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Sign in',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        
+               SizedBox(height: 25.0,),
+        
+              // Register button if not a member
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Not a Member?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    ),
+                  SizedBox(width: 10.0,),
+                  GestureDetector(
+                    onTap: () {
+                      widget.ShowRegisterPage;
+                    },
+                    child: Text(
+                      'Register Now',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+        
+              // Center(
+              //   child: Container(
+                  
+              //     child: ElevatedButton.icon(
+              //       onPressed: (){
+              //         signIn();
+              //         // Navigator.of(context).pushReplacementNamed('/home');
+              //       }, 
+              //       icon: Icon(Icons.login),
+              //       label: Text('Login'),
+              //       ),
+              //   ),
+                
+              
+              // ),
+            ],
+          ),
         ),
       ),
     );

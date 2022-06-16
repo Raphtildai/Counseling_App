@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "972515775153",
+    "project_id": "counseling-659c1",
+    "storage_bucket": "counseling-659c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972515775153:android:9877fec3b0d2feebc9c890",
+        "android_client_info": {
+          "package_name": "com.example.careapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972515775153-121nkm02lpkk7ba8r61fisqiln2kgpkr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2iyZpdkVeLEJ_LWdYhusdbmc8S1KlnF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972515775153-121nkm02lpkk7ba8r61fisqiln2kgpkr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

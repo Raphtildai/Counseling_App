@@ -1,5 +1,7 @@
 import 'dart:html';
 
+import 'package:careapp/screens/home/home.dart';
+import 'package:careapp/screens/login.dart';
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
@@ -98,7 +100,8 @@ class SignUp extends StatelessWidget {
                 Center(
                   child: ElevatedButton.icon(
                     onPressed: (){
-                      Navigator.of(context).pushReplacementNamed('/login');
+                      SignUp();
+                      // Navigator.of(context).pushReplacementNamed('/login');
                     }, 
                     icon: Icon(Icons.app_registration),
                     label: Text('Registration'),
@@ -108,7 +111,8 @@ class SignUp extends StatelessWidget {
                 Center(
               child: ElevatedButton.icon(
                 onPressed: (){
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  LoginPage();
+                  // Navigator.of(context).pushReplacementNamed('/home');
                 }, 
                 icon: Icon(Icons.login),
                 label: Text('Login'),
