@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:careapp/screens/authenticate/authentication.dart';
+import 'package:careapp/services/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:careapp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:careapp/services/bottom_nav_bar.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized;
@@ -10,7 +12,7 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
-    home: const MainPage(),
+    home: BottomBarNav(),
     theme: ThemeData(primarySwatch: Colors.deepPurple),
   ));
 }

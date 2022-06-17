@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../services/bottom_nav_bar.dart';
+
 class Home extends StatefulWidget {
 
   Home({Key? key}) : super(key: key);
@@ -111,5 +113,6 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+    
   }
 }
