@@ -1,9 +1,7 @@
-import 'dart:html';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:careapp/authentication.dart';
-import 'package:careapp/screens/home/home.dart';
-import 'package:careapp/screens/login.dart';
-import 'package:careapp/screens/signup.dart';
+import 'package:careapp/screens/authenticate/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:careapp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,7 +12,7 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
-    home: MainPage(),
+    home: const MainPage(),
   ));
   // runApp(MaterialApp(
   //   // Overwriting the initial route

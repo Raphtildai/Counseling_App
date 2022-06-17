@@ -1,4 +1,4 @@
-import 'dart:html';
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +7,6 @@ class Home extends StatelessWidget {
   // accessing the user details
   final user = FirebaseAuth.instance.currentUser!;
   Home({Key? key}) : super(key: key);
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,22 @@ class Home extends StatelessWidget {
 
           FlatButton(
             onPressed: (){
-              FirebaseAuth.instance.signOut();
+              try{
+                FirebaseAuth.instance.signOut();
+                showDialog(context: context, builder: (context){
+                  return AlertDialog(
+                    content: Text('You have Logged Out'),
+
+                  );
+                });
+              }on FirebaseAuthException catch(e){
+                showDialog(context: context, builder: (context){
+                  return AlertDialog(
+                    content: Text(e.message.toString()),
+                  );
+                });
+              };
+              
           }, 
           child: Text('Sign Out'),
           color: Colors.deepPurple,

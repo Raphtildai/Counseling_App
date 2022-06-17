@@ -1,13 +1,17 @@
 import 'package:careapp/main.dart';
+import 'package:careapp/screens/authenticate/auth.dart';
 import 'package:careapp/screens/home/home.dart';
-import 'package:careapp/screens/login.dart';
-import 'package:careapp/screens/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
@@ -20,7 +24,7 @@ class MainPage extends StatelessWidget {
 
           return Home();
         }else{
-          return LoginPage();
+          return AuthPage();
         }
       }
       );

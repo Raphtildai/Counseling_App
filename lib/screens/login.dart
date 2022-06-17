@@ -1,12 +1,14 @@
-import 'dart:html';
+// ignore_for_file: prefer_const_constructors
 
-import 'package:careapp/screens/signup.dart';
+import 'package:careapp/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'home/forgot_psw_page.dart';
+
 class LoginPage extends StatefulWidget {
   // calling the register page
-  final VoidCallback = void ShowRegisterPage();
+  final VoidCallback ShowRegisterPage;
   const LoginPage({Key? key, required this.ShowRegisterPage}) : super(key: key);
 
   @override
@@ -21,14 +23,32 @@ class _LoginPageState extends State<LoginPage> {
 
   // Sign in function
   Future signIn() async{
-    // This allows the user to login using email and password
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailcontroller.text.trim(), 
-      password: _passwordcontroller.text.trim(),
-      );
+    
+      try{
+        // This allows the user to login using email and password
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailcontroller.text.trim(), 
+          password: _passwordcontroller.text.trim(),  
+        );
+        // Telling the user that sign in was successful
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text('Login success'),
+            );
+          }); 
+
+
+      }on FirebaseAuthException catch(e){
+        print(e);
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+        });
+      }
   }
 
-  // we dispose the above controlles to help our memory management
+  // we dispose the above controllers to help our memory management
   @override
   void dispose() {
     _emailcontroller.dispose();
@@ -73,8 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                 height: 60.0,
                 color: Colors.grey[400],
               ),
-        
-              
         
               // email text field
               Padding(
@@ -122,6 +140,35 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+
+              SizedBox(height: 10.0,),
+
+              // forgot password text
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context){
+                          return ForgotPasswordPage();
+                        },),);
+                      },
+                        
+
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        ),
+                    ),
+                  ],
+                ),
+              ),
         
               SizedBox(height: 20.0,),
         
@@ -167,7 +214,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(width: 10.0,),
                   GestureDetector(
                     onTap: () {
-                      widget.ShowRegisterPage;
+                      widget.ShowRegisterPage();
                     },
                     child: Text(
                       'Register Now',
