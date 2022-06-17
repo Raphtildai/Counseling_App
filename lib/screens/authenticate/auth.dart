@@ -1,5 +1,5 @@
-import 'package:careapp/screens/login.dart';
-import 'package:careapp/screens/signup.dart';
+import 'package:careapp/screens/home/login.dart';
+import 'package:careapp/screens/home/signup.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {

@@ -27,6 +27,17 @@ class _SignUpState extends State<SignUp> {
   // Sign in function
   Future signingUp() async{
     try{
+      // Loading
+      showDialog(
+        context: context, 
+        builder: (context){
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        );
+        // Pop out the loading widget
+        Navigator.of(context).pop();
       // Create User using the email and password
       // This allows the user to create user using email and password
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -42,8 +53,6 @@ class _SignUpState extends State<SignUp> {
         _emailcontroller.text.trim(),
         _passwordcontroller.text.trim(),
       );
-
-
 
       showDialog(context: context, builder: (context){
         return AlertDialog(

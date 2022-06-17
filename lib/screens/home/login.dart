@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:careapp/authentication.dart';
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'home/forgot_psw_page.dart';
+import 'forgot_psw_page.dart';
 
 class LoginPage extends StatefulWidget {
   // calling the register page
@@ -25,19 +25,31 @@ class _LoginPageState extends State<LoginPage> {
   Future signIn() async{
     
       try{
+        // Show circular loading while waiting for data
+    showDialog(
+      context: context, 
+      builder: (context){
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      );
         // This allows the user to login using email and password
         await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailcontroller.text.trim(), 
           password: _passwordcontroller.text.trim(),  
         );
+
+        // Poping out the loading
+          Navigator.of(context).pop();
+          
         // Telling the user that sign in was successful
           showDialog(context: context, builder: (context){
             return AlertDialog(
               content: Text('Login success'),
             );
           }); 
-
-
+        
       }on FirebaseAuthException catch(e){
         print(e);
         showDialog(context: context, builder: (context){

@@ -1,6 +1,5 @@
-import 'package:careapp/main.dart';
+import 'package:careapp/hidden_drawer.dart';
 import 'package:careapp/screens/authenticate/auth.dart';
-import 'package:careapp/screens/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +21,7 @@ class _MainPageState extends State<MainPage> {
         if(snapshot.hasData){
           // Navigator.of(context).pushReplacementNamed('/home');
 
-          return Home();
+          return HiddenDrawer();
         }else{
           return AuthPage();
         }
