@@ -10,6 +10,9 @@ class _Settings_PageState extends State<Settings_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
     );
   }
 }

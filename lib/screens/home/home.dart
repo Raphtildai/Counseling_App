@@ -1,4 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
+import 'package:careapp/screens/home/message.dart';
+import 'package:careapp/screens/home/settings_page.dart';
+import 'package:careapp/screens/home/user_account.dart';
+import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/services/get_user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,101 +19,43 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // accessing the user details
-  final user = FirebaseAuth.instance.currentUser!;
+  // Default tab page
+  int _selectedIndex = 0;
 
-  // creating a list of document IDs
-  List <String> docIDs = [];
-
-  // Creaing function to retrieve the documents
-  Future getdocIDs() async {
-
-    await FirebaseFirestore.instance.collection('users').orderBy('regnumber').get().then(
-      (snapshot) => snapshot.docs.forEach((document) {
-        // adding the document to the list
-        docIDs.add(document.reference.id);
-      }));
+  void _navigateButtonBar(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
   }
+
+  // Creating a list of pages
+
+  final List <Widget> _pages = [
+    User_page(),
+    Message(),
+    Settings_Page(),
+    Account_page(),
+    // search_page();
+  ];
+
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Welcome ${user.displayName}'),
-        // centerTitle: true,
-        backgroundColor: Colors.deepPurple.shade400,
-        actions: [
-          GestureDetector(
-            onTap: (){
-              try{
-                // Loading
-                showDialog(
-                  context: context, 
-                  builder: (context){
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  );
-                  // Pop out the loading widget
-                  Navigator.of(context).pop();
-                FirebaseAuth.instance.signOut();
-                showDialog(context: context, builder: (context){
-                  return AlertDialog(
-                    content: Text('You have Logged Out'),
-                  );
-                });
-                
-              }on FirebaseAuthException catch(e){
-                // Loading
-                showDialog(
-                  context: context, 
-                  builder: (context){
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                );
-                // Pop out the loading widget
-                Navigator.of(context).pop();
-                showDialog(context: context, builder: (context){
-                  return AlertDialog(
-                    content: Text(e.message.toString()),
-                  );
-                });
-              };
-            },
-            child: Row(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                Icon(Icons.logout),
-                Text('Logout'),
-              ],
-            ),
-            ),
-        ],
+      drawer: Drawer(
+       
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-              future: getdocIDs(),
-              builder: ((context, snapshot) {
-                return ListView.builder(
-                  itemCount: docIDs.length,
-                  itemBuilder: (context,index){
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      title: GetUserData(documentIds: docIDs[index]),
-                      tileColor: Colors.grey[300],
-                      ),
-                  );
-                });
-              }),
-            )
-          )
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: _navigateButtonBar,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
         ],
       ),
     );

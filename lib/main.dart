@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:careapp/screens/authenticate/authentication.dart';
+import 'package:careapp/screens/home/home.dart';
 import 'package:careapp/services/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:careapp/firebase_options.dart';
@@ -12,7 +13,7 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
-    home: BottomBarNav(),
+    home: MainPage(),
     theme: ThemeData(primarySwatch: Colors.deepPurple),
   ));
 }
