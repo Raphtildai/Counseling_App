@@ -1,11 +1,17 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/screens/authenticate/authentication.dart';
+import 'package:careapp/screens/home/forgot_psw_page.dart';
 import 'package:careapp/screens/home/home.dart';
+import 'package:careapp/screens/home/login.dart';
+import 'package:careapp/screens/home/signup.dart';
+import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/services/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:careapp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:careapp/services/bottom_nav_bar.dart';
+import 'package:careapp/screens/home/counselee.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized;
@@ -13,7 +19,8 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MaterialApp(
-    home: MainPage(),
+    debugShowCheckedModeBanner: false,
+    home: CounseleePage(),
     theme: ThemeData(primarySwatch: Colors.deepPurple),
   ));
 }

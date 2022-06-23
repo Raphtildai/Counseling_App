@@ -1,5 +1,7 @@
+import 'package:careapp/screens/home/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:careapp/screens/authenticate/auth.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -50,6 +52,7 @@ final _emailcontroller = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
+        title: Text('Reset Your Password'),
         backgroundColor: Colors.deepPurple,
         elevation: 0,
       ),
@@ -91,7 +94,7 @@ final _emailcontroller = TextEditingController();
                   controller: _emailcontroller,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Email Address',
+                    hintText: 'Enter Registered Email Address',
                   ),
                 ),
               ),
@@ -114,6 +117,36 @@ final _emailcontroller = TextEditingController();
             ),
             color: Colors.deepPurple,
           ),
+
+          SizedBox(height: 40.0,),
+
+          // // Show login page if the user remebers the password
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Text(
+          //       'Remember Password?',
+          //       style: TextStyle(
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //       ),
+          //     SizedBox(width: 10.0,),
+          //     GestureDetector(
+          //       onTap: () {
+          //         Navigator.push(context, MaterialPageRoute(builder: (context){
+          //             return LoginPage(ShowRegisterPage: );
+          //         },),);
+          //       },
+          //       child: Text(
+          //         'Login to your account',
+          //         style: TextStyle(
+          //           color: Colors.blue,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
