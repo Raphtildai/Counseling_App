@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
+import 'package:careapp/screens/home/counselee.dart';
 import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/screens/home/settings_page.dart';
 import 'package:careapp/screens/home/user_account.dart';
@@ -31,7 +32,7 @@ class _HomeState extends State<Home> {
   // Creating a list of pages
 
   final List <Widget> _pages = [
-    User_page(),
+    CounseleePage(),
     Message(),
     Settings_Page(),
     Account_page(),

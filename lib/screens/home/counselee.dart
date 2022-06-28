@@ -5,6 +5,7 @@ import 'package:careapp/utilities/category_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../utilities/counselors.dart';
+import 'counselor_profile.dart';
 
 class CounseleePage extends StatefulWidget {
   
@@ -24,7 +25,6 @@ class _CounseleePageState extends State<CounseleePage> {
       body: SafeArea(
         child: Column(
           children: [
-            // App bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Row(
@@ -57,7 +57,7 @@ class _CounseleePageState extends State<CounseleePage> {
                   Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple[100],
+                      color: Colors.deepPurple[50],
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: Icon(
@@ -68,7 +68,7 @@ class _CounseleePageState extends State<CounseleePage> {
                 ],
               ),
             ),
-            
+
             SizedBox(height:25),
       
             // Card asking the counselee how they feel
@@ -154,7 +154,7 @@ class _CounseleePageState extends State<CounseleePage> {
               child: Container(
                 padding: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.deepPurple[100],
+                  color: Colors.deepPurple[50],
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TextField(
@@ -168,12 +168,12 @@ class _CounseleePageState extends State<CounseleePage> {
             ),
 
             SizedBox(height: 25.0,),
-      
+          
             // Horizontal list view for categories -> What we offer
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25.0),
               height: 80,
-              // color: Colors.deepPurple[100],
+              // color: Colors.deepPurple[50],
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -194,7 +194,7 @@ class _CounseleePageState extends State<CounseleePage> {
             ),
 
             SizedBox(height: 25.0,),
-      
+          
             // Counselors list
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -219,7 +219,7 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
             ),
             
-            SizedBox(height: 25.0,),
+            SizedBox(height: 15.0,),
 
             // Counselors
             Expanded(
@@ -252,7 +252,7 @@ class _CounseleePageState extends State<CounseleePage> {
                   ),
                 ],
               ),
-            ),
+            ),            
           ],
         ),
       ),
