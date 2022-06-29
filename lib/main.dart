@@ -2,6 +2,7 @@
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/counselor_profile.dart';
+import 'package:careapp/screens/home/counselors_page.dart';
 import 'package:careapp/screens/home/forgot_psw_page.dart';
 import 'package:careapp/screens/home/home.dart';
 import 'package:careapp/screens/home/login.dart';
@@ -21,7 +22,7 @@ void main() async{
   );
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: MainPage(),
+    home: Counselors_page(),
     theme: ThemeData(primarySwatch: Colors.deepPurple),
   ));
 }

@@ -4,7 +4,7 @@ import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:flutter/material.dart';
 
-import '../../utilities/counselors.dart';
+import '../../utilities/counselors_card.dart';
 import 'counselor_profile.dart';
 
 class CounseleePage extends StatefulWidget {
@@ -141,7 +141,6 @@ class _CounseleePageState extends State<CounseleePage> {
                       ),
                     ),
                   ],
-                  
                 ),
               ),
             ),
