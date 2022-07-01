@@ -168,7 +168,6 @@ class _BookingState extends State<Booking> {
                   ),
                 ),
                 SizedBox(height: 10.0,),
-                SizedBox(height: 10.0,),
           
                 // Date Time Pick text field
                 Padding(

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 import 'package:careapp/screens/home/counselee.dart';
+import 'package:careapp/screens/home/counselors_page.dart';
 import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/screens/home/settings_page.dart';
 import 'package:careapp/screens/home/user_account.dart';
@@ -35,7 +36,7 @@ class _HomeState extends State<Home> {
     CounseleePage(),
     Message(),
     Settings_Page(),
-    Account_page(),
+    Counselors_page(),
     // search_page();
   ];
 
@@ -56,7 +57,7 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Counselor'),
         ],
       ),
     );

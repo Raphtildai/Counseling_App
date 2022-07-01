@@ -1,3 +1,4 @@
+import 'package:careapp/screens/home/counselee_profile.dart';
 import 'package:flutter/material.dart';
 
 class CounselingBooking extends StatelessWidget {
@@ -5,13 +6,16 @@ class CounselingBooking extends StatelessWidget {
 
   final myStyle = TextStyle(
     fontSize: 15,
-    fontFamily: 'Sans-serif',
-    fontWeight: FontWeight.w200,
   );
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: (() {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return CounseleeProfile();
+        }));
+      }),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Container(
@@ -26,6 +30,7 @@ class CounselingBooking extends StatelessWidget {
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(5.0),
@@ -83,48 +88,52 @@ class CounselingBooking extends StatelessWidget {
                           Text('+254725341547', style: myStyle,),
                           SizedBox(height: 5,),
                           // Approval button and Rescheduling Button
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // Approval Button
-                              MaterialButton(
-                                color: Colors.deepPurple,
-                                textColor: Colors.white,
-                                hoverColor: Colors.green,
-                                onPressed: (){
-    
-                                },
-                                child: Text(
-                                  'Approve',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              // Rescheduling button
-                              MaterialButton(
-                                color: Colors.red,
-                                textColor: Colors.white,
-                                hoverColor: Colors.red[900],
-                                onPressed: (){
-    
-                                },
-                                child: Text(
-                                  'Reschedule',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          
                         ],
+                        
                       ),
                     ),
                   )
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Approval Button
+                  MaterialButton(
+                    color: Colors.deepPurple,
+                    textColor: Colors.white,
+                    hoverColor: Colors.green,
+                    onPressed: (){
+
+                    },
+                    child: Text(
+                      'Approve',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 5,),
+                  // Rescheduling button
+                  MaterialButton(
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    hoverColor: Colors.red[900],
+                    onPressed: (){
+
+                    },
+                    child: Text(
+                      'Reschedule',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
+            
           ),
         ),
       ),

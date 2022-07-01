@@ -69,7 +69,7 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
             ),
 
-            SizedBox(height:25),
+            SizedBox(height: 10),
       
             // Card asking the counselee how they feel
             Padding(
@@ -86,8 +86,8 @@ class _CounseleePageState extends State<CounseleePage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: 100,
-                        width: 150,
+                        height: 50,
+                        width: 50,
                         child: Image.asset('assets/icons/conversation.png'),
                       ),
                     ),
@@ -113,7 +113,7 @@ class _CounseleePageState extends State<CounseleePage> {
                               fontSize: 16,
                             ),
                           ),
-                          SizedBox(height: 12.0,),
+                          SizedBox(height: 10.0,),
                           Container(
                             padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
@@ -145,13 +145,13 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
             ),
 
-            SizedBox(height: 25,),
+            SizedBox(height: 10,),
       
             //  Search bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Container(
-                padding: EdgeInsets.all(12),
+                padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Colors.deepPurple[50],
                   borderRadius: BorderRadius.circular(12),
@@ -166,7 +166,7 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
             ),
 
-            SizedBox(height: 25.0,),
+            SizedBox(height: 10.0,),
           
             // Horizontal list view for categories -> What we offer
             Container(
@@ -192,7 +192,7 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
             ),
 
-            SizedBox(height: 25.0,),
+            SizedBox(height: 10.0,),
           
             // Counselors list
             Padding(

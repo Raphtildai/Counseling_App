@@ -12,17 +12,16 @@ import 'package:careapp/services/bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:careapp/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:careapp/services/bottom_nav_bar.dart';
 import 'package:careapp/screens/home/counselee.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized;
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+void main()  {
+  // WidgetsFlutterBinding.ensureInitialized;
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Counselors_page(),
+    home: Home(),
     theme: ThemeData(primarySwatch: Colors.deepPurple),
   ));
 }

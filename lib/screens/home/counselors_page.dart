@@ -1,34 +1,37 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 
 import '../../utilities/booking_card.dart';
 
 class Counselors_page extends StatelessWidget {
-  Counselors_page({Key? key}) : super(key: key);
+  const Counselors_page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('Counselor\'s Page'),
+        title: const Text('Counselor\'s Page'),
         centerTitle: true,
       ),
       body: ListView(
         children: [
+          const SizedBox(height: 10,),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
                     color: Colors.deepPurple[100],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,17 +39,20 @@ class Counselors_page extends StatelessWidget {
                         Column(
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
+                            // ignore: prefer_const_constructors
                             Text(
                               'Hello There',
+                              // ignore: prefer_const_constructors
                               style: TextStyle(
                                 fontSize: 16,
                               ),
                             ),
                             // ignore: prefer_const_constructors
                             SizedBox(height: 5,),
-                            Text(
+                            const Text(
                             'Dr. Angela',
-                            style: TextStyle(
+                            // ignore: unnecessary_const
+                            style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -54,9 +60,9 @@ class Counselors_page extends StatelessWidget {
                           ],
                         ),
                         
-                        SizedBox(width: 10,),
+                        const SizedBox(width: 10,),
 
-                        Icon(
+                        const Icon(
                           Icons.person,
                         ),
                       ],
@@ -65,30 +71,26 @@ class Counselors_page extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
               // Pending booking approvals
 
-              Text(
+              const Text(
                 'Pending Counseling Sessions Approvals',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               
               
               CounselingBooking(),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
               // Counselees list
             ],
-
-            
           ),
-          
-
         ],
       ),
     );
