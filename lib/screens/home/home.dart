@@ -1,16 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
-import 'package:careapp/screens/home/counselee.dart';
-import 'package:careapp/screens/home/counselors_page.dart';
+import 'package:careapp/screens/home/Counselee/counselee.dart';
+import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/message.dart';
-import 'package:careapp/screens/home/settings_page.dart';
-import 'package:careapp/screens/home/user_account.dart';
-import 'package:careapp/screens/home/user_page.dart';
-import 'package:careapp/services/get_user_data.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:careapp/functionalities/settings_page.dart';
+import 'package:careapp/utilities/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-
-import '../../services/bottom_nav_bar.dart';
 
 class Home extends StatefulWidget {
 
@@ -45,21 +39,27 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
+      appBar: AppBar(
+        title: Text('Dashbord'),
+        centerTitle: true,
+      ),
+      drawer: NavigationDrawer(),
+      // drawer: Drawer(
        
-      ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _navigateButtonBar,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Counselor'),
-        ],
-      ),
+      // ),
+      body: CounseleePage(),
+      // _pages[_selectedIndex],
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   currentIndex: _selectedIndex,
+      //   onTap: _navigateButtonBar,
+      //   items: [
+      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Counselor'),
+      //   ],
+      // ),
     );
     
   }

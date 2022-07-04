@@ -1,3 +1,5 @@
+import 'package:careapp/screens/authenticate/auth.dart';
+import 'package:careapp/screens/home/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +63,9 @@ class _SignUpState extends State<SignUp> {
           content: Text('Registration Successful'),
         );
       });
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+          return AuthPage();
+      }));
     }on FirebaseAuthException catch(e){
       showDialog(context: context, builder: (context){
         return AlertDialog(

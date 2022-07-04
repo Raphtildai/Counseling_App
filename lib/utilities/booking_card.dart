@@ -1,4 +1,4 @@
-import 'package:careapp/screens/home/counselee_profile.dart';
+import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:flutter/material.dart';
 
 class CounselingBooking extends StatelessWidget {
@@ -28,6 +28,15 @@ class CounselingBooking extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              SizedBox(height: 10,),
+              // Title of the Card
+              const Text(
+                'Pending Counseling Sessions Approvals',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18
+                ),
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
