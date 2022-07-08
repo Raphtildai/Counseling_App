@@ -67,13 +67,23 @@ class _SignUpState extends State<SignUp> {
           return AuthPage();
       }));
     }on FirebaseAuthException catch(e){
-      showDialog(context: context, builder: (context){
+      if (e.code == 'weak-password') {
         return AlertDialog(
-          content: Text(e.message.toString()),
+          content: Text('The password provided is too weak.'),
         );
-        // Pop out the loading widget
-        Navigator.of(context).pop();
-      });
+      } else if (e.code == 'email-already-in-use') {
+        return AlertDialog(
+          content: Text('The account already exists for that email.'),
+        );
+      }else{
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+          // Pop out the loading widget
+          Navigator.of(context).pop();
+        });
+      }
     }
     
   }

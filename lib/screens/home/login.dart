@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:careapp/screens/authenticate/authentication.dart';
+import 'package:careapp/screens/home/Counselee/counselee.dart';
+import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
+import 'package:careapp/screens/home/user_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       }
       );
         // This allows the user to login using email and password
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+        final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailcontroller.text.trim(), 
           password: _passwordcontroller.text.trim(),  
         );
@@ -52,11 +56,23 @@ class _LoginPageState extends State<LoginPage> {
         
       }on FirebaseAuthException catch(e){
         print(e);
-        showDialog(context: context, builder: (context){
+        if (e.code == 'user-not-found') {
           return AlertDialog(
-            content: Text(e.message.toString()),
+            content: Text('This email is not registered'),
           );
-        });
+          print('No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          return AlertDialog(
+            content: Text('You\'ve entered the wrong password for that user'),
+          );
+          print('Wrong password provided for that user.');
+        }else{
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text(e.message.toString()),
+            );
+          });
+        }
       }
   }
 
