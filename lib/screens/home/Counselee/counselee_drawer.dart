@@ -1,26 +1,16 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
-import 'package:careapp/screens/home/user_account.dart';
 import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/utilities/drawer_item.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class NavigationDrawer extends StatefulWidget {
-  NavigationDrawer({Key? key}) : super(key: key);
+class CounseleeDrawer extends StatelessWidget {
+CounseleeDrawer({ Key? key }) : super(key: key);
 
-  @override
-  State<NavigationDrawer> createState() => _NavigationDrawerState();
-}
-
-class _NavigationDrawerState extends State<NavigationDrawer> {
-
-  final personal = TextStyle(
+final personal = TextStyle(
     fontSize: 14,
     color: Colors.white,
     fontWeight: FontWeight.bold,
@@ -42,11 +32,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Booking()));
       break;
 
       case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Account_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Message()));
       break;
 
       case 4:
@@ -62,7 +52,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 7:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Account_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings_Page()));
       break;
       
 
@@ -74,8 +64,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
+  Widget build(BuildContext context){
     // Url To the profile picture
     const url = 'https://photos.google.com/photo/AF1QipP-L6Wi5Ud3mPpdnmyy1dZrleOhYaIwyrkae6ju';
     return Drawer(
@@ -93,23 +82,21 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                       radius: 40,
                       backgroundImage: NetworkImage(url),
                     ),
-                    const SizedBox(width: 10,),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        // ignore: prefer_const_literals_to_create_immutables
-                        children: [
-                          Text(
-                            'Welcome',
-                            style: personal,
-                          ),
-                          SizedBox(height: 10,),
-                          Text(
-                            '${user.email}',
-                            style: personal
-                          ),
-                        ],
-                      ),
+                    const SizedBox(width: 20,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Text(
+                          'Person Name',
+                          style: personal,
+                        ),
+                        SizedBox(height: 10,),
+                        Text(
+                          'email@gmail.com',
+                          style: personal
+                        ),
+                      ],
                     )
                   ],
                 ),
@@ -120,14 +107,9 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   color: Colors.white,
                 ),
           
+                const SizedBox(height: 10,),
+          
                 // Drawer Items
-
-                Text('Admin', style: TextStyle(color: Colors.white),),
-                Divider(
-                  height: 60,
-                  color: Colors.white,
-                ),
-
                 DrawerItem(
                   Name: 'My Account', 
                   icon: Icons.account_box, 
@@ -141,7 +123,17 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   icon: Icons.notifications, 
                   onPressed: ()=> onItemPressed(context, index: 1),
                 ),
-
+          
+                const SizedBox(height: 20,),
+          
+                const SizedBox(height: 20,),
+          
+                DrawerItem(
+                  Name: 'Book Session', 
+                  icon: Icons.book, 
+                  onPressed: ()=> onItemPressed(context, index: 2),
+                ),
+          
                 const SizedBox(height: 20,),
           
                 DrawerItem(
@@ -151,38 +143,18 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 ),
           
                 const SizedBox(height: 20,),
-
-                Text('Counselors', style: TextStyle(color: Colors.white),),
-                Divider(
-                  height: 60,
-                  color: Colors.white,
-                ),
           
                 DrawerItem(
-                  Name: 'Pending Approvals', 
-                  icon: Icons.pending_actions, 
-                  onPressed: ()=> onItemPressed(context, index: 2),
-                ),
-          
-                const SizedBox(height: 20,),
-          
-                DrawerItem(
-                  Name: 'All Counselee', 
-                  icon: Icons.people, 
+                  Name: 'Reschedule Session', 
+                  icon: Icons.schedule, 
                   onPressed: ()=> onItemPressed(context, index: 3),
                 ),
           
                 const SizedBox(height: 20,),
-
-                Text('Counselee', style: TextStyle(color: Colors.white),),
-                Divider(
-                  height: 60,
-                  color: Colors.white,
-                ),
           
                 DrawerItem(
-                  Name: 'All Counselee', 
-                  icon: Icons.people_alt_rounded, 
+                  Name: 'Counselors', 
+                  icon: Icons.people, 
                   onPressed: ()=> onItemPressed(context, index: 4),
                 ),
           

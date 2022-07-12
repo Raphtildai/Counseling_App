@@ -265,6 +265,7 @@ class _SignUpState extends State<SignUp> {
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _pnumbercontroller,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Phone Number',

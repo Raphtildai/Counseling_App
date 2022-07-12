@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/screens/home/Counselor/register.dart';
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselor/counselor_profile.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';

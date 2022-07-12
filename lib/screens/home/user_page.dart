@@ -30,7 +30,7 @@ class _User_pageState extends State<User_page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome ${user.displayName}'),
+        title: Text('Welcome ${user.email}'),
         // centerTitle: true,
         backgroundColor: Colors.deepPurple.shade400,
         actions: [

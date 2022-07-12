@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashbord'),
+        title: Text('Admin Dashbord'),
         centerTitle: true,
       ),
       drawer: NavigationDrawer(),

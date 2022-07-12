@@ -60,12 +60,12 @@ class _LoginPageState extends State<LoginPage> {
           return AlertDialog(
             content: Text('This email is not registered'),
           );
-          print('No user found for that email.');
+          // print('No user found for that email.');
         } else if (e.code == 'wrong-password') {
           return AlertDialog(
             content: Text('You\'ve entered the wrong password for that user'),
           );
-          print('Wrong password provided for that user.');
+          // print('Wrong password provided for that user.');
         }else{
           showDialog(context: context, builder: (context){
             return AlertDialog(
