@@ -99,6 +99,7 @@ class _SignUpState extends State<SignUp> {
       'email': email,
       'password': password,
       'pnumber': pnumber,
+      'role': "counselee",
 
     });
   }

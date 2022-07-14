@@ -1,5 +1,8 @@
 {
     "cSpell.words": [
         "emailcontroller"
-    ]
+    ],
+    "files.autoSave": "off",
+    "editor.tabCompletion": "on",
+    "files.autoSaveDelay": 1000
 }

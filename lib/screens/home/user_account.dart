@@ -35,8 +35,9 @@ void initState() {
           if(snapshot.hasError){
             return Center(child: Text(snapshot.error.toString()));
           }
-          if(snapshot.connectionState == ConnectionState.active){
+          if(snapshot.connectionState == ConnectionState.done){
             QuerySnapshot querySnapshot = snapshot.data;
+            print(querySnapshot);
           }
           return Center(child: CircularProgressIndicator());
             // return Container(child: Center(child: Text('Nothing to show')),);

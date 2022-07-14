@@ -2,6 +2,8 @@
 
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
+import 'package:careapp/screens/home/Counselee/counselee_list.dart';
+import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
@@ -46,11 +48,11 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Account_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
       break;
 
       case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Settings_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounseleeList()));
       break;
       // Counselors
       case 5:
@@ -167,7 +169,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 const SizedBox(height: 20,),
           
                 DrawerItem(
-                  Name: 'All Counselee', 
+                  Name: 'All Counselors', 
                   icon: Icons.people, 
                   onPressed: ()=> onItemPressed(context, index: 3),
                 ),

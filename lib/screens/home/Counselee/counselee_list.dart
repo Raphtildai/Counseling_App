@@ -4,15 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class User_page extends StatefulWidget {
-  const User_page({Key? key}) : super(key: key);
+class CounseleeList extends StatelessWidget {
 
-  @override
-  State<User_page> createState() => _User_pageState();
-}
-
-class _User_pageState extends State<User_page> {
-  // accessing the user details
+// accessing the user details
   final user = FirebaseAuth.instance.currentUser!;
 
   // creating a list of document IDs

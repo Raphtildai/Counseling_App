@@ -1,18 +1,12 @@
 import 'package:careapp/services/get_counselee_data.dart';
+import 'package:careapp/services/get_counselor_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class User_page extends StatefulWidget {
-  const User_page({Key? key}) : super(key: key);
-
-  @override
-  State<User_page> createState() => _User_pageState();
-}
-
-class _User_pageState extends State<User_page> {
-  // accessing the user details
+class CounselorList extends StatelessWidget {
+// accessing the user details
   final user = FirebaseAuth.instance.currentUser!;
 
   // creating a list of document IDs
@@ -21,7 +15,7 @@ class _User_pageState extends State<User_page> {
   // Creaing function to retrieve the documents
   Future getdocIDs() async {
 
-    await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselee").get().then(
+    await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselor").get().then(
       (snapshot) => snapshot.docs.forEach((document) {
         // adding the document to the list
         docIDs.add(document.reference.id);
@@ -49,7 +43,7 @@ class _User_pageState extends State<User_page> {
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
                           children: [
-                            GetCounseleeData(documentIds: docIDs[index])
+                            GetCounselorData(documentIds: docIDs[index])
                           ],
                         ),
                       )
