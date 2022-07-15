@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, avoid_function_literals_in_foreach_calls, prefer_const_constructors
+
 import 'package:careapp/services/get_counselee_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,17 +10,17 @@ class User_page extends StatefulWidget {
   const User_page({Key? key}) : super(key: key);
 
   @override
-  State<User_page> createState() => _User_pageState();
+  State<User_page> createState() => Creating();
 }
 
-class _User_pageState extends State<User_page> {
+class Creating extends State<User_page> {
   // accessing the user details
   final user = FirebaseAuth.instance.currentUser!;
 
   // creating a list of document IDs
   List <String> docIDs = [];
 
-  // Creaing function to retrieve the documents
+  // Creating function to retrieve the documents
   Future getdocIDs() async {
 
     await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselee").get().then(

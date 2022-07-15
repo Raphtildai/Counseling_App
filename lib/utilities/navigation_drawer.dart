@@ -1,12 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:careapp/functionalities/booking.dart';
-import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
-import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/screens/home/user_account.dart';
 import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/utilities/drawer_item.dart';
@@ -14,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawer extends StatefulWidget {
-  NavigationDrawer({Key? key}) : super(key: key);
+  const NavigationDrawer({Key? key}) : super(key: key);
 
   @override
   State<NavigationDrawer> createState() => _NavigationDrawerState();

@@ -1,20 +1,38 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/utilities/category_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utilities/counselors_card.dart';
-import '../Counselor/counselor_profile.dart';
 
 class CounseleePage extends StatefulWidget {
+  CounseleePage({Key? key}) : super(key: key);
   
   @override
   State<CounseleePage> createState() => _CounseleePageState();
 }
 
 class _CounseleePageState extends State<CounseleePage> {
+
+  // accessing the user details
+  final user = FirebaseAuth.instance.currentUser!;
+
+  // creating a list of document IDs
+  List <String> docIDs = [];
+
+  // Creaing function to retrieve the documents
+  Future getdocIDs() async {
+
+    await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselor").get().then(
+      (snapshot) => snapshot.docs.forEach((document) {
+        // adding the document to the list
+        docIDs.add(document.reference.id);
+      }));
+  }
+
   final String email = 'raphaeltildai6@gmail.com';
   final String phone = '+254725341547';
 
@@ -27,94 +45,6 @@ class _CounseleePageState extends State<CounseleePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Column(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         // ignore: prefer_const_literals_to_create_immutables
-              //         children: [
-        
-              //           // Name of the user
-              //           Text(
-              //             'Hello',
-              //             style: TextStyle(
-              //               fontSize: 16.0,
-              //               fontWeight: FontWeight.bold,
-              //             ),
-              //           ),
-              //           SizedBox(height: 8.0), 
-              //           Text(
-              //             'Tildai',
-              //             style: TextStyle(
-              //               fontSize: 20.0,
-              //               fontWeight: FontWeight.bold,
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //       // profile picture of the user
-              //       GestureDetector(
-
-              //         onTap: (){
-              //           try{
-              //             // Loading
-              //             showDialog(
-              //               context: context, 
-              //               builder: (context){
-              //                 return Center(
-              //                   child: CircularProgressIndicator(),
-              //                 );
-              //               }
-              //               );
-              //               // Pop out the loading widget
-              //               Navigator.of(context).pop();
-              //             FirebaseAuth.instance.signOut();
-              //             showDialog(context: context, builder: (context){
-              //               return AlertDialog(
-              //                 content: Text('You have Logged Out'),
-              //               );
-              //             });
-                          
-              //           }on FirebaseAuthException catch(e){
-              //             // Loading
-              //             showDialog(
-              //               context: context, 
-              //               builder: (context){
-              //                 return Center(
-              //                   child: CircularProgressIndicator(),
-              //                 );
-              //               }
-              //             );
-              //             // Pop out the loading widget
-              //             Navigator.of(context).pop();
-              //             showDialog(context: context, builder: (context){
-              //               return AlertDialog(
-              //                 content: Text(e.message.toString()),
-              //               );
-              //             });
-              //           };
-              //         },
-
-
-              //         child: Container(
-              //           padding: EdgeInsets.all(12),
-              //           decoration: BoxDecoration(
-              //             color: Colors.deepPurple[50],
-              //             borderRadius: BorderRadius.circular(15.0),
-              //           ),
-              //           child: Icon(
-              //             Icons.person,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-        
               SizedBox(height: 10),
               
               // Card asking the counselee how they feel
@@ -221,7 +151,7 @@ class _CounseleePageState extends State<CounseleePage> {
                 // color: Colors.deepPurple[50],
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: [
+                  children: const [
                     CategoryCard(
                       iconImagePath: 'assets/icons/counsellor.png',
                       categoryName: 'Mindfulness Based Therapy',
@@ -245,7 +175,7 @@ class _CounseleePageState extends State<CounseleePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+                  children: const [
                     Text(
                       'Counselors List',
                       style: TextStyle(
@@ -265,44 +195,63 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
               
               SizedBox(height: 15.0,),
-        
-              // Counselors
-              Container(
-                height: 200,
-                child: Expanded(
-                  child: ListView(
-                    primary: false,
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      CounselorCard(
-                        counselorImage: 'assets/bg.jpg',
-                        counselorRating: '5.0',
-                        counselorName: 'Dr. Angela',
-                        counselorProfession: 'Student Counselor',
-                        counselorEmail: email,
-                        counselorPhone: phone,
+
+              FutureBuilder(
+                future: getdocIDs(),
+                builder:((context, snapshot){
+                  // Counselors
+                  return Container(
+                    height: 200,
+                    child: Expanded(
+                      child: ListView.builder(
+                        primary: false,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: docIDs.length,
+                        itemBuilder: (context, index) {
+                          // Get collection
+                          CollectionReference users = FirebaseFirestore.instance.collection('users');
+                          return FutureBuilder<DocumentSnapshot>(
+                            future: users.doc(docIDs[index]).get(),
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.done){
+                                Map <String, dynamic> data = 
+                                snapshot.data!.data() as Map <String, dynamic>;
+                                return CounselorCard(
+                                  counselorImage: 'assets/bg.jpg',
+                                  counselorRating: '${data['rating']}',
+                                  counselorName: '${data['firstname']}',
+                                  counselorProfession: '${data['profession']}',
+                                  counselorEmail: '${data['email']}',
+                                  counselorPhone: '${data['pnumber']}',
+                                  counselorID: docIDs[index],
+                                );
+                              }
+                              return Center(child: CircularProgressIndicator());
+                              
+                            },
+                          );
+                          
+                        }),
                       ),
-                      CounselorCard(
-                        counselorImage: 'assets/counselor1.png',
-                        counselorRating: '5.0',
-                        counselorName: 'Dr. Angela',
-                        counselorProfession: 'Student Counselor',
-                        counselorEmail: email,
-                        counselorPhone: phone,
-                      ),
-                      CounselorCard(
-                        counselorImage: 'assets/counselor2.png',
-                        counselorRating: '5.0',
-                        counselorName: 'Dr. Angela',
-                        counselorProfession: 'Student Counselor',
-                        counselorEmail: email,
-                        counselorPhone: phone,
-                      ),
-                    ],
-                  ),
-                ),
+                      // ListView(
+                      //   primary: false,
+                      //   scrollDirection: Axis.horizontal,
+                      //   children: [
+                      //     CounselorCard(
+                      //       counselorImage: 'assets/bg.jpg',
+                      //       counselorRating: '5.0',
+                      //       counselorName: 'Dr. Angela',
+                      //       counselorProfession: 'Student Counselor',
+                      //       counselorEmail: email,
+                      //       counselorPhone: phone,
+                      //     ),
+                      //   ],
+                      // ),
+                    // ),
+                  );
+                }),
               ),
-              SizedBox(height: 30,)
+              SizedBox(height: 30,),
             ],
           ),
         ),

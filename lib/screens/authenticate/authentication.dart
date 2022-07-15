@@ -1,12 +1,6 @@
 // import 'package:careapp/hidden_drawer.dart';
 import 'package:careapp/screens/authenticate/auth.dart';
-import 'package:careapp/screens/home/Counselee/counselee.dart';
-import 'package:careapp/screens/home/Counselee/counselee_home.dart';
-import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
-import 'package:careapp/screens/home/Counselor/counselor_home.dart';
 import 'package:careapp/screens/home/home.dart';
-import 'package:careapp/screens/home/user_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +38,7 @@ class _MainPageState extends State<MainPage> {
           return Home();
           
         }else{
-          return AuthPage();
+          return const AuthPage();
         }
       }
       );

@@ -1,10 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:careapp/screens/home/home.dart';
 import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/user_account.dart';
 import 'package:flutter/material.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
-import 'package:careapp/screens/home/home.dart';
 
 class HiddenDrawer extends StatefulWidget {
   const HiddenDrawer({Key? key}) : super(key: key);

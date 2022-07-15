@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unused_element, duplicate_ignore
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +21,9 @@ const AuthFunctions({ Key? key }) : super(key: key);
     showDialog(
       context: context, 
       builder: (context){
+        // ignore: prefer_const_constructors
         return Center(
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         );
       }
       );
@@ -30,7 +33,7 @@ const AuthFunctions({ Key? key }) : super(key: key);
         //   password: _passwordcontroller.text.trim(),  
         // );
 
-        // Poping out the loading
+        // Popping out the loading
           Navigator.of(context).pop();
           
         // Telling the user that sign in was successful
@@ -41,7 +44,7 @@ const AuthFunctions({ Key? key }) : super(key: key);
           }); 
         
       }on FirebaseAuthException catch(e){
-        print(e);
+        // print(e);
         showDialog(context: context, builder: (context){
           return AlertDialog(
             content: Text(e.message.toString()),

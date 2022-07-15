@@ -8,9 +8,9 @@ import 'package:careapp/utilities/drawer_item.dart';
 import 'package:flutter/material.dart';
 
 class CounselorDrawer extends StatelessWidget {
-CounselorDrawer({ Key? key }) : super(key: key);
+const CounselorDrawer({ Key? key }) : super(key: key);
 
-final personal = TextStyle(
+final personal = const TextStyle(
     fontSize: 14,
     color: Colors.white,
     fontWeight: FontWeight.bold,
@@ -24,35 +24,35 @@ final personal = TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const User_page()));
       break;
       //Notifications
       case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const User_page()));
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Booking()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Booking()));
       break;
 
       case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Message()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Message()));
       break;
 
       case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Settings_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Settings_Page()));
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Counselors_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Counselors_page()));
       break;
 
       case 6:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Logout()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Logout()));
       break;
 
       case 7:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Settings_Page()));
       break;
       
 
@@ -91,7 +91,7 @@ final personal = TextStyle(
                           'Person Name',
                           style: personal,
                         ),
-                        SizedBox(height: 10,),
+                        const SizedBox(height: 10,),
                         Text(
                           'email@gmail.com',
                           style: personal
@@ -102,7 +102,7 @@ final personal = TextStyle(
                 ),
                 const SizedBox(height: 10,),
           
-                Divider(
+                const Divider(
                   height: 60,
                   color: Colors.white,
                 ),
@@ -153,7 +153,7 @@ final personal = TextStyle(
                 const SizedBox(height: 20,),
           
                 DrawerItem(
-                  Name: 'Counselees', 
+                  Name: 'Counselee', 
                   icon: Icons.people, 
                   onPressed: ()=> onItemPressed(context, index: 4),
                 ),

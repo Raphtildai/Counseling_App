@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/material.dart';
 
 class NeuBox extends StatelessWidget {
@@ -7,8 +9,7 @@ class NeuBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
-      child: Center(child: child,),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.deepPurple[100],
         borderRadius: BorderRadius.circular(25),
@@ -17,17 +18,18 @@ class NeuBox extends StatelessWidget {
           BoxShadow(
             color: Colors.deepPurple.shade200,
             blurRadius: 10,
-            offset: Offset(5, 5),
+            offset: const Offset(5, 5),
           ),
 
           // Lighter region
-          BoxShadow(
+          const BoxShadow(
             color: Colors.white,
             blurRadius: 10,
             offset: Offset(-5, -5),
           ),
         ],
       ),
+      child: Center(child: child,),
     );
   }
 }

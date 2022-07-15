@@ -12,7 +12,7 @@ class _MessageState extends State<Message> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: const Text('Chat'),
       ),
     );
   }

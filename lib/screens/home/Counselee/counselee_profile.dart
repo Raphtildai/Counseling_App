@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 class CounseleeProfile extends StatelessWidget {
   CounseleeProfile({Key? key}) : super(key: key);
@@ -30,7 +32,7 @@ class CounseleeProfile extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 5,),
-                // Counselee's profil picture and basic details
+                // Counselee's profile picture and basic details
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
@@ -110,7 +112,7 @@ class CounseleeProfile extends StatelessWidget {
           
                 const SizedBox(height: 10,),
           
-                // Counselees Edudation details
+                // Counselee Education details
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
@@ -162,7 +164,7 @@ class CounseleeProfile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Counseling Sessions History', style: subtitle,),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             Image.asset('assets/graph.png'),                                        
                           ],
                         ),
@@ -171,7 +173,7 @@ class CounseleeProfile extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 10,),
+                const SizedBox(height: 10,),
                 
                 // Contact information
                 Padding(
@@ -190,7 +192,7 @@ class CounseleeProfile extends StatelessWidget {
                           // Contact details
                           Text('Contact Me', style: subtitle,),
 
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

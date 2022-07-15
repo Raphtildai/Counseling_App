@@ -1,5 +1,6 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:careapp/screens/authenticate/auth.dart';
-import 'package:careapp/screens/home/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _SignUpState extends State<SignUp> {
       showDialog(
         context: context, 
         builder: (context){
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -59,20 +60,20 @@ class _SignUpState extends State<SignUp> {
       );
 
       showDialog(context: context, builder: (context){
-        return AlertDialog(
+        return const AlertDialog(
           content: Text('Registration Successful'),
         );
       });
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-          return AuthPage();
+          return const AuthPage();
       }));
     }on FirebaseAuthException catch(e){
       if (e.code == 'weak-password') {
-        return AlertDialog(
+        return const AlertDialog(
           content: Text('The password provided is too weak.'),
         );
       } else if (e.code == 'email-already-in-use') {
-        return AlertDialog(
+        return const AlertDialog(
           content: Text('The account already exists for that email.'),
         );
       }else{
@@ -80,9 +81,9 @@ class _SignUpState extends State<SignUp> {
           return AlertDialog(
             content: Text(e.message.toString()),
           );
-          // Pop out the loading widget
-          Navigator.of(context).pop();
         });
+        // Pop out the loading widget
+        Navigator.of(context).pop();
       }
     }
     
@@ -121,14 +122,14 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: Text('sign Up Page'),
+        title: const Text('sign Up Page'),
         centerTitle: true,
       ),
       body: ListView(
         children: [
 
           Padding(
-          padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
+          padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 0.0),
       
           // SingleChildScrollView removes the overflow
           child: SingleChildScrollView(
@@ -136,17 +137,17 @@ class _SignUpState extends State<SignUp> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
+                const Center(
                   child: CircleAvatar(
                     backgroundImage: AssetImage('assets/flutter.png'),
                     radius: 30.0,
                   ),
                 ),
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
                 // Text to display at the top
-                Center(
+                const Center(
                   child: Text(
-                    'Welcome to Ment Care.',
+                    'Welcome to Counseling App.',
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
@@ -159,7 +160,7 @@ class _SignUpState extends State<SignUp> {
           
                 // First Name Text field
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -167,10 +168,10 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _firstnamecontroller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'First Name',
                         ),
@@ -179,11 +180,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
       
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
       
                 // Last Name Text field
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -191,10 +192,10 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _lastnamecontroller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Last Name',
                         ),
@@ -203,11 +204,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
       
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
       
                 // Reg number text field
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -215,10 +216,10 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _regnocontroller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Registration Number',
                         ),
@@ -227,11 +228,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
       
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
           
                 // email text field
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -239,10 +240,10 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _emailcontroller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Email Address',
                         ),
@@ -251,11 +252,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
       
                 // Phone Number text field
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -263,11 +264,11 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _pnumbercontroller,
                         keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Phone Number',
                         ),
@@ -276,11 +277,11 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
           
                 // password text field
                  Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -288,11 +289,11 @@ class _SignUpState extends State<SignUp> {
                       borderRadius: BorderRadius.circular(25.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
+                      padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _passwordcontroller,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Password',
                         ),
@@ -301,22 +302,22 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
           
                 // sign in button
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(    
                     onTap: (){
                       signingUp();
                     },             
                     child: Container(
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(25.0),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Sign Up',
                           style: TextStyle(
@@ -330,24 +331,24 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
           
-                 SizedBox(height: 15.0,),
+                 const SizedBox(height: 15.0,),
           
                 // Register button if not a member
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Already have account?',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                       ),
-                    SizedBox(width: 10.0,),
+                    const SizedBox(width: 10.0,),
                     GestureDetector(
                       onTap: () {
                         widget.ShowLoginPage();
                       },
-                      child: Text(
+                      child: const Text(
                         'Login Now',
                         style: TextStyle(
                           color: Colors.blue,
@@ -377,7 +378,7 @@ class _SignUpState extends State<SignUp> {
             ),
           ),
         ),
-        SizedBox(height: 100.0,),
+        const SizedBox(height: 100.0,),
         ],
       ),
     );

@@ -1,7 +1,7 @@
-import 'package:careapp/screens/home/login.dart';
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:careapp/screens/authenticate/auth.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -37,7 +37,7 @@ final _emailcontroller = TextEditingController();
       });
 
     }on FirebaseAuthException catch(e){
-      print(e);
+      // print(e);
 
       // Alerting the user on errors which might arise on the app
       showDialog(context: context, builder: (context){
@@ -105,6 +105,7 @@ final _emailcontroller = TextEditingController();
             onPressed: (){
               passWordReset();      
             },
+            color: Colors.deepPurple,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Text(
@@ -115,12 +116,11 @@ final _emailcontroller = TextEditingController();
                 ),
               ),
             ),
-            color: Colors.deepPurple,
           ),
 
           SizedBox(height: 40.0,),
 
-          // // Show login page if the user remebers the password
+          // // Show login page if the user remembers the password
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.center,
           //   children: [

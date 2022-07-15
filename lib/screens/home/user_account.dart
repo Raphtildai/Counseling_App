@@ -1,4 +1,5 @@
-import 'package:careapp/utilities/neumorphicbox.dart';
+// ignore_for_file: camel_case_types, prefer_final_fields, annotate_overrides, unused_local_variable
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ void initState() {
     // _collectionReference.snapshots();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _streamAdmins,
@@ -37,9 +38,9 @@ void initState() {
           }
           if(snapshot.connectionState == ConnectionState.done){
             QuerySnapshot querySnapshot = snapshot.data;
-            print(querySnapshot);
+            // print(querySnapshot);
           }
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
             // return Container(child: Center(child: Text('Nothing to show')),);
           },
         ),

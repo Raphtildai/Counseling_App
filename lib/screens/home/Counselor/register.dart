@@ -1,3 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, unnecessary_null_comparison
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -7,7 +11,7 @@ class Register extends StatefulWidget {
   _RegisterState createState() => _RegisterState();
 }
 
-final heading = TextStyle(
+const heading = TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
   );
@@ -21,6 +25,21 @@ final heading = TextStyle(
   }
 
 class _RegisterState extends State<Register> {
+    // Calling the email of the user that is logged in
+  User user = FirebaseAuth.instance.currentUser!;
+  // Connecting to firebase
+  CollectionReference booking = FirebaseFirestore.instance.collection('bookings');
+
+  // Function to add the booking to the database
+  Future<void> addBooking(){
+    // Calling the collection to add counselee booking
+    return booking.add({
+      // Data added in the form of a dictionary into the document
+
+      
+    });
+
+  }
 
   // Form key
   final _formKey = GlobalKey<FormState>();
@@ -28,7 +47,7 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Counselor Registration',),
+        title: const Text('Counselor Registration',),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(
@@ -36,11 +55,11 @@ class _RegisterState extends State<Register> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               // Basic Details
-              Text('Counselor\'s Basic Details', style: heading,),
+              const Text('Counselor\'s Basic Details', style: heading,),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               // Full Names
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -50,8 +69,8 @@ class _RegisterState extends State<Register> {
                     borderRadius: BorderRadius.circular(25),
                     border: Border.all(color: Colors.white),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
+                  child: const Padding(
+                    padding: EdgeInsets.only(left: 20.0),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Full Name',
@@ -64,18 +83,18 @@ class _RegisterState extends State<Register> {
                 ),
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
               // Phone Number text field
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         // controller: _pnumbercontroller,
@@ -89,18 +108,18 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
 
                 // Email Address
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         // controller: _pnumbercontroller,
@@ -114,18 +133,18 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
 
                 // password text field
                  Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         // controller: _passwordcontroller,
@@ -139,23 +158,23 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
 
                 // Professional Details
-                Text('Professional Details', style: heading,),
+                const Text('Professional Details', style: heading,),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Counselor ID
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         // controller: _pnumbercontroller,
@@ -168,18 +187,18 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
 
                 // Profession
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         // controller: _pnumbercontroller,
@@ -192,18 +211,18 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
 
                 // Experience
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.white),
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
                         // controller: _pnumbercontroller,
@@ -217,13 +236,13 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
           
-                SizedBox(height: 10.0,),
+                const SizedBox(height: 10.0,),
 
       
               // Register button
               GestureDetector(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(    
                     onTap: (){
                       if(_formKey.currentState!.validate()){
@@ -235,12 +254,12 @@ class _RegisterState extends State<Register> {
                       }
                     },             
                     child: Container(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(25.0),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Register',
                           style: TextStyle(

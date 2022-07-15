@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors
+// ignore_for_file: camel_case_types, prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +28,13 @@ class Counselors_page extends StatelessWidget {
               CounselingBooking(),
               const SizedBox(height: 10,),
     
-              // Counselees list
+              // Counselee list
     
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: NeuBox(
                   child: Column(
-                    children: [
+                    children: const [
                       Text('Hello there'),
                     ],
                   ),

@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:flutter/material.dart';
 class Settings_Page extends StatefulWidget {
   const Settings_Page({Key? key}) : super(key: key);
@@ -11,7 +13,7 @@ class _Settings_PageState extends State<Settings_Page> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
     );
   }

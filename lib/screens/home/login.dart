@@ -1,10 +1,5 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_build_context_synchronously
 
-import 'package:careapp/screens/authenticate/authentication.dart';
-import 'package:careapp/screens/home/Counselee/counselee.dart';
-import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
-import 'package:careapp/screens/home/user_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
           password: _passwordcontroller.text.trim(),  
         );
 
-        // Poping out the loading
+        // Popping out the loading
           Navigator.of(context).pop();
           
         // Telling the user that sign in was successful
@@ -55,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           }); 
         
       }on FirebaseAuthException catch(e){
-        print(e);
+        // print(e);
         if (e.code == 'user-not-found') {
           return AlertDialog(
             content: Text('This email is not registered'),

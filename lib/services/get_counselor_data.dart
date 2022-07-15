@@ -1,10 +1,12 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GetCounselorData extends StatelessWidget {
 final String documentIds;
 
-  GetCounselorData({required this.documentIds});
+  const GetCounselorData({required this.documentIds});
 
   @override
   Widget build(BuildContext context) {
@@ -25,48 +27,50 @@ final String documentIds;
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Name:',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   Text(
-                    '${data['firstname'] + data['lastname']}',
-                    style: TextStyle(
+                    '${data['firstname']}',
+                    style: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
+                  const SizedBox(width: 5,),
+                  Text('${data['lastname']}'),
                 ],
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
               // Registration number
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Reg. No:',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   Text(
                     '${data['regnumber']}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
 
               // email
@@ -74,18 +78,18 @@ final String documentIds;
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Email:',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   Expanded(
                     child: Text(
                       '${data['email']}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
@@ -93,55 +97,55 @@ final String documentIds;
                 ],
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
               // phone number
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Phone Number:',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   Text(
                     '${data['pnumber']}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
 
               // Role
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Role:',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   Text(
                     '${data['role']}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                     ),
                   ),
                 ],
               ),
 
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
             //   Text(
             // '${data['firstname']} ' + '${data['lastname']}, '
             //  + '${data['regnumber']}'
@@ -149,7 +153,7 @@ final String documentIds;
             ],
           );
         }
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },

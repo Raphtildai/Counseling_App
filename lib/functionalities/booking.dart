@@ -1,8 +1,10 @@
-import 'dart:ui';
+// ignore_for_file: prefer_const_constructors
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../services/cards.dart';
 
 class Booking extends StatefulWidget {
   const Booking({Key? key}) : super(key: key);
@@ -18,9 +20,13 @@ class _BookingState extends State<Booking> {
   final _firstnamecontroller = TextEditingController();
   final _lastnamecontroller = TextEditingController();
   final _regnocontroller = TextEditingController();
-  final _emailcontroller = TextEditingController();
   final _passwordcontroller = TextEditingController();
   final _pnumbercontroller = TextEditingController();
+
+    // Calling the email of the user that is logged in
+  User user = FirebaseAuth.instance.currentUser!;
+  // Connecting to firebase
+  CollectionReference booking = FirebaseFirestore.instance.collection('bookings');
 
   // Creating date time variable
   DateTime _dateTime = DateTime.now();
@@ -40,7 +46,10 @@ class _BookingState extends State<Booking> {
     });  
   }
 
-  Future bookSession() async {
+  Future<void> bookSession(){
+    return booking.add({
+      
+    });
 
   }
   @override

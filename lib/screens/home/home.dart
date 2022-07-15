@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_constructors_in_immutables, unused_field, unused_element, unused_local_variable
 import 'package:careapp/screens/home/Counselee/counselee.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/message.dart';
@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Admin Dashbord'),
+        title: Text('Admin Dashboard'),
         centerTitle: true,
       ),
       drawer: NavigationDrawer(),

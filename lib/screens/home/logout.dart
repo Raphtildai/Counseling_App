@@ -1,5 +1,4 @@
 import 'package:careapp/screens/authenticate/authentication.dart';
-import 'package:careapp/screens/home/login.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,25 +10,25 @@ class Logout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Logout'),
+        title: const Text('Logout'),
         centerTitle: true,
       ),
 
       body:Center(
         child: Container(
           height: 200,
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: NeuBox(
             child: Column(
               children: [
-                Text(
+                const Text(
                   'Are you sure you want to Logout?',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold
                   ),
                 ),
-                SizedBox(height: 40,),
+                const SizedBox(height: 40,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -40,7 +39,7 @@ class Logout extends StatelessWidget {
                           showDialog(
                             context: context, 
                             builder: (context){
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             }
@@ -49,10 +48,10 @@ class Logout extends StatelessWidget {
                             Navigator.of(context).pop();
                           FirebaseAuth.instance.signOut();
                           Navigator.of(context).pop(MaterialPageRoute(builder: (context){
-                            return MainPage();
+                            return const MainPage();
                           }));
                           showDialog(context: context, builder: (context){
-                            return AlertDialog(
+                            return const AlertDialog(
                               content: Text('You have Logged Out'),
                             );
                           });
@@ -64,7 +63,7 @@ class Logout extends StatelessWidget {
                           showDialog(
                             context: context, 
                             builder: (context){
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             }
@@ -76,24 +75,24 @@ class Logout extends StatelessWidget {
                               content: Text(e.message.toString()),
                             );
                           });
-                        };
+                        }
                       },
                       // },
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(20.0),
                         child: NeuBox(
                           child: Text('Logout'),
                         ),
                       ),
                     ),
-                    SizedBox(width: 40,),
+                    const SizedBox(width: 40,),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).pop(context);
                         },
-                        child: NeuBox(
+                        child: const NeuBox(
                           child: Text('Cancel'),
                         ),
                       ),

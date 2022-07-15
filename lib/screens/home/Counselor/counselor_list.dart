@@ -1,4 +1,5 @@
-import 'package:careapp/services/get_counselee_data.dart';
+// ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
+
 import 'package:careapp/services/get_counselor_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,7 +26,7 @@ class CounselorList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Counselee'),
+        title: const Text('All Counselors'),
       ),
       body: Column(
         children: [

@@ -1,10 +1,19 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CounselingBooking extends StatelessWidget {
- CounselingBooking({Key? key}) : super(key: key);
+class CounselingBooking extends StatefulWidget {
+ const CounselingBooking({Key? key}) : super(key: key);
 
-  final myStyle = TextStyle(
+  @override
+  State<CounselingBooking> createState() => _CounselingBookingState();
+}
+
+class _CounselingBookingState extends State<CounselingBooking> {
+  final myStyle = const TextStyle(
     fontSize: 15,
   );
 
@@ -23,12 +32,12 @@ class CounselingBooking extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
             color: Colors.deepPurple[100],
           ),
-          padding: EdgeInsets.symmetric(horizontal: 25),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           // height: 100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               // Title of the Card
               const Text(
                 'Pending Counseling Sessions Approvals',
@@ -61,20 +70,20 @@ class CounselingBooking extends StatelessWidget {
                         children: [
                           // Student Name
                           Text('Name: Raphael Tildai', style: myStyle,),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           // Course
                           Text('Course: BSc. Computer Science', style: myStyle,),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           // Date booked Session
                           Container(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25),
                               color: Colors.deepPurple[200],
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                              children: const [
                                 Text(
                                   'Date Booked',
                                   style: TextStyle(
@@ -92,10 +101,10 @@ class CounselingBooking extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           // Phone Number
                           Text('+254725341547', style: myStyle,),
-                          SizedBox(height: 5,),
+                          const SizedBox(height: 5,),
                           // Approval button and Rescheduling Button
                           
                         ],
@@ -116,14 +125,14 @@ class CounselingBooking extends StatelessWidget {
                     onPressed: (){
 
                     },
-                    child: Text(
+                    child: const Text(
                       'Approve',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(width: 5,),
+                  const SizedBox(width: 5,),
                   // Rescheduling button
                   MaterialButton(
                     color: Colors.red,
@@ -132,7 +141,7 @@ class CounselingBooking extends StatelessWidget {
                     onPressed: (){
 
                     },
-                    child: Text(
+                    child: const Text(
                       'Reschedule',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

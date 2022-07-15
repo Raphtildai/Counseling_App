@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
+
 import 'package:careapp/services/get_counselee_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +14,7 @@ class CounseleeList extends StatelessWidget {
   // creating a list of document IDs
   List <String> docIDs = [];
 
-  // Creaing function to retrieve the documents
+  // Creating function to retrieve the documents
   Future getdocIDs() async {
 
     await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselee").get().then(
@@ -25,7 +27,7 @@ class CounseleeList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Counselee'),
+        title: const Text('All Counselee'),
       ),
       body: Column(
         children: [
