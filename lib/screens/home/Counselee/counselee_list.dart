@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
 
+import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:careapp/services/get_counselee_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,15 +41,25 @@ class CounseleeList extends StatelessWidget {
                   itemBuilder: (context,index){
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    child: NeuBox(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          children: [
-                            GetCounseleeData(documentIds: docIDs[index])
-                          ],
-                        ),
-                      )
+                    child: GestureDetector(
+                      child: NeuBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              GetCounseleeData(documentIds: docIDs[index]),
+                              ElevatedButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                                    return CounseleeProfile(counseleeID: docIDs[index],);
+                                  }));
+                                }, 
+                                child: Text('Read More'),
+                              ),
+                            ],
+                          ),
+                        )
+                      ),
                     ),
                   );
                 });

@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CounselingBooking extends StatefulWidget {
- const CounselingBooking({Key? key}) : super(key: key);
+ const CounselingBooking({Key? key,}) : super(key: key);
 
   @override
   State<CounselingBooking> createState() => _CounselingBookingState();
@@ -22,7 +22,7 @@ class _CounselingBookingState extends State<CounselingBooking> {
     return GestureDetector(
       onTap: (() {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return CounseleeProfile();
+          return CounseleeProfile(counseleeID: '',);
         }));
       }),
       child: Padding(

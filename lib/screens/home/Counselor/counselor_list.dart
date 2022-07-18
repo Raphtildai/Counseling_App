@@ -1,5 +1,5 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
-
+import 'package:careapp/screens/home/Counselor/counselor_profile.dart';
 import 'package:careapp/services/get_counselor_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +44,14 @@ class CounselorList extends StatelessWidget {
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
                           children: [
-                            GetCounselorData(documentIds: docIDs[index])
+                            GetCounselorData(documentIds: docIDs[index]),
+                              ElevatedButton(onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context){
+                                  return CounselorProfile(counselorID: docIDs[index],);
+                                },));                                
+                              }, 
+                                child: Text('Read More'),
+                            ),
                           ],
                         ),
                       )
