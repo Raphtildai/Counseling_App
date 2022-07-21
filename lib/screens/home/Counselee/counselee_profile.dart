@@ -25,12 +25,6 @@ class CounseleeProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Uri link = Uri.parse('https://youtube.com');
-    Future<void> _message() async{
-      if(!await launchUrl(link)){
-        throw 'Could not launch $link';
-      }
-    }
     // Retrieving and Accessing Counselee details
     CollectionReference counselee = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
@@ -47,6 +41,62 @@ class CounseleeProfile extends StatelessWidget {
         // Outputting the data to the user
         if(snapshot.connectionState == ConnectionState.done){
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
+          // Encoding for SMS
+          final Uri smsUri = Uri(
+            scheme: 'sms',
+            path: '${data['phonenumber']}',
+          );
+          
+          Future<void> _message() async{
+            try{
+              if(await canLaunchUrl(smsUri)){
+                await launchUrl(smsUri);
+              }
+            }catch (e){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Some error occured'),
+                ),
+              );
+            }
+          }
+
+          // Encoding phone calls
+          final Uri callUri = Uri(
+            scheme: 'tel',
+            path: '${data['phonenumber']}'
+          );
+          Future<void> _call() async{
+            try{
+              if(await canLaunchUrl(callUri)){
+                await launchUrl(callUri);
+              }
+            }catch (e){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Some error occured'),
+                ),
+              );
+            }
+          }
+
+          // Encoding Emails
+          final mailUri = Uri(
+            scheme: 'mailto',
+            path: '${data['email']}',
+          );
+          Future<void> _email() async{
+            try{
+              if(await canLaunchUrl(mailUri)){
+                await launchUrl(mailUri);
+              }
+            }catch (e){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Some error occured'),
+                ),
+              );
+            }
+          }
+
           return Scaffold(
           appBar: AppBar(
             title: const Text('Counselee\'s Profile'),
@@ -237,35 +287,41 @@ class CounseleeProfile extends StatelessWidget {
                                         Icon(
                                           Icons.message,
                                         ),
-                                        Text('Message', style: paragraph,),
+                                        Text('Send SMS', style: paragraph,),
                                       ],
                                     ),
                                   ),
 
                                   // Call Me
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    // ignore: prefer_const_literals_to_create_immutables
-                                    children: [
-                                      // ignore: prefer_const_constructors
-                                      Icon(
-                                        Icons.phone
-                                      ),
-                                      Text('Call', style: paragraph,),
-                                    ],
+                                  GestureDetector(
+                                    onTap: () => _call(),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        // ignore: prefer_const_constructors
+                                        Icon(
+                                          Icons.phone
+                                        ),
+                                        Text('Call', style: paragraph,),
+                                      ],
+                                    ),
                                   ),
 
-                                  // WhatsApp Me
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    // ignore: prefer_const_literals_to_create_immutables
-                                    children: [
-                                      // ignore: prefer_const_constructors
-                                      Icon(
-                                        Icons.whatsapp,
-                                      ),
-                                      Text('WhatsApp', style: paragraph,),
-                                    ],
+                                  // Email Me
+                                  GestureDetector(
+                                    onTap: () => _email(),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        // ignore: prefer_const_constructors
+                                        Icon(
+                                          Icons.mail,
+                                        ),
+                                        Text('Email', style: paragraph,),
+                                      ],
+                                    ),
                                   ),
 
                                 ],

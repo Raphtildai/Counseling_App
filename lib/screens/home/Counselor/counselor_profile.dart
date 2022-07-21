@@ -12,14 +12,6 @@ class CounselorProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Uri link = Uri.parse('https://www.youtube.com');
-    Future<void> _message() async{
-      if(!await launchUrl(link)){
-        throw 'Could not launch $link';
-      }else{
-        print('Success');
-      }
-    }git
     final String ID = counselorID; 
     // Retrieving the record of the specified counselor
     CollectionReference counselor = FirebaseFirestore.instance.collection('users');
@@ -37,14 +29,61 @@ class CounselorProfile extends StatelessWidget {
         // Outputting the data to the user
         if(snapshot.connectionState == ConnectionState.done){
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+
           // Encoding for SMS
-          final Uri smsLaunchUri = Uri(
+          final Uri smsUri = Uri(
             scheme: 'sms',
             path: '${data['phonenumber']}',
-            queryParameters: <String, String>{
-              'body': Uri.encodeComponent('Type your message here'),
-            },
           );
+          
+          Future<void> _message() async{
+            try{
+              if(await canLaunchUrl(smsUri)){
+                await launchUrl(smsUri);
+              }
+            }catch (e){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Some error occured'),
+                ),
+              );
+            }
+          }
+
+          // Encoding phone calls
+          final Uri callUri = Uri(
+            scheme: 'tel',
+            path: '${data['phonenumber']}'
+          );
+          Future<void> _call() async{
+            try{
+              if(await canLaunchUrl(callUri)){
+                await launchUrl(callUri);
+              }
+            }catch (e){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Some error occured'),
+                ),
+              );
+            }
+          }
+
+          // Encoding Emails
+          final mailUri = Uri(
+            scheme: 'mailto',
+            path: '${data['email']}',
+          );
+          Future<void> _email() async{
+            try{
+              if(await canLaunchUrl(mailUri)){
+                await launchUrl(mailUri);
+              }
+            }catch (e){
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: const Text('Some error occured'),
+                ),
+              );
+            }
+          }
 
           return Scaffold(
             appBar: AppBar(
@@ -271,7 +310,7 @@ class CounselorProfile extends StatelessWidget {
                                 padding: const EdgeInsets.all(10.0),
                                 child: GestureDetector(
                                   onTap: (){
-
+                                    _message();
                                   },
                                   child: Column(
                                     children: [
@@ -287,7 +326,7 @@ class CounselorProfile extends StatelessWidget {
                                 padding: const EdgeInsets.all(10.0),
                                 child: GestureDetector(
                                   onTap: (){
-                                    _message();
+                                    _call();
                                   },
                                   child: Column(
                                     children: [
@@ -301,13 +340,16 @@ class CounselorProfile extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.whatsapp,
-                                    ),
-                                    Text('Whatsapp Me'),
-                                  ],
+                                child: GestureDetector(
+                                  onTap: () => _email(),
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.mail,
+                                      ),
+                                      Text('Email Me'),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -326,7 +368,6 @@ class CounselorProfile extends StatelessWidget {
         // Return loading to the user
         return Center(child: CircularProgressIndicator(),);
       },
-
     );
   }
 }
