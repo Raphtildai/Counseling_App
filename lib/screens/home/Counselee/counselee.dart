@@ -33,9 +33,6 @@ class _CounseleePageState extends State<CounseleePage> {
       }));
   }
 
-  final String email = 'raphaeltildai6@gmail.com';
-  final String phone = '+254725341547';
-
 
   @override
   Widget build(BuildContext context) {
@@ -209,9 +206,9 @@ class _CounseleePageState extends State<CounseleePage> {
                         itemCount: docIDs.length,
                         itemBuilder: (context, index) {
                           // Get collection
-                          CollectionReference users = FirebaseFirestore.instance.collection('users');
+                          CollectionReference counselor = FirebaseFirestore.instance.collection('users');
                           return FutureBuilder<DocumentSnapshot>(
-                            future: users.doc(docIDs[index]).get(),
+                            future: counselor.doc(docIDs[index]).get(),
                             builder: (context, snapshot){
                               if(snapshot.connectionState == ConnectionState.done){
                                 Map <String, dynamic> data = 
@@ -233,21 +230,6 @@ class _CounseleePageState extends State<CounseleePage> {
                           
                         }),
                       ),
-                      // ListView(
-                      //   primary: false,
-                      //   scrollDirection: Axis.horizontal,
-                      //   children: [
-                      //     CounselorCard(
-                      //       counselorImage: 'assets/bg.jpg',
-                      //       counselorRating: '5.0',
-                      //       counselorName: 'Dr. Angela',
-                      //       counselorProfession: 'Student Counselor',
-                      //       counselorEmail: email,
-                      //       counselorPhone: phone,
-                      //     ),
-                      //   ],
-                      // ),
-                    // ),
                   );
                 }),
               ),

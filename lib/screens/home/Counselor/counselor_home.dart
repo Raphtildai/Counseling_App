@@ -20,7 +20,7 @@ class _CounselorHomeState extends State<CounselorHome> {
         centerTitle: true,
       ),  
       drawer: const CounselorDrawer(),
-      body: const Counselors_page(),    
+      body: const Counselors_Page(),    
     );
   }
 }

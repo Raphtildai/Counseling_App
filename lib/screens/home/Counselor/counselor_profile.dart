@@ -43,7 +43,7 @@ class CounselorProfile extends StatelessWidget {
               }
             }catch (e){
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: const Text('Some error occured'),
+                const SnackBar(content: Text('Some error occurred'),
                 ),
               );
             }
@@ -61,7 +61,7 @@ class CounselorProfile extends StatelessWidget {
               }
             }catch (e){
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: const Text('Some error occured'),
+                const SnackBar(content: Text('Some error occurred'),
                 ),
               );
             }
@@ -79,7 +79,7 @@ class CounselorProfile extends StatelessWidget {
               }
             }catch (e){
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: const Text('Some error occured'),
+                const SnackBar(content: Text('Some error occurred'),
                 ),
               );
             }

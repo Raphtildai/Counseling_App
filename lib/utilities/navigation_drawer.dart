@@ -53,7 +53,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Counselors_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Counselors_Page()));
       break;
 
       case 6:

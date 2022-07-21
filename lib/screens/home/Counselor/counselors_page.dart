@@ -1,20 +1,44 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/utilities/category_card.dart';
+import 'package:careapp/utilities/counselee_card.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utilities/booking_card.dart';
 
-class Counselors_page extends StatelessWidget {
-  const Counselors_page({Key? key}) : super(key: key);
+class Counselors_Page extends StatefulWidget {
+  const Counselors_Page({Key? key}) : super(key: key);
 
+  @override
+  State<Counselors_Page> createState() => _Counselors_PageState();
+}
+
+class _Counselors_PageState extends State<Counselors_Page> {
+    // accessing the user details
+    final user = FirebaseAuth.instance.currentUser!;
+
+    // creating a list of document IDs
+    List <String> docIDs = [];
+
+    // Creaing function to retrieve the documents
+    Future getdocIDs() async {
+
+      await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselee").get().then(
+        (snapshot) => snapshot.docs.forEach((document) {
+          // adding the document to the list
+          docIDs.add(document.reference.id);
+        }));
+    }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text('Counselor\'s Dashboard'),
+        title: const Text('counselee\'s Dashboard'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -94,6 +118,124 @@ class Counselors_page extends StatelessWidget {
                 ),
               ),
             ),
+
+            SizedBox(height: 10,),
+              
+              //  Search bar
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple[50],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      border: InputBorder.none,
+                      hintText: 'How can we help you?',
+                    ),
+                  ),
+                ),
+              ),
+        
+              SizedBox(height: 10.0,),
+            
+              // Horizontal list view for categories -> What we offer
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                height: 80,
+                // color: Colors.deepPurple[50],
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: const [
+                    CategoryCard(
+                      iconImagePath: 'assets/icons/counsellor.png',
+                      categoryName: 'Mindfulness Based Therapy',
+                    ),
+                    CategoryCard(
+                      iconImagePath: 'assets/icons/conversation.png',
+                      categoryName: 'Cognitive Based Therapy',
+                    ),
+                    CategoryCard(
+                      iconImagePath: 'assets/icons/talking.png',
+                      categoryName: 'Rational Emotive Therapy',
+                    ),
+                  ],
+                ),
+              ),
+        
+              SizedBox(height: 10.0,),
+
+              // Counselee Card
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      'Counselee List',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              SizedBox(height: 15.0,),
+
+              FutureBuilder(
+                future: getdocIDs(),
+                builder: ((context, snapshot){
+                  // Counselee
+                  return Container(
+                    height: 200,
+                    child: Expanded(
+                      child: ListView.builder(
+                        primary: false,
+                        itemCount: 3,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index){
+                          // Get collection of counselee records
+                          CollectionReference counselee = FirebaseFirestore.instance.collection('users');
+                          return FutureBuilder<DocumentSnapshot>(
+                            future: counselee.doc(docIDs[index]).get(),
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.done){
+                                Map <String, dynamic> data = 
+                                snapshot.data!.data() as Map <String, dynamic>;
+                                return CounseleeCard(
+                                  counseleeImage: 'assets/bg.jpg',
+                                  counseleeReg: '${data['regnumber']}',
+                                  counseleeName: '${data['firstname']}',
+                                  counseleeCourse: '${data['Course']}',
+                                  counseleeEmail: '${data['email']}',
+                                  counseleePhone: '${data['pnumber']}',
+                                  counseleeID: docIDs[index], 
+
+                                );
+
+                              }
+                              return Center(child: CircularProgressIndicator());
+                            },
+
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }),
+              ),
           ],
         ),
       ),
