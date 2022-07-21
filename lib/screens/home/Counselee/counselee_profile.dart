@@ -2,9 +2,10 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 class CounseleeProfile extends StatelessWidget {
   final String counseleeID;
-  CounseleeProfile({Key? key, required this.counseleeID}) : super(key: key);
+  CounseleeProfile({Key? key, required this.counseleeID,}) : super(key: key);
 
   // Subtitle text style
   // ignore: prefer_const_constructors
@@ -24,6 +25,12 @@ class CounseleeProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Uri link = Uri.parse('https://youtube.com');
+    Future<void> _message() async{
+      if(!await launchUrl(link)){
+        throw 'Could not launch $link';
+      }
+    }
     // Retrieving and Accessing Counselee details
     CollectionReference counselee = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
@@ -217,16 +224,22 @@ class CounseleeProfile extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   // Message Me
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    // ignore: prefer_const_literals_to_create_immutables
-                                    children: [
-                                      // ignore: prefer_const_constructors
-                                      Icon(
-                                        Icons.message,
-                                      ),
-                                      Text('Message', style: paragraph,),
-                                    ],
+                                  GestureDetector(
+                                    onTap: (){
+                                      _message();
+                                      
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        // ignore: prefer_const_constructors
+                                        Icon(
+                                          Icons.message,
+                                        ),
+                                        Text('Message', style: paragraph,),
+                                      ],
+                                    ),
                                   ),
 
                                   // Call Me

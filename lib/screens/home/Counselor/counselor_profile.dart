@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CounselorProfile extends StatelessWidget {
   final String counselorID;
@@ -11,6 +12,14 @@ class CounselorProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Uri link = Uri.parse('https://www.youtube.com');
+    Future<void> _message() async{
+      if(!await launchUrl(link)){
+        throw 'Could not launch $link';
+      }else{
+        print('Success');
+      }
+    }git
     final String ID = counselorID; 
     // Retrieving the record of the specified counselor
     CollectionReference counselor = FirebaseFirestore.instance.collection('users');
@@ -28,6 +37,15 @@ class CounselorProfile extends StatelessWidget {
         // Outputting the data to the user
         if(snapshot.connectionState == ConnectionState.done){
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          // Encoding for SMS
+          final Uri smsLaunchUri = Uri(
+            scheme: 'sms',
+            path: '${data['phonenumber']}',
+            queryParameters: <String, String>{
+              'body': Uri.encodeComponent('Type your message here'),
+            },
+          );
+
           return Scaffold(
             appBar: AppBar(
               title: Text('Counselor\'s Profile '),
@@ -251,24 +269,34 @@ class CounselorProfile extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.message,
-                                    ),
-                                    Text('Message Me'),
-                                  ],
+                                child: GestureDetector(
+                                  onTap: (){
+
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.message,
+                                      ),
+                                      Text('Message Me'),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    Icon(
-                                      Icons.call,
-                                    ),
-                                    Text('Call Me'),
-                                  ],
+                                child: GestureDetector(
+                                  onTap: (){
+                                    _message();
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.call,
+                                      ),
+                                      Text('Call Me'),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Padding(
