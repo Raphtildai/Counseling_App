@@ -3,10 +3,12 @@
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
+import 'package:careapp/screens/home/Counselor/reschedule.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/utilities/drawer_item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CounseleeDrawer extends StatelessWidget {
@@ -30,7 +32,7 @@ final personal = TextStyle(
       break;
       //Notifications
       case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Booking()));
       break;
 
       case 2:
@@ -42,7 +44,7 @@ final personal = TextStyle(
       break;
 
       case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Settings_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> Reschedule()));
       break;
       // Counselors
       case 5:
@@ -50,11 +52,11 @@ final personal = TextStyle(
       break;
 
       case 6:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Logout()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings_Page()));
       break;
 
       case 7:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>Logout()));
       break;
       
 
@@ -141,7 +143,7 @@ final personal = TextStyle(
                 DrawerItem(
                   Name: 'Chats', 
                   icon: Icons.chat, 
-                  onPressed: ()=> onItemPressed(context, index: 2),
+                  onPressed: ()=> onItemPressed(context, index: 3),
                 ),
           
                 const SizedBox(height: 20,),
@@ -149,7 +151,7 @@ final personal = TextStyle(
                 DrawerItem(
                   Name: 'Reschedule Session', 
                   icon: Icons.schedule, 
-                  onPressed: ()=> onItemPressed(context, index: 3),
+                  onPressed: ()=> onItemPressed(context, index: 4),
                 ),
           
                 const SizedBox(height: 20,),
@@ -157,7 +159,7 @@ final personal = TextStyle(
                 DrawerItem(
                   Name: 'Counselors', 
                   icon: Icons.people, 
-                  onPressed: ()=> onItemPressed(context, index: 4),
+                  onPressed: ()=> onItemPressed(context, index: 5),
                 ),
           
                 const SizedBox(height: 20,),
@@ -165,7 +167,7 @@ final personal = TextStyle(
                 DrawerItem(
                   Name: 'Settings', 
                   icon: Icons.settings, 
-                  onPressed: ()=> onItemPressed(context, index: 5),
+                  onPressed: ()=> onItemPressed(context, index: 6),
                 ),
           
                 const SizedBox(height: 20,),
@@ -173,7 +175,7 @@ final personal = TextStyle(
                 DrawerItem(
                   Name: 'Logout', 
                   icon: Icons.logout, 
-                  onPressed: ()=> onItemPressed(context, index: 6),
+                  onPressed: ()=> onItemPressed(context, index: 7),
                 ),
               ],
             ),
