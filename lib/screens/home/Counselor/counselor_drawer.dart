@@ -1,11 +1,12 @@
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
-import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
+import 'package:careapp/screens/home/user_account.dart';
 import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/utilities/drawer_item.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CounselorDrawer extends StatelessWidget {
@@ -25,7 +26,7 @@ final personal = const TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const UserAccount()));
       break;
       //Notifications
       case 1:
@@ -45,7 +46,7 @@ final personal = const TextStyle(
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Counselors_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Counselors_Page()));
       break;
 
       case 6:
@@ -66,6 +67,7 @@ final personal = const TextStyle(
 
   @override
   Widget build(BuildContext context){
+    final user = FirebaseAuth.instance.currentUser!;
     // Url To the profile picture
     const url = 'https://photos.google.com/photo/AF1QipP-L6Wi5Ud3mPpdnmyy1dZrleOhYaIwyrkae6ju';
     return Drawer(
@@ -84,20 +86,22 @@ final personal = const TextStyle(
                       backgroundImage: NetworkImage(url),
                     ),
                     const SizedBox(width: 20,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: [
-                        Text(
-                          'Person Name',
-                          style: personal,
-                        ),
-                        const SizedBox(height: 10,),
-                        Text(
-                          'email@gmail.com',
-                          style: personal
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Text(
+                            'Welcome',
+                            style: personal,
+                          ),
+                          const SizedBox(height: 10,),
+                          Text(
+                            '${user.email}',
+                            style: personal
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),

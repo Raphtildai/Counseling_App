@@ -61,7 +61,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 7:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>Account_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>UserAccount()));
       break;
       
 

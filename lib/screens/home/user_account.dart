@@ -3,47 +3,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class Account_page extends StatefulWidget {
-  const Account_page({Key? key}) : super(key: key);
+class UserAccount extends StatelessWidget {
+const UserAccount({ Key? key }) : super(key: key);
 
   @override
-  State<Account_page> createState() => _Account_pageState();
-}
-
-
-@override
-class _Account_pageState extends State<Account_page> {
-
-CollectionReference _collectionReference = FirebaseFirestore.instance.collection('users');
-late Stream<QuerySnapshot> _streamAdmins;
-
-void initState() {
-  super.initState();
-  _streamAdmins = _collectionReference.snapshots();
-}
-
-  @override
-  Widget build(BuildContext context) {
-    
-    // _collectionReference.snapshots();
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: const Text('My Account'),
+        centerTitle: true,
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _streamAdmins,
-        builder: (BuildContext context, AsyncSnapshot snapshot){
-          if(snapshot.hasError){
-            return Center(child: Text(snapshot.error.toString()));
-          }
-          if(snapshot.connectionState == ConnectionState.done){
-            QuerySnapshot querySnapshot = snapshot.data;
-            // print(querySnapshot);
-          }
-          return const Center(child: CircularProgressIndicator());
-            // return Container(child: Center(child: Text('Nothing to show')),);
-          },
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Account profile picture
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                child: Container(
+                  height: 200,
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple[100],
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      const SizedBox(height: 20,),
+
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: Image.asset(
+                          'assets/raph.PNG',
+                          height: 100,
+                          width: 300,
+                        ),
+                      )
+                    ],
+                  ),
+                  
+                ),
+              )
+        
+              // Name and basic details
+              
+            ],
+          ),
         ),
-      );
+      ),
+
+    );
   }
 }

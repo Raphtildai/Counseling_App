@@ -54,7 +54,7 @@ class CounseleeList extends StatelessWidget {
                                     return CounseleeProfile(counseleeID: docIDs[index],);
                                   }));
                                 }, 
-                                child: Text('Read More'),
+                                child: const Text('Read More'),
                               ),
                             ],
                           ),

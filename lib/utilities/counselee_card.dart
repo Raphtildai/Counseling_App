@@ -49,7 +49,7 @@ class CounseleeCard extends StatelessWidget {
             // counselee's Rating
             Row(
               children: [
-                const Icon(Icons.star, color: Colors.yellow,),
+                const Icon(Icons.numbers),
                 Text(counseleeReg),
               ],
             ),

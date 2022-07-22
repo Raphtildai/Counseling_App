@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -172,7 +173,7 @@ class _CounseleePageState extends State<CounseleePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'Counselors List',
                       style: TextStyle(
@@ -180,11 +181,16 @@ class _CounseleePageState extends State<CounseleePage> {
                         fontSize: 18.0,
                       ),
                     ),
-                    Text(
-                      'See All',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16.0,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
+                      },
+                      child: Text(
+                        'See All',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
                   ],
@@ -203,7 +209,7 @@ class _CounseleePageState extends State<CounseleePage> {
                       child: ListView.builder(
                         primary: false,
                         scrollDirection: Axis.horizontal,
-                        itemCount: docIDs.length,
+                        itemCount: 3,
                         itemBuilder: (context, index) {
                           // Get collection
                           CollectionReference counselor = FirebaseFirestore.instance.collection('users');

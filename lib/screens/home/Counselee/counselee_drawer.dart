@@ -6,9 +6,10 @@ import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/Counselor/reschedule.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
+import 'package:careapp/screens/home/user_account.dart';
 import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/utilities/drawer_item.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CounseleeDrawer extends StatelessWidget {
@@ -28,7 +29,7 @@ final personal = TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
       break;
       //Notifications
       case 1:
@@ -69,6 +70,7 @@ final personal = TextStyle(
 
   @override
   Widget build(BuildContext context){
+    final user = FirebaseAuth.instance.currentUser!;
     // Url To the profile picture
     const url = 'https://photos.google.com/photo/AF1QipP-L6Wi5Ud3mPpdnmyy1dZrleOhYaIwyrkae6ju';
     return Drawer(
@@ -87,20 +89,22 @@ final personal = TextStyle(
                       backgroundImage: NetworkImage(url),
                     ),
                     const SizedBox(width: 20,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // ignore: prefer_const_literals_to_create_immutables
-                      children: [
-                        Text(
-                          'Person Name',
-                          style: personal,
-                        ),
-                        SizedBox(height: 10,),
-                        Text(
-                          'email@gmail.com',
-                          style: personal
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // ignore: prefer_const_literals_to_create_immutables
+                        children: [
+                          Text(
+                            'Welcome',
+                            style: personal,
+                          ),
+                          SizedBox(height: 10,),
+                          Text(
+                            '${user.email}',
+                            style: personal
+                          ),
+                        ],
+                      ),
                     )
                   ],
                 ),

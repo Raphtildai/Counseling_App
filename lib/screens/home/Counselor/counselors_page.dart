@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:careapp/utilities/counselee_card.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
@@ -36,11 +37,11 @@ class _Counselors_PageState extends State<Counselors_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('counselee\'s Dashboard'),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   title: const Text('counselor\'s Dashboard'),
+      //   centerTitle: true,
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -173,7 +174,7 @@ class _Counselors_PageState extends State<Counselors_Page> {
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'Counselee List',
                       style: TextStyle(
@@ -181,11 +182,16 @@ class _Counselors_PageState extends State<Counselors_Page> {
                         fontSize: 18.0,
                       ),
                     ),
-                    Text(
-                      'See All',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16.0,
+                    GestureDetector(
+                      onTap: (() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CounseleeList()));
+                      }),
+                      child: Text(
+                        'See All',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
                   ],

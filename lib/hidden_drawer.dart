@@ -84,7 +84,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           selectedStyle: myTextStyle,
           colorLineSelected: Colors.deepPurple,
         ), 
-        Account_page(),
+        UserAccount(),
       ),
     ];
   }
