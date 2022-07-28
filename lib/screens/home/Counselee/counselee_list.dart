@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
 
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
+import 'package:careapp/screens/home/Counselee/register.dart';
 import 'package:careapp/services/get_counselee_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,6 +33,55 @@ class CounseleeList extends StatelessWidget {
       ),
       body: Column(
         children: [
+          const SizedBox(height: 10,),
+          //  Search bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.deepPurple[50],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                  hintText: 'Search Counselee',
+                ),
+              ),
+            ),
+          ),
+    
+          const SizedBox(height: 10.0,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal:25.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Adding new counselor
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                      return const Register();
+
+                    }));
+                  },
+                   child: const Text('New Counselee'),
+                ),
+                // Searching counselor
+                ElevatedButton(
+                  onPressed: (){
+                    // Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    //   return ;
+
+                    // }));
+                  },
+                   child: const Text('Search Counselee'),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: FutureBuilder(
               future: getdocIDs(),

@@ -1,8 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, unnecessary_null_comparison
-
-import 'package:careapp/screens/authenticate/auth.dart';
-import 'package:careapp/screens/home/Counselor/counselor_list.dart';
-import 'package:careapp/screens/home/home.dart';
+import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +15,7 @@ const heading = TextStyle(
     fontWeight: FontWeight.bold,
   );
 
-class _RegisterState extends State<Register> { 
+class _RegisterState extends State<Register> {
   String Validate(String value){
     if(value == null || value == ""){
       return 'This field cannot be empty';
@@ -34,9 +30,11 @@ class _RegisterState extends State<Register> {
   final _pnumbercontroller = TextEditingController();
   final _passwordcontroller = TextEditingController();
   final _aboutcontroller = TextEditingController();
-  final _counselorIDcontroller = TextEditingController();
-  final _professioncontroller = TextEditingController();
-  final _ratingcontroller = TextEditingController();
+  final _regnumbercontroller = TextEditingController();
+  final _agecontroller = TextEditingController();
+  final _schoolcontroller = TextEditingController();
+  final _coursecontroller = TextEditingController();
+  final _year_of_studycontroller = TextEditingController();
 
   // Sign up function
   Future signingUp() async{
@@ -67,9 +65,11 @@ class _RegisterState extends State<Register> {
       int.parse(_pnumbercontroller.text.toString()),
       _passwordcontroller.text.trim(),
       _aboutcontroller.text.trim(),
-      _counselorIDcontroller.text.trim(),
-      _professioncontroller.text.trim(),
-      int.parse(_ratingcontroller.text.toString()),
+      _regnumbercontroller.text.trim(),
+      int.parse(_agecontroller.text.toString()),
+      _schoolcontroller.text.trim(),
+      _coursecontroller.text.trim(),
+      int.parse(_year_of_studycontroller.text.toString()),
     );
 
     showDialog(context: context, builder: (context){
@@ -78,7 +78,7 @@ class _RegisterState extends State<Register> {
       );
     });
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return CounselorList();
+        return CounseleeList();
     }));
   }on FirebaseAuthException catch(e){
     if (e.code == 'weak-password') {
@@ -104,7 +104,7 @@ class _RegisterState extends State<Register> {
 
 // function to add user details
 // We will pass the above controllers to the function
-Future addUserDetails(String fname, String lname, String email, int pnumber, String password, String about, String counselorID, String profession, int rating) async {
+Future addUserDetails(String fname, String lname, String email, int pnumber, String password, String about, String regnumber, int age, String school, String course, int year_of_study) async {
   await FirebaseFirestore.instance.collection('users').add({
     // We pass the above parameters inform of a map
     'firstname': fname,
@@ -113,10 +113,12 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
     'pnumber': pnumber,
     'password': password,
     'about': about,
-    'counselorID': counselorID,
-    'profession': profession,
-    'rating': rating,
-    'role': "counselor",
+    'regnumber': regnumber,
+    'age': age,
+    'school': school,
+    'Course': course,
+    'year_of_study': year_of_study,
+    'role': "counselee",
     'date_registered': DateTime.now(),
 
   });
@@ -132,9 +134,11 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
     _pnumbercontroller.dispose();
     _passwordcontroller.dispose();
     _aboutcontroller.dispose();
-    _counselorIDcontroller.dispose();
-    _professioncontroller.dispose();
-    _ratingcontroller.dispose();
+    _regnumbercontroller.dispose();
+    _agecontroller.dispose();
+    _schoolcontroller.dispose();
+    _coursecontroller.dispose();
+    _year_of_studycontroller.dispose();
     super.dispose();
   }
   
@@ -153,7 +157,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
             // Basic Details
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 25),
-              child: Text('Counselor\'s Basic Details', style: heading,),
+              child: Text('Counselee\'s Basic Details', style: heading,),
             ),
 
             const SizedBox(height: 10,),
@@ -308,10 +312,35 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
         
               const SizedBox(height: 10.0,),
 
-              // Professional Details
+              // Age
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: TextField(
+                      controller: _agecontroller,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Age',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        
+              const SizedBox(height: 10.0,),
+
+              // Education Details
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 25),
-                child: Text('Professional Details', style: heading,),
+                child: Text('Education Details', style: heading,),
               ),
 
               const SizedBox(height: 10),
@@ -328,10 +357,10 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
-                      controller: _counselorIDcontroller,
+                      controller: _regnumbercontroller,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Counselor ID',
+                        hintText: 'Registration Number',
                       ),
                     ),
                   ),
@@ -340,7 +369,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
         
               const SizedBox(height: 10.0,),
 
-              // Profession
+              // school
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
@@ -352,10 +381,34 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
-                      controller: _professioncontroller,
+                      controller: _schoolcontroller,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Profession',
+                        hintText: 'School',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        
+              const SizedBox(height: 10.0,),
+
+              // Course
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.white),
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: TextField(
+                      controller: _coursecontroller,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Course',
                       ),
                     ),
                   ),
@@ -376,11 +429,11 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: TextField(
-                      controller: _ratingcontroller,
+                      controller: _year_of_studycontroller,
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Years of Experience',
+                        hintText: 'Year of Study',
                       ),
                     ),
                   ),

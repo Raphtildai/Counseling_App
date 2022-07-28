@@ -33,7 +33,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
       break;
       //Notifications
       case 1:

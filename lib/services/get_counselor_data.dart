@@ -54,7 +54,7 @@ final String documentIds;
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    'Reg. No:',
+                    'Counselor ID:',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ final String documentIds;
                   ),
                   const SizedBox(width: 5,),
                   Text(
-                    '${data['regnumber']}',
+                    '${data['counselorID']}',
                     style: const TextStyle(
                       fontSize: 14,
                     ),

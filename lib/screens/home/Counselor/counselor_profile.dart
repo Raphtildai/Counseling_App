@@ -95,26 +95,33 @@ class CounselorProfile extends StatelessWidget {
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Row(
-                          children: [
-                            // A picture at the left
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: 200,
-                                width: 150,
-                                child: Image.asset('assets/bg.jpg'),
+                        child: Container(
+                        // height: MediaQuery.of(context).size.height - 200,
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 20,),
+                              // A picture at the left
+                              ClipRRect(
+                                borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                child: Image.asset(
+                                  'assets/raph.PNG',
+                                  // height: 100,
+                                  width: MediaQuery.of(context).size.width,
+                                ),
                               ),
-                            ),
 
-                            SizedBox(width: 20,),
+                              SizedBox(height: 20,),
 
-                            // A message at the Right
-                            Expanded(
-                              child: Column(
+                              // A message at the Right
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
@@ -154,8 +161,8 @@ class CounselorProfile extends StatelessWidget {
                                   
                                 ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
           
@@ -223,7 +230,7 @@ class CounselorProfile extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        'License Number:',
+                                        'Counselor ID:',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
@@ -233,7 +240,7 @@ class CounselorProfile extends StatelessWidget {
                                       SizedBox(width: 10,),
 
                                       Text(
-                                        '${data['regnumber']}',
+                                        '${data['counselorID']}',
                                         style: TextStyle(
                                           fontSize: 14,
                                         ),

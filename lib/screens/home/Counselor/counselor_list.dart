@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
 import 'package:careapp/screens/home/Counselor/counselor_profile.dart';
+import 'package:careapp/screens/home/Counselor/register.dart';
 import 'package:careapp/services/get_counselor_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,6 +31,50 @@ class CounselorList extends StatelessWidget {
       ),
       body: Column(
         children: [
+          SizedBox(height: 10,),
+          //  Search bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0),
+            child: Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.deepPurple[50],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                  hintText: 'Search Counselor',
+                ),
+              ),
+            ),
+          ),
+    
+          SizedBox(height: 10.0,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal:25.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Adding new counselor
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                      return Register();
+
+                    }));
+                  },
+                   child: Text('New Counselor'),
+                ),
+                // Searching counselor
+                ElevatedButton(
+                  onPressed: (){},
+                   child: Text('Search Counselor'),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: FutureBuilder(
               future: getdocIDs(),

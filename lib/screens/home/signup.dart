@@ -28,7 +28,7 @@ class _SignUpState extends State<SignUp> {
   final _passwordcontroller = TextEditingController();
   final _pnumbercontroller = TextEditingController();
 
-  // Sign in function
+  // Sign up function
   Future signingUp() async{
     try{
       // Loading
@@ -101,6 +101,7 @@ class _SignUpState extends State<SignUp> {
       'password': password,
       'pnumber': pnumber,
       'role': "counselee",
+      'date_registered': DateTime.now(),
 
     });
   }

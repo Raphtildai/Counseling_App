@@ -2,6 +2,7 @@
 import 'package:careapp/screens/authenticate/auth.dart';
 import 'package:careapp/screens/home/Counselee/counselee_home.dart';
 import 'package:careapp/screens/home/Counselor/counselor_home.dart';
+import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class _MainPageState extends State<MainPage> {
           //   }
           // );
           // Navigator.of(context).pushReplacementNamed('/home');
-          return const CounselorHome();
+          return Home();
           
         }else{
           return const AuthPage();

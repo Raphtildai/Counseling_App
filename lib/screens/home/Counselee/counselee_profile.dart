@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
+import 'package:careapp/screens/home/Counselee/register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,10 +33,10 @@ class CounseleeProfile extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         // Error handling conditions
         if(snapshot.hasError){
-          return Center(child: Text('Something went Wrong'));
+          return const Center(child: Text('Something went Wrong'));
         }
         if(snapshot.hasData && !snapshot.data!.exists){
-          return Center(child: Text('The counselee Record does not exist'),);
+          return const Center(child: Text('The counselee Record does not exist'),);
         }
 
         // Outputting the data to the user
@@ -106,7 +107,7 @@ class CounseleeProfile extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    const SizedBox(height: 5,),
+                    const SizedBox(height: 10,),
                     // Counselee's profile picture and basic details
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -117,39 +118,48 @@ class CounseleeProfile extends StatelessWidget {
               
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 150,
-                                  width: 100,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: Image.asset('assets/counselor2.png')
-                                  ),
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 10,),
+                                    // A picture at the top
+                                    ClipRRect(
+                                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                                      child: Image.asset(
+                                        'assets/counselor2.png',
+                                        // height: 100,
+                                        width: MediaQuery.of(context).size.width,
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 20,),
+                                  
+                                    // Name and other basic information
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text('Basic Details', style: subtitle,),
+                                        Text('Name: ${data['firstname'] + ' ' + data['lastname']}',style: paragraph,),
+                                        // Text('email: ${data['email']}', style: paragraph,),
+                                        Text('Reg No: ${data['regnumber']}',style: paragraph,),
+                                        Text('Age: ${data['age']}', style: paragraph,),
+                                        Text('Residence: ${data['residence']}', style: paragraph,), 
+                                        const SizedBox(height: 10,),                           
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 5,),
-                                    
-                                // Name and other basic information
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text('Basic Details', style: subtitle,),
-                                      Text('Name: ${data['firstname'] + ' ' + data['lastname']}',style: paragraph,),
-                                      // Text('email: ${data['email']}', style: paragraph,),
-                                      Text('Reg No: ${data['regnumber']}',style: paragraph,),
-                                      Text('Age: ${data['age']}', style: paragraph,),
-                                      Text('Residence: ${data['residence']}', style: paragraph,),                            
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -206,13 +216,37 @@ class CounseleeProfile extends StatelessWidget {
                               children: [
                                 Text('Education Details', style: subtitle,),
                                 // School Enrolled
-                                Text('School: ${data['school']}', style: paragraph,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('School:', style: heading,),
+                                    const SizedBox(width: 5,),
+                                    Expanded(child: Text('${data['school']}', style: paragraph,)),
+                                  ],
+                                ),
                                             
                                 // Course Pursuing
-                                Text('Course: ${data['Course']}', style: paragraph,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Course:', style: heading,),
+                                    const SizedBox(width: 5,),
+                                    Expanded(child: Text('${data['Course']}', style: paragraph,)),
+                                  ],
+                                ),
                                             
                                 // Year of Study
-                                Text('Year of Study: ${data['year_of_study']}', style: paragraph,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text('Year of Study:', style: heading,),
+                                    const SizedBox(width: 5,),
+                                    Expanded(child: Text('${data['year_of_study']}', style: paragraph,)),
+                                  ],
+                                ),
                                             
                               ],
                             ),
@@ -221,33 +255,33 @@ class CounseleeProfile extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 10,),
+                    // const SizedBox(height: 10,),
 
-                    // Counseling Sessions attended before
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25),
-                          color: Colors.deepPurple[100],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Counseling Sessions History', style: subtitle,),
-                                const SizedBox(height: 10,),
-                                Image.asset('assets/graph.png'),                                        
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // // Counseling Sessions attended before
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 25),
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 25),
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(25),
+                    //       color: Colors.deepPurple[100],
+                    //     ),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.symmetric(vertical: 10),
+                    //       child: Expanded(
+                    //         child: Column(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //           children: [
+                    //             Text('Counseling Sessions History', style: subtitle,),
+                    //             const SizedBox(height: 10,),
+                    //             Image.asset('assets/graph.png'),                                        
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
 
                     const SizedBox(height: 10,),
                     
@@ -323,7 +357,6 @@ class CounseleeProfile extends StatelessWidget {
                                       ],
                                     ),
                                   ),
-
                                 ],
                               ),
                             ],
@@ -331,7 +364,6 @@ class CounseleeProfile extends StatelessWidget {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               )
@@ -339,7 +371,7 @@ class CounseleeProfile extends StatelessWidget {
           ),
         );  
       }
-      return Center(child: CircularProgressIndicator(),);
+      return const Center(child: CircularProgressIndicator(),);
       }
     );
   }
