@@ -14,7 +14,7 @@ class CounselorList extends StatelessWidget {
   // creating a list of document IDs
   List <String> docIDs = [];
 
-  // Creaing function to retrieve the documents
+  // Creating function to retrieve the documents
   Future getdocIDs() async {
 
     await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselor").get().then(

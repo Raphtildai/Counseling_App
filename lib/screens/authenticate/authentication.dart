@@ -1,6 +1,7 @@
 // import 'package:careapp/hidden_drawer.dart';
 import 'package:careapp/screens/authenticate/auth.dart';
 import 'package:careapp/screens/home/Counselee/counselee_home.dart';
+import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/screens/home/Counselor/counselor_home.dart';
 import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,20 +15,28 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
+String userID = 'JeyTqxAEqxMCSWH1LeuP';
+
 class _MainPageState extends State<MainPage> {
-  final counselor = FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'counselor').get();
-  final counselee = FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'counselee').get();
-  final admin = FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'admin').get();
-  // creating a list of document IDs
-  List <String> docIDs = [];
 
-  // Creaing function to retrieve the documents
-  Future getdocIDs() async {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserID();
+  }
 
-    await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselor").get().then(
+  // Creating function to retrieve the documents
+  Future getUserID() async {
+    final email = FirebaseAuth.instance.currentUser!.email;
+
+    await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get().then(
       (snapshot) => snapshot.docs.forEach((document) {
-        // adding the document to the list
-        docIDs.add(document.reference.id);
+        if(ConnectionState == ConnectionState.done){
+          setState(() {
+            userID = document.reference.id;
+          });
+        }
       }));
   }
   // Future myrole() async{
@@ -46,12 +55,41 @@ class _MainPageState extends State<MainPage> {
   // }
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
+    return StreamBuilder(
       // Below checks any auth changes
       stream: FirebaseAuth.instance.authStateChanges(), //FirebaseAuth.instance.authStateChanges()
       // Snapshot gives us information for the user
       builder: (context, snapshot){
         if(snapshot.hasData){
+          CollectionReference counselee = FirebaseFirestore.instance.collection('users');
+          return FutureBuilder<DocumentSnapshot>(
+            future: counselee.doc('$userID').get(),
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+              // Error handling conditions
+              if(snapshot.hasError){
+                return const Center(child: Text('Something went Wrong'));
+              }
+              if(snapshot.hasData && !snapshot.data!.exists){
+                print(FirebaseAuth.instance.currentUser?.email);
+                return const Center(child: Text('The counselee Record does not exist'),);
+              }
+
+              // Outputting the data to the user
+              if(snapshot.connectionState == ConnectionState.done){
+                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                if(data['role'] == 'admin'){
+                  return Home();
+                }else if(data['role'] == 'counselee'){
+                  return CounseleeHome();
+                }else if(data['role'] == 'counselor'){
+                  return CounselorHome();
+                }else{
+                  return CounseleeList();
+                }
+              }
+              return Scaffold(body: const Center(child: CircularProgressIndicator(),));
+            }
+          );         
           // if(User == admin){
           //   return Home();
           // }else if(User == counselee){
@@ -102,7 +140,7 @@ class _MainPageState extends State<MainPage> {
           //   }
           // );
           // Navigator.of(context).pushReplacementNamed('/home');
-          return Home();
+          // return Home();
           
         }else{
           return const AuthPage();

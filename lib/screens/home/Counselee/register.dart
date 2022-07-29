@@ -123,7 +123,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
 
   });
     
-  }
+}
 
   // we dispose the above controllers to help our memory management
   @override
