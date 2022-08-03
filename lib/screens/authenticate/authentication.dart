@@ -14,45 +14,29 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
-
-String userID = 'JeyTqxAEqxMCSWH1LeuP';
+String userID = '';
 
 class _MainPageState extends State<MainPage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUserID();
-  }
+      // Creating function to retrieve the documents
+    Future<void> getUserID() async {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
 
-  // Creating function to retrieve the documents
-  Future getUserID() async {
-    final email = FirebaseAuth.instance.currentUser!.email;
-
-    await FirebaseFirestore.instance.collection('users').where('email', isEqualTo: email).get().then(
-      (snapshot) => snapshot.docs.forEach((document) {
-        if(ConnectionState == ConnectionState.done){
-          setState(() {
-            userID = document.reference.id;
-          });
-        }
-      }));
+      await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid).get().then(
+        (snapshot) => snapshot.docs.forEach((document) {
+          if(ConnectionState == ConnectionState.done){
+            String result = document.reference.id;
+            setState(() {
+              userID = result;
+              print(userID);
+            });
+          }
+        }));
+    }
   }
-  // Future myrole() async{
-  //   final role = await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: 'admin');
-  //   if(role == 'admin'){
-      
-  //   }else if(role == 'user'){
-  //     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-  //       return Home();
-  //     }));
-  //   }else{
-  //     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-  //       return Home();
-  //     }));
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -60,18 +44,22 @@ class _MainPageState extends State<MainPage> {
       stream: FirebaseAuth.instance.authStateChanges(), //FirebaseAuth.instance.authStateChanges()
       // Snapshot gives us information for the user
       builder: (context, snapshot){
+        // String ID = userID;
         if(snapshot.hasData){
           CollectionReference counselee = FirebaseFirestore.instance.collection('users');
           return FutureBuilder<DocumentSnapshot>(
-            future: counselee.doc('$userID').get(),
+            future: counselee.doc('JeyTqxAEqxMCSWH1LeuP').get(),
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
               // Error handling conditions
               if(snapshot.hasError){
+                print(userID);
+                print(snapshot.error);
                 return const Center(child: Text('Something went Wrong'));
               }
               if(snapshot.hasData && !snapshot.data!.exists){
                 print(FirebaseAuth.instance.currentUser?.email);
-                return const Center(child: Text('The counselee Record does not exist'),);
+                print(userID);
+                return const Center(child: Text('The User Record does not exist'),);
               }
 
               // Outputting the data to the user

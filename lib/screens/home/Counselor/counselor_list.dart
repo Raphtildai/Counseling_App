@@ -51,7 +51,7 @@ class CounselorList extends StatelessWidget {
             ),
           ),
     
-          SizedBox(height: 10.0,),
+          const SizedBox(height: 10.0,),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal:25.0),
             child: Row(

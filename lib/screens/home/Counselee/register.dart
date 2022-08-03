@@ -146,7 +146,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counselor Registration',),
+        title: const Text('Counselee Registration',),
         elevation: 0.0,
       ),
       body: SingleChildScrollView(

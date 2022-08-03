@@ -118,7 +118,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
     'rating': rating,
     'role': "counselor",
     'date_registered': DateTime.now(),
-
+    'uid': FirebaseAuth.instance.currentUser!.uid,
   });
     
   }

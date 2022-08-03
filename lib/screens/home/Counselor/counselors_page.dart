@@ -2,6 +2,7 @@
 
 import 'package:careapp/functionalities/booking.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
+import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:careapp/utilities/counselee_card.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
@@ -99,7 +100,7 @@ class _Counselors_PageState extends State<Counselors_Page> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return Booking();
+                                  return ApproveSession();
                                 },),);
                                 },
                                 child: Text(

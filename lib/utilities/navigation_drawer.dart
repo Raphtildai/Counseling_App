@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
+import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
@@ -41,7 +42,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> ApproveSession()));
       break;
 
       case 3:

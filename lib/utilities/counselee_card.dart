@@ -46,7 +46,7 @@ class CounseleeCard extends StatelessWidget {
             ),
             const SizedBox(height: 5,),
       
-            // counselee's Rating
+            // counselee's Regnumber
             Row(
               children: [
                 const Icon(Icons.numbers),
@@ -66,7 +66,7 @@ class CounseleeCard extends StatelessWidget {
       
             const SizedBox(height: 5,),
       
-            Text(counseleeCourse),
+            SizedBox( width: 150,child: Expanded(child: Text(counseleeCourse))),
       
             const SizedBox(height: 5,),
       
