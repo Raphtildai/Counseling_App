@@ -1,3 +1,6 @@
+import 'dart:js';
+
+import 'package:careapp/services/get_counselee_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +12,24 @@ class ApproveSession extends StatefulWidget {
   _ApproveSessionState createState() => _ApproveSessionState();
 }
 
-final titleStyle = const TextStyle(
+const titleStyle = TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.bold,
 );
-final textStyle = const TextStyle(
+const textStyle = TextStyle(
   fontSize: 14,
 );
 
+// Function to approve session
+Future approveSession() async {
+  // await FirebaseFirestore.instance.ref
+
+}
+
   // creating a list of document IDs
   List <String> docIDs = [];
+  
+  List<String> counseleeID = [];
 
   // Creating function to retrieve the documents
   Future getdocIDs() async {
@@ -33,6 +44,19 @@ final textStyle = const TextStyle(
 class _ApproveSessionState extends State<ApproveSession> {
   @override
   Widget build(BuildContext context) {
+    // Get counselee document ID
+    Future getCounseleeID(regnumber) async {
+      await FirebaseFirestore.instance.collection('users').where('regnumber', isEqualTo: regnumber).get().then(
+        (snapshot) => snapshot.docs.forEach((document) {
+          // Adding that document to the list     
+          
+        Navigator.of(context).push(MaterialPageRoute(builder: (context){
+          counseleeID.add(document.reference.id); 
+          return GetCounseleeData(documentIds: document.reference.id);
+        }));  
+        })
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Approve Session'),
@@ -45,9 +69,10 @@ class _ApproveSessionState extends State<ApproveSession> {
             itemCount: docIDs.length,
             itemBuilder: (context, index) {
               // Retrieving the approval requests
-              CollectionReference counselor = FirebaseFirestore.instance.collection('bookings');
+              CollectionReference counselee = FirebaseFirestore.instance.collection('bookings');
+              CollectionReference counseleeId = FirebaseFirestore.instance.collection('users');
               return FutureBuilder<DocumentSnapshot>(
-              future: counselor.doc(docIDs[index]).get(),
+              future: counselee.doc(docIDs[index]).get(),
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
 
                   // Error handling conditions
@@ -134,7 +159,10 @@ class _ApproveSessionState extends State<ApproveSession> {
                                     MaterialButton(
                                       color: Colors.deepPurple,
                                       textColor: Colors.white,
-                                      onPressed: (){},
+                                      onPressed: (){
+                                        // getCounseleeID('${data['regnumber']}');
+                                        // print(counseleeID);
+                                      },
                                       child: const Text('Counselee Profile'),
                                     ),
                                     
@@ -152,7 +180,9 @@ class _ApproveSessionState extends State<ApproveSession> {
                                         MaterialButton(
                                           color: Colors.deepPurple,
                                           textColor: Colors.white,
-                                          onPressed: (){},
+                                          onPressed: (){
+
+                                          },
                                           child: const Text('Approve'),
                                         ),
                                         const SizedBox(width: 20,),
