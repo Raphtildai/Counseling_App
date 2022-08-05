@@ -4,6 +4,7 @@ import 'package:careapp/services/get_counselee_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApproveSession extends StatefulWidget {
   const ApproveSession({ Key? key }) : super(key: key);
@@ -19,13 +20,6 @@ const titleStyle = TextStyle(
 const textStyle = TextStyle(
   fontSize: 14,
 );
-
-// Function to approve session
-Future approveSession() async {
-  // await FirebaseFirestore.instance.ref
-
-}
-
   // creating a list of document IDs
   List <String> docIDs = [];
   
@@ -33,12 +27,12 @@ Future approveSession() async {
 
   // Creating function to retrieve the documents
   Future getdocIDs() async {
-
     await FirebaseFirestore.instance.collection('bookings').where('approval', isEqualTo: "Pending").get().then(
       (snapshot) => snapshot.docs.forEach((document) {
         // adding the document to the list
         docIDs.add(document.reference.id);
-      }));
+    }));
+
   }
 
 class _ApproveSessionState extends State<ApproveSession> {
@@ -86,6 +80,49 @@ class _ApproveSessionState extends State<ApproveSession> {
                   // Outputting the data to the user
                   if(snapshot.connectionState == ConnectionState.done){
                     Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                    // Sending email to the counselee informing them on their approval status
+                    //Encoding email
+                    String? encodeQueryParameters(Map<String, String>params){
+                      return params.entries
+                      .map((MapEntry<String, String>e) =>
+                      '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeComponent(e.value)}'
+                      ).join('&');
+                    }
+                    final email = Uri(
+                      scheme: 'mailto',
+                      path: '${data['email']}',
+                      query: encodeQueryParameters(<String, String>{
+                        'subject': 'Your Counseling Session was Approved',
+                        'body': 'Hello,\n Your Counseling Session which you booked on ${data['created_at']}, for date: ${data['date_booked']} time: ${data['time_booked']}, has been approved.\n You\'ll be contacted by one of our counselors soon.\n\n Kind regards',
+                      }),
+                    );
+                    Future<void>_sendEmail() async{
+                      try{
+                        if(await canLaunchUrl(email)){
+                          await launchUrl(email);
+                        }
+                      }catch(e){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: const Text('Error while launching email sender app')),
+                        );
+                      }
+                    }
+                    // Function to approve session
+                    Future approveSession(String docID) async {
+                      try{
+                        final approval = await FirebaseFirestore.instance.collection('bookings')
+                        .doc('$docID').update({
+                          'approval': "Approved",
+                          'counseleeID' : FirebaseAuth.instance.currentUser!.uid,
+                          'time_approved': DateTime.now(),
+                        });
+                        ApproveSession();
+                        _sendEmail();
+                      }
+                      catch(e){
+                        print(e);
+                      }
+                    }
                     return SingleChildScrollView(
                       child: Column(
                         children: [
@@ -181,7 +218,8 @@ class _ApproveSessionState extends State<ApproveSession> {
                                           color: Colors.deepPurple,
                                           textColor: Colors.white,
                                           onPressed: (){
-
+                                            print(docIDs[index]);
+                                            approveSession(docIDs[index]);
                                           },
                                           child: const Text('Approve'),
                                         ),

@@ -33,7 +33,7 @@ class _BookingState extends State<Booking> {
   // Date
   // Creating date time variable
   DateTime _selectedDate = DateTime.now();
-  DateTime _initialDate = DateTime(2022);
+  DateTime _initialDate = DateTime.now();
   DateTime _lastDate = DateTime(2023);
 
   Future displayDatePicker(BuildContext context) async {

@@ -102,7 +102,6 @@ class _SignUpState extends State<SignUp> {
       'pnumber': pnumber,
       'role': "counselee",
       'date_registered': DateTime.now(),
-
     });
   }
 
@@ -220,6 +219,7 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.only(left: 20.0),
                       child: TextField(
                         controller: _regnocontroller,
+                        textCapitalization: TextCapitalization.characters,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Registration Number',

@@ -41,64 +41,64 @@ class _RegisterState extends State<Register> {
   // Sign up function
   Future signingUp() async{
     try{
-    // Loading
-    showDialog(
-      context: context, 
-      builder: (context){
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    );
-    // Pop out the loading widget
-    Navigator.of(context).pop();
-    // Create User using the email and password
-    // This allows the user to create user using email and password
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: _emailcontroller.text.trim(),
-      password: _passwordcontroller.text.trim(),
-    );
-
-    // adding user details by calling the function
-    addUserDetails(
-      _firstnamecontroller.text.trim(),
-      _lastnamecontroller.text.trim(),
-      _emailcontroller.text.trim(),
-      int.parse(_pnumbercontroller.text.toString()),
-      _passwordcontroller.text.trim(),
-      _aboutcontroller.text.trim(),
-      _counselorIDcontroller.text.trim(),
-      _professioncontroller.text.trim(),
-      int.parse(_ratingcontroller.text.toString()),
-    );
-
-    showDialog(context: context, builder: (context){
-      return const AlertDialog(
-        content: Text('Registration Successful'),
+      // Loading
+      showDialog(
+        context: context, 
+        builder: (context){
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
       );
-    });
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return CounselorList();
-    }));
-  }on FirebaseAuthException catch(e){
-    if (e.code == 'weak-password') {
-      return const AlertDialog(
-        content: Text('The password provided is too weak.'),
-      );
-    } else if (e.code == 'email-already-in-use') {
-      return const AlertDialog(
-        content: Text('The account already exists for that email.'),
-      );
-    }else{
-      showDialog(context: context, builder: (context){
-        return AlertDialog(
-          content: Text(e.message.toString()),
-        );
-      });
       // Pop out the loading widget
       Navigator.of(context).pop();
+      // Create User using the email and password
+      // This allows the user to create user using email and password
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailcontroller.text.trim(),
+        password: _passwordcontroller.text.trim(),
+      );
+
+      // adding user details by calling the function
+      addUserDetails(
+        _firstnamecontroller.text.trim(),
+        _lastnamecontroller.text.trim(),
+        _emailcontroller.text.trim(),
+        int.parse(_pnumbercontroller.text.toString()),
+        _passwordcontroller.text.trim(),
+        _aboutcontroller.text.trim(),
+        _counselorIDcontroller.text.trim(),
+        _professioncontroller.text.trim(),
+        int.parse(_ratingcontroller.text.toString()),
+      );
+
+      showDialog(context: context, builder: (context){
+        return const AlertDialog(
+          content: Text('Registration Successful'),
+        );
+      });
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+          return CounselorList();
+      }));
+    }on FirebaseAuthException catch(e){
+      if (e.code == 'weak-password') {
+        return const AlertDialog(
+          content: Text('The password provided is too weak.'),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        return const AlertDialog(
+          content: Text('The account already exists for that email.'),
+        );
+      }else{
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+        });
+        // Pop out the loading widget
+        Navigator.of(context).pop();
+      }
     }
-  }
   
 }
 
