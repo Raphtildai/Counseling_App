@@ -33,7 +33,7 @@ class CounselorProfile extends StatelessWidget {
           // Encoding for SMS
           final Uri smsUri = Uri(
             scheme: 'sms',
-            path: '${data['phonenumber']}',
+            path: '+254${data['pnumber']}',
           );
           
           Future<void> _message() async{
@@ -52,7 +52,7 @@ class CounselorProfile extends StatelessWidget {
           // Encoding phone calls
           final Uri callUri = Uri(
             scheme: 'tel',
-            path: '${data['phonenumber']}'
+            path: '+254${data['pnumber']}'
           );
           Future<void> _call() async{
             try{
@@ -87,7 +87,7 @@ class CounselorProfile extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text('Counselor\'s Profile '),
+              title: Text('${data['firstname']} ' '${data['lastname']}\'s Profile '),
             ),
 
             body: SafeArea(
@@ -373,7 +373,7 @@ class CounselorProfile extends StatelessWidget {
           );
         }
         // Return loading to the user
-        return Center(child: CircularProgressIndicator(),);
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

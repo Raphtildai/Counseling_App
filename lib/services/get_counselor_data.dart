@@ -153,9 +153,7 @@ final String documentIds;
             ],
           );
         }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

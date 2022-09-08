@@ -1,4 +1,4 @@
-import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
@@ -34,7 +34,7 @@ final personal = const TextStyle(
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Booking()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const SessionBooking()));
       break;
 
       case 3:

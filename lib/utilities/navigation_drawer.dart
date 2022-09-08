@@ -1,12 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:careapp/functionalities/appointments/appointment_list.dart';
+import 'package:careapp/functionalities/device_info.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
+import 'package:careapp/screens/home/Counselee/counselee_register.dart';
+import 'package:careapp/screens/home/Counselor/counselor_register.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
+import 'package:careapp/screens/home/Counselor/counselor_register.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/user_account.dart';
 import 'package:careapp/screens/home/user_page.dart';
+import 'package:careapp/services/get_pending_session_approval_data.dart';
 import 'package:careapp/utilities/drawer_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +48,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> ApproveSession()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
       break;
 
       case 3:
@@ -54,7 +60,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Counselors_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> DeviceInfo()));
       break;
 
       case 6:
@@ -62,8 +68,16 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
 
       case 7:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>UserAccount()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>CounseleeRegister()));
       break;
+
+      case 8:
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>CounselorRegister()));
+      break;
+
+      // case 7:
+      // Navigator.push(context, MaterialPageRoute(builder: (context)=>UserAccount()));
+      // break;
       
 
       // default:
@@ -173,8 +187,17 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 ),
           
                 const SizedBox(height: 20,),
+          
+                DrawerItem(
+                  Name: 'Register New Counselor', 
+                  icon: Icons.app_registration, 
+                  onPressed: ()=> onItemPressed(context, index: 8),
+                ),
+          
+                const SizedBox(height: 20,),
 
                 Text('Counselee', style: TextStyle(color: Colors.white),),
+
                 Divider(
                   height: 60,
                   color: Colors.white,
@@ -187,6 +210,19 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 ),
           
                 const SizedBox(height: 20,),
+          
+                DrawerItem(
+                  Name: 'Register New Counselee', 
+                  icon: Icons.app_registration, 
+                  onPressed: ()=> onItemPressed(context, index: 7),
+                ),
+          
+                const SizedBox(height: 20,),
+
+                Divider(
+                  height: 60,
+                  color: Colors.white,
+                ),
           
                 DrawerItem(
                   Name: 'Settings', 

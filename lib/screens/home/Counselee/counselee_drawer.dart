@@ -1,13 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/Counselor/reschedule.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/screens/home/user_account.dart';
-import 'package:careapp/screens/home/user_page.dart';
 import 'package:careapp/utilities/drawer_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +32,11 @@ final personal = TextStyle(
       break;
       //Notifications
       case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Booking()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> SessionBooking()));
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Booking()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> SessionBooking()));
       break;
 
       case 3:
@@ -45,7 +44,7 @@ final personal = TextStyle(
       break;
 
       case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Reschedule()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> SessionBooking()));
       break;
       // Counselors
       case 5:

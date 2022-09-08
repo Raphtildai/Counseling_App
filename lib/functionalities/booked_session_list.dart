@@ -1,13 +1,12 @@
-// ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
-import 'package:careapp/screens/home/Counselor/counselor_profile.dart';
-import 'package:careapp/screens/home/Counselor/counselor_register.dart';
-import 'package:careapp/services/get_counselor_data.dart';
+import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
+import 'package:careapp/services/get_pending_session_approval_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class CounselorList extends StatelessWidget {
+class Approve extends StatelessWidget {
+
 // accessing the user details
   final user = FirebaseAuth.instance.currentUser!;
 
@@ -17,35 +16,35 @@ class CounselorList extends StatelessWidget {
   // Creating function to retrieve the documents
   Future getdocIDs() async {
 
-    await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselor").get().then(
+    await FirebaseFirestore.instance.collection('bookings').where('approval', isEqualTo: "Pending").get().then(
       (snapshot) => snapshot.docs.forEach((document) {
         // adding the document to the list
         docIDs.add(document.reference.id);
       }));
   }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text('All Counselors'),
+        title: const Text('Pending Approvals'),
       ),
       body: Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           //  Search bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.deepPurple[50],
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search),
                   border: InputBorder.none,
-                  hintText: 'Search Counselor',
+                  hintText: 'Search approval requests',
                 ),
               ),
             ),
@@ -55,13 +54,13 @@ class CounselorList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal:25.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // // Adding new counselor
                 // ElevatedButton(
                 //   onPressed: (){
                 //     Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                //       return CounselorRegister();
+                //       return Register();
 
                 //     }));
                 //   },
@@ -70,7 +69,7 @@ class CounselorList extends StatelessWidget {
                 // Searching counselor
                 ElevatedButton(
                   onPressed: (){},
-                   child: Text('Search Counselor'),
+                   child: const Text('Search requests'),
                 ),
               ],
             ),
@@ -89,13 +88,13 @@ class CounselorList extends StatelessWidget {
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
                           children: [
-                            GetCounselorData(documentIds: docIDs[index]),
+                            const GetPendingSessionApprovalData(),
                               ElevatedButton(onPressed: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return CounselorProfile(counselorID: docIDs[index],);
+                                  return CounseleeProfile(counseleeID: docIDs[index],);
                                 },));                                
                               }, 
-                                child: Text('Read More'),
+                                child: const Text('Read More'),
                             ),
                           ],
                         ),

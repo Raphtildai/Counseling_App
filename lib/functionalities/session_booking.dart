@@ -1,24 +1,35 @@
 // ignore_for_file: prefer_const_constructors
 
 
+import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-
-class Booking extends StatefulWidget {
-  const Booking({Key? key}) : super(key: key);
+class SessionBooking extends StatefulWidget {
+  const SessionBooking({Key? key}) : super(key: key);
 
 
   @override
-  State<Booking> createState() => _BookingState();
+  State<SessionBooking> createState() => _SessionBookingState();
 }
 
-class _BookingState extends State<Booking> {
+ // creating a list of document IDs
+  List <String> docIDs = [];
+
+  // Creating function to retrieve the documents
+  Future getdocIDs() async {
+    await FirebaseFirestore.instance.collection('bookings').where('counseleeID', isEqualTo: FirebaseAuth.instance.currentUser?.uid).get().then(
+      (snapshot) => snapshot.docs.forEach((document) {
+        // adding the document to the list
+        docIDs.add(document.reference.id);
+    }));
+  }
+class _SessionBookingState extends State<SessionBooking> {
   // Text controllers
   final _dateTimecontroller = TextEditingController();
   final _timecontroller = TextEditingController();
-  final _reasoncontroller = TextEditingController();
   final _regnocontroller = TextEditingController();
 
   // hint text to show on the date text field
@@ -79,9 +90,7 @@ class _BookingState extends State<Booking> {
       showDialog(
         context: context, 
         builder: (context){
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         }
       );
       // Pop out the loading widget
@@ -97,23 +106,55 @@ class _BookingState extends State<Booking> {
         _timecontroller.text.trim(),
       );
     }catch(e){
-
+      showDialog(context: context, builder: (context){
+        return AlertDialog(
+          content: Text(e.toString()),
+        );
+      });
     } 
   }     
   Future bookUser(String regnumber, String date, String time) async {
-      var book = await FirebaseFirestore.instance.collection('bookings').add({
+    try{
+    // Loading
+    showDialog(
+      context: context, 
+      builder: (context){
+        return Center(child: CircularProgressIndicator());
+      }
+    );
+    // Pop out the loading widget
+    Navigator.of(context).pop();
+    //Creating user information with email and registration
+
+    var book = await FirebaseFirestore.instance.collection('bookings').add({
         // Add the user to the collection
+        'counselee_email': FirebaseAuth.instance.currentUser?.email,
         'regnumber': regnumber,
         'date_booked': date,
         'time_booked': time,
+        'created_at': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
         'approval': 'Pending',
       });
 
-      // Checking the status
-      if(book == true){
-        return Center(child: Text('Session Booked successfully wait for confirmation from the counselor'),);
-      }
+    showDialog(context: context, builder: (context){
+      return const AlertDialog(
+        content: Text('Booking Successful'),
+      );
+    });
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+        return Home();
+    }));
 
+    }on FirebaseAuthException catch(e){
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text(e.message.toString()),
+          );
+        });
+        // Pop out the loading widget
+        Navigator.of(context).pop();
+      
+      }
     }
   
   @override
@@ -342,7 +383,7 @@ class _BookingState extends State<Booking> {
           
                 SizedBox(height: 10.0,),
           
-                // sign in button
+                // Button to submit bookings
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(    

@@ -1,6 +1,6 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, sized_box_for_whitespace
 
-import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/utilities/category_card.dart';
@@ -231,11 +231,9 @@ class _Counselors_PageState extends State<Counselors_Page> {
                                   counseleeID: docIDs[index], 
 
                                 );
-
                               }
                               return Center(child: CircularProgressIndicator());
                             },
-
                           );
                         },
                       ),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 
 class AuthFunctions extends StatelessWidget {
 const AuthFunctions({ Key? key }) : super(key: key);
@@ -22,9 +23,7 @@ const AuthFunctions({ Key? key }) : super(key: key);
       context: context, 
       builder: (context){
         // ignore: prefer_const_constructors
-        return Center(
-          child: const CircularProgressIndicator(),
-        );
+        return Center(child: CircularProgressIndicator());
       }
       );
         // This allows the user to login using email and password
@@ -82,7 +81,7 @@ const AuthFunctions({ Key? key }) : super(key: key);
       'name':userCredential.user!.displayName,
       'image':userCredential.user!.photoURL,
       'uid':userCredential.user!.uid,
-      'date':DateTime.now(),
+      'date':DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
     });
   }
 

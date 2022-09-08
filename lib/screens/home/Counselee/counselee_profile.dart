@@ -1,6 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'package:careapp/screens/home/Counselee/register.dart';
+import 'package:careapp/screens/home/Counselee/counselee_register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,10 +33,18 @@ class CounseleeProfile extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         // Error handling conditions
         if(snapshot.hasError){
-          return const Center(child: Text('Something went Wrong'));
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text('Something went Wrong'),
+            );
+          }); 
         }
         if(snapshot.hasData && !snapshot.data!.exists){
-          return const Center(child: Text('The counselee Record does not exist'),);
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text('The counselee Record does not exist'),
+            );
+          });
         }
 
         // Outputting the data to the user
@@ -46,7 +54,7 @@ class CounseleeProfile extends StatelessWidget {
           // Encoding for SMS
           final Uri smsUri = Uri(
             scheme: 'sms',
-            path: '${data['phonenumber']}',
+            path: '+254${data['pnumber']}',
           );
           
           Future<void> _message() async{
@@ -56,7 +64,7 @@ class CounseleeProfile extends StatelessWidget {
               }
             }catch (e){
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: const Text('Some error occured'),
+                const SnackBar(content: Text('Some error occurred'),
                 ),
               );
             }
@@ -65,7 +73,7 @@ class CounseleeProfile extends StatelessWidget {
           // Encoding phone calls
           final Uri callUri = Uri(
             scheme: 'tel',
-            path: '${data['phonenumber']}'
+            path: '+254${data['pnumber']}'
           );
           Future<void> _call() async{
             try{
@@ -74,7 +82,7 @@ class CounseleeProfile extends StatelessWidget {
               }
             }catch (e){
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: const Text('Some error occured'),
+                const SnackBar(content: Text('Some error occurred'),
                 ),
               );
             }
@@ -92,7 +100,7 @@ class CounseleeProfile extends StatelessWidget {
               }
             }catch (e){
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: const Text('Some error occured'),
+                const SnackBar(content: Text('Some error occurred'),
                 ),
               );
             }
@@ -100,7 +108,7 @@ class CounseleeProfile extends StatelessWidget {
 
           return Scaffold(
           appBar: AppBar(
-            title: const Text('Counselee\'s Profile'),
+            title: Text('${data['firstname']} ' '${data['lastname']}\'s Profile '),
           ),
           body: ListView(
             children: [
@@ -371,7 +379,7 @@ class CounseleeProfile extends StatelessWidget {
           ),
         );  
       }
-      return const Center(child: CircularProgressIndicator(),);
+      return Center(child: CircularProgressIndicator());
       }
     );
   }

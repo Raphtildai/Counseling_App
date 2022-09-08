@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
-import 'package:careapp/functionalities/booking.dart';
+import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -98,7 +98,7 @@ class _CounseleePageState extends State<CounseleePage> {
                                 child: GestureDetector(
                                   onTap: () {
                                     Navigator.push(context, MaterialPageRoute(builder: (context){
-                                    return Booking();
+                                    return SessionBooking();
                                   },),);
                                   },
                                   child: Text(

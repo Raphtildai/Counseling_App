@@ -39,33 +39,26 @@ class Logout extends StatelessWidget {
                           showDialog(
                             context: context, 
                             builder: (context){
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
+                              return Center(child: CircularProgressIndicator());
                             }
                             );
                             // Pop out the loading widget
                             Navigator.of(context).pop();
                           FirebaseAuth.instance.signOut();
                           Navigator.of(context).pop(MaterialPageRoute(builder: (context){
-                            return const MainPage();
+                            return MainPage();
                           }));
                           showDialog(context: context, builder: (context){
                             return const AlertDialog(
                               content: Text('You have Logged Out'),
                             );
                           });
-                          
-                          
-                          
                         }on FirebaseAuthException catch(e){
                           // Loading
                           showDialog(
                             context: context, 
                             builder: (context){
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
+                              return Center(child: CircularProgressIndicator());
                             }
                           );
                           // Pop out the loading widget

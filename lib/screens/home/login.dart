@@ -28,9 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context, 
       builder: (context){
-        return Center(
-          child: CircularProgressIndicator(),
-        );
+        return Center(child: CircularProgressIndicator());
       }
       );
         // This allows the user to login using email and password

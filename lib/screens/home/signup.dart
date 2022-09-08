@@ -4,6 +4,7 @@ import 'package:careapp/screens/authenticate/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 // void main(List<String> args) {
 //   runApp(MaterialApp(
@@ -35,9 +36,7 @@ class _SignUpState extends State<SignUp> {
       showDialog(
         context: context, 
         builder: (context){
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         }
         );
         // Pop out the loading widget
@@ -101,7 +100,7 @@ class _SignUpState extends State<SignUp> {
       'password': password,
       'pnumber': pnumber,
       'role': "counselee",
-      'date_registered': DateTime.now(),
+      'date_registered': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
     });
   }
 

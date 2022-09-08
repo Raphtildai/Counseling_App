@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable, avoid_function_literals_in_foreach_calls
 
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
-import 'package:careapp/screens/home/Counselee/register.dart';
+import 'package:careapp/screens/home/Counselee/counselee_register.dart';
 import 'package:careapp/services/get_counselee_data.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,18 +57,18 @@ class CounseleeList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal:25.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // Adding new counselor
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
-                      return const Register();
+                // // Adding new counselor
+                // ElevatedButton(
+                //   onPressed: (){
+                //     Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                //       return const CounseleeRegister();
 
-                    }));
-                  },
-                   child: const Text('New Counselee'),
-                ),
+                //     }));
+                //   },
+                //    child: const Text('New Counselee'),
+                // ),
                 // Searching counselor
                 ElevatedButton(
                   onPressed: (){
