@@ -76,7 +76,7 @@ const AuthFunctions({ Key? key }) : super(key: key);
     UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
     // Storing those data into the firebase firestore
-    await firestore.collection('users').doc(userCredential.user!.uid).set({
+    await firestore.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set({
       'email':userCredential.user!.email,
       'name':userCredential.user!.displayName,
       'image':userCredential.user!.photoURL,

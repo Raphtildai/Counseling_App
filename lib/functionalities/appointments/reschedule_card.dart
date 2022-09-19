@@ -64,7 +64,7 @@ String? encodeQueryParameters(Map<String, String>params){
           await launchUrl(email);
         }
       }catch(e){
-        showDialog(context: context, builder: (context){
+        await showDialog(context: context, builder: (context){
           return AlertDialog(
             content: Text('Error while launching email sender app'),
           );
@@ -84,7 +84,7 @@ String? encodeQueryParameters(Map<String, String>params){
           'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
         });
         // const approveSession(docid);
-        showDialog(context: context, builder: (context){
+        await showDialog(context: context, builder: (context){
           return AlertDialog(
             content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
           );
@@ -96,7 +96,7 @@ String? encodeQueryParameters(Map<String, String>params){
       }
       catch(e){
         // Alerting the user on errors which might arise on the app
-        showDialog(context: context, builder: (context){
+        await showDialog(context: context, builder: (context){
           return AlertDialog(
             content: Text(e.toString()),
           );

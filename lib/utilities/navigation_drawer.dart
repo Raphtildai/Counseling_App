@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:careapp/functionalities/appointments/appointment_list.dart';
+import 'package:careapp/functionalities/counseling%20session/launch%20session.dart';
 import 'package:careapp/functionalities/device_info.dart';
+import 'package:careapp/functionalities/reports/reports_list.dart';
+import 'package:careapp/functionalities/reports/reports.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/screens/home/Counselee/counselee_register.dart';
 import 'package:careapp/screens/home/Counselor/counselor_register.dart';
@@ -40,7 +43,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> ReportsList()));
       break;
       //Notifications
       case 1:
@@ -60,7 +63,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> DeviceInfo()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> LaunchSession()));
       break;
 
       case 6:

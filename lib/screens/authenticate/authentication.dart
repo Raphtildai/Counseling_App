@@ -13,31 +13,9 @@ class MainPage extends StatefulWidget {
   @override
   State<MainPage> createState() => _MainPageState();
 }
-class _MainPageState extends State<MainPage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-      // Creating function to retrieve the documents
-    Future getUserID() async {
-      final uid = FirebaseAuth.instance.currentUser!.uid;
 
-      await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid).get().then(
-        (snapshot) => snapshot.docs.forEach((document) {
-          if(ConnectionState == ConnectionState.done){
-            setState(() {
-              document.reference.id;
-            });
-          }else if(ConnectionState == ConnectionState.waiting){
-          showDialog(context: context, builder: (context){
-            return AlertDialog(
-              content: Text('Signing you in based on your user role'),
-            );
-          });
-          }
-        }));
-    }
-  }
+class _MainPageState extends State<MainPage> {
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -47,9 +25,9 @@ class _MainPageState extends State<MainPage> {
       builder: (context, snapshot){
         // String ID = userID;
         if(snapshot.hasData){
-          CollectionReference counselee = FirebaseFirestore.instance.collection('users');
+          CollectionReference user = FirebaseFirestore.instance.collection('users');
           return FutureBuilder<DocumentSnapshot>(
-            future: counselee.doc('JeyTqxAEqxMCSWH1LeuP').get(),
+            future: user.doc(FirebaseAuth.instance.currentUser!.uid).get(),//'JeyTqxAEqxMCSWH1LeuP'
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
               // Error handling conditions
               if(snapshot.hasError){
@@ -64,7 +42,7 @@ class _MainPageState extends State<MainPage> {
                 // print(docid);
                 showDialog(context: context, builder: (context){
                   return const AlertDialog(
-                    content: Text('The User Record does not exist'),
+                    content: Text('Sorry your account information cannot be found'),
                   );
                 });
                 // return const Center(child: Text('The User Record does not exist'),);
@@ -75,15 +53,13 @@ class _MainPageState extends State<MainPage> {
                 Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                 if(data['role'] == 'admin'){
                   return Home();
-                }else if(data['role'] == 'counselee'){
-                  return const CounseleeHome();
                 }else if(data['role'] == 'counselor'){
                   return const CounselorHome();
                 }else{
-                  return CounseleeList();
+                  return const CounseleeHome();
                 }
               }
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           );         
           
@@ -94,3 +70,22 @@ class _MainPageState extends State<MainPage> {
       );
    }
 }
+
+// Future getUserID() async {
+//   final uid = FirebaseAuth.instance.currentUser!.uid;
+
+//   await FirebaseFirestore.instance.collection('users').where('uid', isEqualTo: uid).get().then(
+//     (snapshot) => snapshot.docs.forEach((document) {
+//       if(ConnectionState == ConnectionState.done){
+//         setState(() {
+//           document.reference.id;
+//         });
+//       }else if(ConnectionState == ConnectionState.waiting){
+//       showDialog(context: context, builder: (context){
+//         return AlertDialog(
+//           content: Text('Signing you in based on your user role'),
+//         );
+//       });
+//     }
+//   }));
+// }

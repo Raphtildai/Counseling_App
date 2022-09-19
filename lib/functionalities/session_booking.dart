@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 
-import 'package:careapp/screens/home/home.dart';
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -104,16 +104,17 @@ class _SessionBookingState extends State<SessionBooking> {
         _regnocontroller.text.trim(),
         _dateTimecontroller.text.trim(),
         _timecontroller.text.trim(),
+        DateTime.now(),
       );
     }catch(e){
-      showDialog(context: context, builder: (context){
+      await showDialog(context: context, builder: (context){
         return AlertDialog(
           content: Text(e.toString()),
         );
       });
     } 
   }     
-  Future bookUser(String regnumber, String date, String time) async {
+  Future bookUser(String regnumber, String date, String time, DateTime now) async {
     try{
     // Loading
     showDialog(
@@ -126,27 +127,27 @@ class _SessionBookingState extends State<SessionBooking> {
     Navigator.of(context).pop();
     //Creating user information with email and registration
 
-    var book = await FirebaseFirestore.instance.collection('bookings').add({
+    var book = await FirebaseFirestore.instance.collection('bookings').doc(FirebaseAuth.instance.currentUser!.uid).set({
         // Add the user to the collection
         'counselee_email': FirebaseAuth.instance.currentUser?.email,
         'regnumber': regnumber,
         'date_booked': date,
         'time_booked': time,
-        'created_at': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
+        'created_at': now, //DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now())
         'approval': 'Pending',
       });
 
-    showDialog(context: context, builder: (context){
+    await showDialog(context: context, builder: (context){
       return const AlertDialog(
         content: Text('Booking Successful'),
       );
     });
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return Home();
+        return MainPage();
     }));
 
     }on FirebaseAuthException catch(e){
-        showDialog(context: context, builder: (context){
+        await showDialog(context: context, builder: (context){
           return AlertDialog(
             content: Text(e.message.toString()),
           );
@@ -215,6 +216,7 @@ class _SessionBookingState extends State<SessionBooking> {
                     child: Padding(
                       padding: EdgeInsets.only(left: 20.0),
                       child: TextField(
+                        textCapitalization: TextCapitalization.characters,
                         controller: _regnocontroller,
                         decoration: InputDecoration(
                           border: InputBorder.none,

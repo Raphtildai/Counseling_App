@@ -2,6 +2,8 @@
 
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
+import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
+import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/Counselor/reschedule.dart';
 import 'package:careapp/screens/home/logout.dart';
@@ -28,7 +30,7 @@ final personal = TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounseleeProfile(counseleeID: FirebaseAuth.instance.currentUser!.uid)));
       break;
       //Notifications
       case 1:
@@ -48,7 +50,7 @@ final personal = TextStyle(
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> Counselors_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
       break;
 
       case 6:
@@ -131,9 +133,7 @@ final personal = TextStyle(
                   onPressed: ()=> onItemPressed(context, index: 1),
                 ),
           
-                const SizedBox(height: 20,),
-          
-                const SizedBox(height: 20,),
+                const SizedBox(height: 40,),
           
                 DrawerItem(
                   Name: 'Book Session', 
@@ -143,11 +143,11 @@ final personal = TextStyle(
           
                 const SizedBox(height: 20,),
           
-                DrawerItem(
-                  Name: 'Chats', 
-                  icon: Icons.chat, 
-                  onPressed: ()=> onItemPressed(context, index: 3),
-                ),
+                // DrawerItem(
+                //   Name: 'Chats', 
+                //   icon: Icons.chat, 
+                //   onPressed: ()=> onItemPressed(context, index: 3),
+                // ),
           
                 const SizedBox(height: 20,),
           
@@ -160,7 +160,7 @@ final personal = TextStyle(
                 const SizedBox(height: 20,),
           
                 DrawerItem(
-                  Name: 'Counselors', 
+                  Name: 'Counselors List', 
                   icon: Icons.people, 
                   onPressed: ()=> onItemPressed(context, index: 5),
                 ),

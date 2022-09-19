@@ -37,18 +37,19 @@ class AppointmentCard extends StatelessWidget {
     required this.counseleeID, 
     required this.docID
   }) : super(key: key);
-  
-// Sending email to the counselee informing them on their approval status
-String? encodeQueryParameters(Map<String, String>params){
-  return params.entries
-  .map((MapEntry<String, String>e) =>
-  '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeComponent(e.value)}'
-  ).join('&');
-}
+
+  // Sending email to the counselee informing them on their approval status
+  String? encodeQueryParameters(Map<String, String>params){
+    return params.entries
+    .map((MapEntry<String, String>e) =>
+    '${Uri.encodeQueryComponent(e.key)}=${Uri.encodeComponent(e.value)}'
+    ).join('&');
+  }
   
 
   @override
   Widget build(BuildContext context){
+    // final String datevalue  = DateFormat('E, d MMM yyyy HH:mm:ss').format(created_at).toString();
     final String uid = counseleeID;
     final docid = docID;
     final email = Uri(
@@ -84,11 +85,11 @@ String? encodeQueryParameters(Map<String, String>params){
         final approval = await FirebaseFirestore.instance.collection('bookings')
         .doc('$docID').update({
           'approval': "Approved",
-          'counseleeID' : FirebaseAuth.instance.currentUser!.uid,
-          'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
+          'counselorID' : FirebaseAuth.instance.currentUser!.uid,
+          'time_approved': DateTime.now(), //DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now())
         });
         // const approveSession(docid);
-        showDialog(context: context, builder: (context){
+        await showDialog(context: context, builder: (context){
           return AlertDialog(
             content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
           );
@@ -97,7 +98,7 @@ String? encodeQueryParameters(Map<String, String>params){
       }
       catch(e){
         // Alerting the user on errors which might arise on the app
-        showDialog(context: context, builder: (context){
+        await showDialog(context: context, builder: (context){
           return AlertDialog(
             content: Text(e.toString()),
           );

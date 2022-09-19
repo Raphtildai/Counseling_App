@@ -19,18 +19,19 @@ class _LoginPageState extends State<LoginPage> {
   // Text controllers
   final _emailcontroller = TextEditingController();
   final _passwordcontroller = TextEditingController();
+  bool passwordVisible = false;
 
   // Sign in function
   Future signIn() async{
     
       try{
         // Show circular loading while waiting for data
-    showDialog(
-      context: context, 
-      builder: (context){
-        return Center(child: CircularProgressIndicator());
-      }
-      );
+        showDialog(
+          context: context, 
+          builder: (context){
+            return Center(child: CircularProgressIndicator());
+          }
+        );
         // This allows the user to login using email and password
         final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _emailcontroller.text.trim(), 
@@ -41,31 +42,36 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).pop();
           
         // Telling the user that sign in was successful
-          showDialog(context: context, builder: (context){
-            return AlertDialog(
-              content: Text('Login success'),
-            );
-          }); 
+        await showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text('Login success'),
+          );
+        }); 
         
       }on FirebaseAuthException catch(e){
         // print(e);
         if (e.code == 'user-not-found') {
-          return AlertDialog(
-            content: Text('This email is not registered'),
-          );
-          // print('No user found for that email.');
+          await showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text('This email is not registered'),
+            );
+          });
         } else if (e.code == 'wrong-password') {
-          return AlertDialog(
-            content: Text('You\'ve entered the wrong password for that user'),
-          );
-          // print('Wrong password provided for that user.');
+          await showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text('You\'ve entered the wrong password for that user'),
+            );
+          });
         }else{
-          showDialog(context: context, builder: (context){
+          await showDialog(context: context, builder: (context){
             return AlertDialog(
               content: Text(e.message.toString()),
             );
           });
         }
+
+        // Popping out the loading
+        Navigator.of(context).pop();
       }
   }
 
@@ -76,6 +82,8 @@ class _LoginPageState extends State<LoginPage> {
     _passwordcontroller.dispose();
     super.dispose();
   }
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,180 +98,225 @@ class _LoginPageState extends State<LoginPage> {
 
         // SingleChildScrollView removes the overflow
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/flutter.png'),
-                  radius: 40.0,
-                ),
-              ),
-              SizedBox(height: 20.0,),
-              // Text to display at the top
-              Center(
-                child: Text(
-                  'Hello! and Welcome',
-                  style: TextStyle(
-                    fontSize: 18.0,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/logo1.png'),
+                    radius: 70.0,
                   ),
                 ),
-              ),
-              Divider(
-                height: 60.0,
-                color: Colors.grey[400],
-              ),
-        
-              // email text field
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(25.0),
+                SizedBox(height: 20.0,),
+                // Text to display at the top
+                Center(
+                  child: Text(
+                    'Hello! and Welcome',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20.0),
-                    child: TextField(
-                      controller: _emailcontroller,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Email Address',
+                ),
+                Divider(
+                  height: 60.0,
+                  color: Colors.grey[400],
+                ),
+                  
+                // email text field
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: TextFormField(
+                        controller: _emailcontroller,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Email Address',
+                        ),
+                        validator: (text){
+                          // RegExp('[0-9]+@students.kcau.ac.ke');
+                          if(text == null || text.isEmpty){
+                            return 'Email address field is empty';
+                          }else if(text.length < 2 || text.length > 40){
+                            return 'Email address is not Valid';
+                          }
+                          // else if(text.contains(RegExp(r'[0-9]'))){
+                          //   return 'Email Should not Contain numbers';
+                          // }
+                          
+                          else if(!(text.contains(RegExp(r'[a-z]+@students.must.ac.ke')) || text.contains(RegExp(r'[a-z]+@staff.must.ac.ke')) || text.contains(RegExp(r'[a-z0-9]+@gmail.com')))){
+                            return 'Enter valid Student or Staff email';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ),
                 ),
-              ),
-        
-              SizedBox(height: 20.0,),
-        
-              // password text field
-               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20.0),
-                    child: TextField(
-                      controller: _passwordcontroller,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Password',
+                  
+                SizedBox(height: 20.0,),
+                  
+                // password text field
+                 Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: TextFormField(
+                        controller: _passwordcontroller,
+                        obscureText: passwordVisible,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Password',
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                passwordVisible = !passwordVisible;                                
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(13),
+                              child: Icon(
+                                passwordVisible
+                                ? Icons.remove_red_eye_outlined
+                                : Icons.remove_red_eye_sharp,
+                                color: Colors.deepPurple,
+                                size: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+                        validator: (text){
+                          if(text == null || text.isEmpty){
+                            return 'Password Cannot be Empty';
+                          }else if(text.length < 6){
+                            return 'Password Length Should be at least 6 characters';
+                          }return null;
+                        },
                       ),
                     ),
                   ),
                 ),
-              ),
-
-              SizedBox(height: 10.0,),
-
-              // forgot password text
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  // ignore: prefer_const_literals_to_create_immutables
+          
+                SizedBox(height: 10.0,),
+          
+                // forgot password text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return ForgotPasswordPage();
+                          },),);
+                        },
+                          
+          
+                        child: Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          ),
+                      ),
+                    ],
+                  ),
+                ),
+                  
+                SizedBox(height: 20.0,),
+                  
+                // sign in button
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  child: GestureDetector(    
+                    onTap: (){
+                      if(_formKey.currentState!.validate()){
+                        signIn();
+                      }
+                    },             
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple,
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Sign in',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                  
+                 SizedBox(height: 25.0,),
+                  
+                // Register button if not a member
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text(
+                      'Not a Member?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      ),
+                    SizedBox(width: 10.0,),
                     GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context){
-                          return ForgotPasswordPage();
-                        },),);
+                      onTap: () {
+                        widget.ShowRegisterPage();
                       },
-                        
-
                       child: Text(
-                        'Forgot Password?',
+                        'Register Now',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
                         ),
-                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-        
-              SizedBox(height: 20.0,),
-        
-              // sign in button
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: GestureDetector(    
-                  onTap: (){
-                    signIn();
-                  },             
-                  child: Container(
-                    padding: EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Sign in',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-        
-               SizedBox(height: 25.0,),
-        
-              // Register button if not a member
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Not a Member?',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    ),
-                  SizedBox(width: 10.0,),
-                  GestureDetector(
-                    onTap: () {
-                      widget.ShowRegisterPage();
-                    },
-                    child: Text(
-                      'Register Now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-        
-              // Center(
-              //   child: Container(
                   
-              //     child: ElevatedButton.icon(
-              //       onPressed: (){
-              //         signIn();
-              //         // Navigator.of(context).pushReplacementNamed('/home');
-              //       }, 
-              //       icon: Icon(Icons.login),
-              //       label: Text('Login'),
-              //       ),
-              //   ),
+                // Center(
+                //   child: Container(
+                    
+                //     child: ElevatedButton.icon(
+                //       onPressed: (){
+                //         signIn();
+                //         // Navigator.of(context).pushReplacementNamed('/home');
+                //       }, 
+                //       icon: Icon(Icons.login),
+                //       label: Text('Login'),
+                //       ),
+                //   ),
+                  
                 
-              
-              // ),
-            ],
+                // ),
+              ],
+            ),
           ),
         ),
       ),

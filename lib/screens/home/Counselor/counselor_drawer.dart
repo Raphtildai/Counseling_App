@@ -1,5 +1,8 @@
+import 'package:careapp/functionalities/appointments/appointment_list.dart';
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
+import 'package:careapp/screens/home/Counselee/counselee_list.dart';
+import 'package:careapp/screens/home/Counselor/counselor_profile.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
@@ -26,36 +29,36 @@ final personal = const TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const UserAccount()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorProfile(counselorID: FirebaseAuth.instance.currentUser!.uid)));
       break;
       //Notifications
       case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const User_page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
       break;
 
       case 2:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const SessionBooking()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
       break;
 
       case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Message()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
       break;
 
       case 4:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Settings_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounseleeList()));
       break;
       // Counselors
       case 5:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Counselors_Page()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const Settings_Page()));
       break;
 
       case 6:
       Navigator.push(context, MaterialPageRoute(builder: (context)=>const Logout()));
       break;
 
-      case 7:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>const Settings_Page()));
-      break;
+      // case 7:
+      // Navigator.push(context, MaterialPageRoute(builder: (context)=>const Settings_Page()));
+      // break;
       
 
       // default:
@@ -131,8 +134,6 @@ final personal = const TextStyle(
           
                 const SizedBox(height: 20,),
           
-                const SizedBox(height: 20,),
-          
                 DrawerItem(
                   Name: 'Pending Approvals', 
                   icon: Icons.pending, 
@@ -141,11 +142,11 @@ final personal = const TextStyle(
           
                 const SizedBox(height: 20,),
           
-                DrawerItem(
-                  Name: 'Chats', 
-                  icon: Icons.chat, 
-                  onPressed: ()=> onItemPressed(context, index: 2),
-                ),
+                // DrawerItem(
+                //   Name: 'Chats', 
+                //   icon: Icons.chat, 
+                //   onPressed: ()=> onItemPressed(context, index: 2),
+                // ),
           
                 const SizedBox(height: 20,),
           
@@ -158,7 +159,7 @@ final personal = const TextStyle(
                 const SizedBox(height: 20,),
           
                 DrawerItem(
-                  Name: 'Counselee', 
+                  Name: 'Counselee List', 
                   icon: Icons.people, 
                   onPressed: ()=> onItemPressed(context, index: 4),
                 ),

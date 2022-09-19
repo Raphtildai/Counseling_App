@@ -9,33 +9,13 @@ import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
 
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  // Default tab page
-  int _selectedIndex = 0;
-
-  void _navigateButtonBar(int index){
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  // Creating a list of pages
-
-  final List <Widget> _pages = [
-    CounseleePage(),
-    Message(),
-    Settings_Page(),
-    Counselors_Page(),
-    // search_page();
-  ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +27,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
       ),
       drawer: NavigationDrawer(),
-      // drawer: Drawer(
-       
-      // ),
-      body: CounseleePage(),
-      // _pages[_selectedIndex],
-      // bottomNavigationBar: BottomNavigationBar(
-      //   type: BottomNavigationBarType.fixed,
-      //   currentIndex: _selectedIndex,
-      //   onTap: _navigateButtonBar,
-      //   items: [
-      //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-      //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Counselor'),
-      //   ],
-      // ),
+      body: Counselors_Page(),
     );
     
   }

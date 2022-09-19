@@ -60,6 +60,7 @@ class _BookedSessionState extends State<BookedSession> {
     // Retrieving the date and formatting it
     // var dateCreated = '${data['created_at']}';
     // String date = DateFormat.yMMMEd().format(data['created_at']);
+    // DateTime createdat = DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime(created_at));
     final email = Uri(
       scheme: 'mailto',
       path: counselee_email,

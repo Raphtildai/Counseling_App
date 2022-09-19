@@ -27,7 +27,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
       fontSize: 14,
     );
     return FutureBuilder <DocumentSnapshot>(
-      future: userData.doc('4OJFTCuKu7PQP1Tp03yw').get(),
+      future: userData.doc(FirebaseAuth.instance.currentUser!.uid).get(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         // Error handling conditions
         if(snapshot.hasError){
@@ -41,7 +41,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
             appBar: AppBar(
-              title: const Text('My Account'),
+              title: Text('${data['firstname']} ' '${data['lastname']}\'s Profile '),
               centerTitle: true,
             ),
             body: SafeArea(

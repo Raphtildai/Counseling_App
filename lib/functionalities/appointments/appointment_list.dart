@@ -92,7 +92,7 @@ class AppointmentList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Divider(
                 height: 10,
-                color: Colors.deepPurple[500],
+                color: Colors.deepPurple[200],
                 thickness: 2.0,
               ),
             ),
@@ -146,7 +146,7 @@ class AppointmentList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Divider(
                 height: 10,
-                color: Colors.deepPurple[500],
+                color: Colors.deepPurple[200],
                 thickness: 2.0,
               ),
             ),
@@ -197,7 +197,7 @@ class AppointmentList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Divider(
                 height: 10,
-                color: Colors.deepPurple[500],
+                color: Colors.deepPurple[200],
                 thickness: 2.0,
               ),
             ),
