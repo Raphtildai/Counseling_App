@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, non_constant_identifier_names, unused_local_variable, use_build_context_synchronously
 
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
         // Telling the user that sign in was successful
         await showDialog(context: context, builder: (context){
           return AlertDialog(
-            content: Text('Login success'),
+            content: Text('Login successful'),
           );
         }); 
         
@@ -69,10 +70,10 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
         }
-
-        // Popping out the loading
-        Navigator.of(context).pop();
       }
+      // Popping out the loading
+      Navigator.of(context).pop();
+      return MainPage();
   }
 
   // we dispose the above controllers to help our memory management

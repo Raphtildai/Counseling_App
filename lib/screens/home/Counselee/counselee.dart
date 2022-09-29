@@ -169,76 +169,76 @@ class _CounseleePageState extends State<CounseleePage> {
               SizedBox(height: 10.0,),
             
               // Counselors list
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Counselors List',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
-                      },
-                      child: Text(
-                        'See All',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: [
+              //       Text(
+              //         'Counselors List',
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 18.0,
+              //         ),
+              //       ),
+              //       GestureDetector(
+              //         onTap: (){
+              //           Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
+              //         },
+              //         child: Text(
+              //           'See All',
+              //           style: TextStyle(
+              //             color: Colors.blue,
+              //             fontSize: 16.0,
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               
-              SizedBox(height: 15.0,),
+              // SizedBox(height: 15.0,),
 
-              FutureBuilder(
-                future: getdocIDs(),
-                builder:((context, snapshot){
-                  // Counselors
-                  return Container(
-                    height: 200,
-                    child: Expanded(
-                      child: ListView.builder(
-                        primary: false,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 3,
-                        itemBuilder: (context, index) {
-                          // Get collection
-                          CollectionReference counselor = FirebaseFirestore.instance.collection('users');
-                          return FutureBuilder<DocumentSnapshot>(
-                            future: counselor.doc(docIDs[index]).get(),
-                            builder: (context, snapshot){
-                              if(snapshot.connectionState == ConnectionState.done){
-                                Map <String, dynamic> data = 
-                                snapshot.data!.data() as Map <String, dynamic>;
-                                return CounselorCard(
-                                  counselorImage: 'assets/bg.jpg',
-                                  counselorRating: '${data['rating']}',
-                                  counselorName: '${data['firstname']}',
-                                  counselorProfession: '${data['profession']}',
-                                  counselorEmail: '${data['email']}',
-                                  counselorPhone: '${data['pnumber']}',
-                                  counselorID: docIDs[index],
-                                );
-                              }
-                              return Center(child: CircularProgressIndicator());
+              // FutureBuilder(
+              //   future: getdocIDs(),
+              //   builder:((context, snapshot){
+              //     // Counselors
+              //     return Container(
+              //       height: 200,
+              //       child: Expanded(
+              //         child: ListView.builder(
+              //           primary: false,
+              //           scrollDirection: Axis.horizontal,
+              //           itemCount: 3,
+              //           itemBuilder: (context, index) {
+              //             // Get collection
+              //             CollectionReference counselor = FirebaseFirestore.instance.collection('users');
+              //             return FutureBuilder<DocumentSnapshot>(
+              //               future: counselor.doc(docIDs[index]).get(),
+              //               builder: (context, snapshot){
+              //                 if(snapshot.connectionState == ConnectionState.done){
+              //                   Map <String, dynamic> data = 
+              //                   snapshot.data!.data() as Map <String, dynamic>;
+              //                   return CounselorCard(
+              //                     counselorImage: 'assets/bg.jpg',
+              //                     counselorRating: '${data['rating']}',
+              //                     counselorName: '${data['firstname']}',
+              //                     counselorProfession: '${data['profession']}',
+              //                     counselorEmail: '${data['email']}',
+              //                     counselorPhone: '${data['pnumber']}',
+              //                     counselorID: docIDs[index],
+              //                   );
+              //                 }
+              //                 return Center(child: CircularProgressIndicator());
                               
-                            },
-                          );
+              //               },
+              //             );
                           
-                        }),
-                      ),
-                  );
-                }),
-              ),
+              //           }),
+              //         ),
+              //     );
+              //   }),
+              // ),
               SizedBox(height: 30,),
             ],
           ),

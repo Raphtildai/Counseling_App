@@ -69,7 +69,7 @@ class _SignUpState extends State<SignUp> {
         DateTime.now()
       );
 
-      showDialog(context: context, builder: (context){
+      await showDialog(context: context, builder: (context){
         return const AlertDialog(
           content: Text('Registration Successful'),
         );

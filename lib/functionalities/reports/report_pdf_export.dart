@@ -6,10 +6,16 @@ import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 
 class ReportPdfExport extends StatelessWidget {
+  final String doc;
   final String regnumber;
   final String date_booked;
   final String time_booked;
-ReportPdfExport({ Key? key, required this.regnumber, required this.date_booked, required this.time_booked }) : super(key: key);
+ReportPdfExport({ Key? key, 
+required this.regnumber, 
+required this.date_booked, 
+required this.time_booked ,
+required this.doc
+}) : super(key: key);
 
 
 final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
@@ -24,7 +30,7 @@ pdf.addPage(
       pageFormat: format,
       build: (context){
         return pw.Padding(
-          padding: pw.EdgeInsets.symmetric(horizontal: 25),
+          padding: pw.EdgeInsets.symmetric(horizontal: 25, vertical: 20),
           child: pw.Column(
             mainAxisAlignment: pw.MainAxisAlignment.start,
             children: [
@@ -55,11 +61,23 @@ pdf.addPage(
               pw.Padding(
                 padding: pw.EdgeInsets.all(1),
                 child: pw.Text(
-                  'List of Counselee based on Gender',
-                  style: pw.Theme.of(context).header4,
+                  '${regnumber} Detailed Report',
+                  style: pw.Theme.of(context).header3,
                   textAlign: pw.TextAlign.center,
                 )
               ),
+
+              pw.SizedBox(height: 20),
+              pw.Padding(
+                padding: pw.EdgeInsets.all(1),
+                child: pw.Text(
+                  'Document ID ${doc}',
+                  style: pw.Theme.of(context).header3,
+                  textAlign: pw.TextAlign.center,
+                )
+              ),
+
+              pw.SizedBox(height: 20),
 
 
               // Content of the Report
@@ -89,7 +107,7 @@ pdf.addPage(
                       pw.Padding(
                         padding: pw.EdgeInsets.all(5),
                         child: pw.Text(
-                          'Gender',
+                          'Date Booked',
                           style: pw.Theme.of(context).header4,
                           textAlign: pw.TextAlign.center,
                         )
@@ -133,8 +151,8 @@ pdf.addPage(
                     ]
                   ),
                 ]
-                  
               ),
+              pw.SizedBox(height: 20),
 
               // Footer or the Report
               pw.Padding(padding: pw.EdgeInsets.only(bottom: 10), child: pw.Column(
@@ -229,7 +247,7 @@ void _createPdf() async{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Counseling Session Reports'),
+        title: Text('${regnumber} Detailed Report'),
       ),
       body: Center(
         child: ElevatedButton(

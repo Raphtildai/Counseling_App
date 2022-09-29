@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:careapp/functionalities/appointments/appointment_list.dart';
+import 'package:careapp/functionalities/calendar/calendar_page.dart';
 import 'package:careapp/functionalities/counseling%20session/launch%20session.dart';
 import 'package:careapp/functionalities/device_info.dart';
 import 'package:careapp/functionalities/reports/reports_list.dart';
@@ -78,9 +79,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
       Navigator.push(context, MaterialPageRoute(builder: (context)=>CounselorRegister()));
       break;
 
-      // case 7:
-      // Navigator.push(context, MaterialPageRoute(builder: (context)=>UserAccount()));
-      // break;
+      case 9:
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>CalendarPage()));
+      break;
+
+      case 10:
+      Navigator.push(context, MaterialPageRoute(builder: (context)=>ReportsList()));
+      break;
       
 
       // default:
@@ -231,6 +236,22 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   Name: 'Settings', 
                   icon: Icons.settings, 
                   onPressed: ()=> onItemPressed(context, index: 5),
+                ),
+          
+                const SizedBox(height: 20,),
+          
+                DrawerItem(
+                  Name: 'Calendar', 
+                  icon: Icons.calendar_month, 
+                  onPressed: ()=> onItemPressed(context, index: 9),
+                ),
+          
+                const SizedBox(height: 20,),
+          
+                DrawerItem(
+                  Name: 'Reports', 
+                  icon: Icons.book, 
+                  onPressed: ()=> onItemPressed(context, index: 10),
                 ),
           
                 const SizedBox(height: 20,),

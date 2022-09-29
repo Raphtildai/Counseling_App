@@ -79,7 +79,8 @@ class _SessionBookingState extends State<SessionBooking> {
       );
     }else{
       setState(() {
-        _timecontroller.text = '${time.hour}:${time.minute}';
+        // '${time.hour}:${time.minute}'
+        timeHint = '${time.hour}:${time.minute}';
       });
     }
   }
@@ -99,10 +100,9 @@ class _SessionBookingState extends State<SessionBooking> {
       // Checking whether the user has pending approval
       // CollectionReference approvalRequest = FirebaseFirestore.instance.collection('bookings').where('regnumber', isEqualTo: _regnocontroller).get
       
-      // Creating a user with user credential
+      // Creating a document with counselee session booking information
       bookUser(
-        _regnocontroller.text.trim(),
-        _dateTimecontroller.text.trim(),
+        DateTime.parse(_dateTimecontroller.text.trim()),
         _timecontroller.text.trim(),
         DateTime.now(),
       );
@@ -114,7 +114,7 @@ class _SessionBookingState extends State<SessionBooking> {
       });
     } 
   }     
-  Future bookUser(String regnumber, String date, String time, DateTime now) async {
+  Future bookUser(DateTime date, String time, DateTime now) async {
     try{
     // Loading
     showDialog(
@@ -130,7 +130,6 @@ class _SessionBookingState extends State<SessionBooking> {
     var book = await FirebaseFirestore.instance.collection('bookings').doc(FirebaseAuth.instance.currentUser!.uid).set({
         // Add the user to the collection
         'counselee_email': FirebaseAuth.instance.currentUser?.email,
-        'regnumber': regnumber,
         'date_booked': date,
         'time_booked': time,
         'created_at': now, //DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now())
@@ -164,6 +163,7 @@ class _SessionBookingState extends State<SessionBooking> {
     _regnocontroller.dispose();
     _dateTimecontroller.dispose();
     _timecontroller.dispose();
+    
   }
   @override
   Widget build(BuildContext context) {

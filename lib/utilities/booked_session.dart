@@ -76,7 +76,7 @@ class _BookedSessionState extends State<BookedSession> {
         }
       }catch(e){
         showDialog(context: context, builder: (context){
-          return AlertDialog(
+          return const AlertDialog(
             content: Text('Error while launching email sender app'),
           );
         });
@@ -85,7 +85,7 @@ class _BookedSessionState extends State<BookedSession> {
         // );
       }
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return Home();
+        return const Home();
       },));
     }
     // Function to approve session
@@ -94,13 +94,13 @@ class _BookedSessionState extends State<BookedSession> {
         final approval = await FirebaseFirestore.instance.collection('bookings')
         .doc('$docID').update({
           'approval': "Approved",
-          'counseleeID' : FirebaseAuth.instance.currentUser!.uid,
+          'counselorID' : FirebaseAuth.instance.currentUser!.uid,
           'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
         });
         const ApproveSession();
         showDialog(context: context, builder: (context){
-          return AlertDialog(
-            content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
+          return const AlertDialog(
+            content: Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
           );
         });
         _sendEmail();
@@ -138,7 +138,7 @@ class _BookedSessionState extends State<BookedSession> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Reg number:', style: BookedSession.titleStyle,),
+                        const Text('Reg number:', style: BookedSession.titleStyle,),
                         const SizedBox(width: 10,),
                         Text(widget.regnumber),
                       ],
@@ -155,7 +155,7 @@ class _BookedSessionState extends State<BookedSession> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Date Booked:', style: BookedSession.titleStyle,),
+                        const Text('Date Booked:', style: BookedSession.titleStyle,),
                         const SizedBox(width: 10,),
                         Text(widget.date_booked),
                       ],
@@ -171,7 +171,7 @@ class _BookedSessionState extends State<BookedSession> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Time Booked:', style: BookedSession.titleStyle,),
+                        const Text('Time Booked:', style: BookedSession.titleStyle,),
                         const SizedBox(width: 10,),
                         Text(widget.time_booked),
                       ],
@@ -206,6 +206,7 @@ class _BookedSessionState extends State<BookedSession> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         MaterialButton(
                           color: Colors.deepPurple,
@@ -216,15 +217,15 @@ class _BookedSessionState extends State<BookedSession> {
                           },
                           child: const Text('Approve'),
                         ),
-                        const SizedBox(width: 20,),
-                        MaterialButton(
-                          color: Colors.black,
-                          textColor: Colors.white,
-                          onPressed: (){
-                            // Navigator.p
-                          },
-                          child: const Text('Reschedule'),
-                        ),
+                        // const SizedBox(width: 20,),
+                        // MaterialButton(
+                        //   color: Colors.black,
+                        //   textColor: Colors.white,
+                        //   onPressed: (){
+                        //     // Navigator.p
+                        //   },
+                        //   child: const Text('Reschedule'),
+                        // ),
                       ],
                     ),
                     const Divider(

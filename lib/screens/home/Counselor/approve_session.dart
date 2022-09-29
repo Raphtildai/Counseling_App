@@ -1,13 +1,9 @@
 // import 'dart:js';
 
-import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:careapp/services/get_counselee_data.dart';
 import 'package:careapp/utilities/booked_session.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
 
 class ApproveSession extends StatefulWidget {
   const ApproveSession({ Key? key, }) : super(key: key);
