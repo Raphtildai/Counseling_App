@@ -34,7 +34,7 @@ class CounseleeProfile extends StatelessWidget {
         // Error handling conditions
         if(snapshot.hasError){
           showDialog(context: context, builder: (context){
-            return AlertDialog(
+            return const AlertDialog(
               content: Text('Something went Wrong'),
             );
           }); 
@@ -379,7 +379,7 @@ class CounseleeProfile extends StatelessWidget {
           ),
         );  
       }
-      return Center(child: CircularProgressIndicator());
+        return const Center(child: AlertDialog(content: Center(child: CircularProgressIndicator())));
       }
     );
   }

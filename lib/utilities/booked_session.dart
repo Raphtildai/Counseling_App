@@ -95,6 +95,7 @@ class _BookedSessionState extends State<BookedSession> {
         .doc('$docID').update({
           'approval': "Approved",
           'counselorID' : FirebaseAuth.instance.currentUser!.uid,
+          'counselor_email': FirebaseAuth.instance.currentUser!.email,
           'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
         });
         const ApproveSession();

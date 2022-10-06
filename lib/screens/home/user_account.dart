@@ -16,8 +16,7 @@ class _UserAccountState extends State<UserAccount> {
 final FirebaseAuth auth = FirebaseAuth.instance;
 @override
   Widget build(BuildContext context){
-    final userId = FirebaseAuth.instance.currentUser!.email;
-    print(userId);
+    final userId = FirebaseAuth.instance.currentUser!.uid;
     CollectionReference userData = FirebaseFirestore.instance.collection('users');
     const headingStyle = TextStyle(
       fontSize: 16,
@@ -27,7 +26,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
       fontSize: 14,
     );
     return FutureBuilder <DocumentSnapshot>(
-      future: userData.doc(FirebaseAuth.instance.currentUser!.uid).get(),
+      future: userData.doc(userId).get(),
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         // Error handling conditions
         if(snapshot.hasError){
@@ -213,6 +212,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                         
                       ),
                     ),
+                    
                     // Education Details
                     const SizedBox(height: 10,),
                     Padding(

@@ -1,7 +1,9 @@
 import 'package:careapp/functionalities/appointments/appointment_card.dart';
 import 'package:careapp/functionalities/appointments/reschedule_card.dart';
+import 'package:careapp/utilities/error_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppointmentList extends StatelessWidget {
   // Styles used in the app
@@ -43,7 +45,7 @@ class AppointmentList extends StatelessWidget {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pending Appointment(s)'),
+        title: const Text('Pending Appointment(s)'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -54,12 +56,12 @@ class AppointmentList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: Container(
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.deepPurple[50],
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: TextField(
+              child: const TextField(
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search),
                   border: InputBorder.none,
@@ -78,7 +80,7 @@ class AppointmentList extends StatelessWidget {
                 // Searching pending session
                 ElevatedButton(
                   onPressed: (){},
-                   child: Text('Search Pending Approval'),
+                   child: const Text('Search Pending Approval'),
                 ),
               ],
             ),
@@ -92,7 +94,7 @@ class AppointmentList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Divider(
                 height: 10,
-                color: Colors.deepPurple[200],
+                color: Colors.deepPurple[100],
                 thickness: 2.0,
               ),
             ),
@@ -113,19 +115,29 @@ class AppointmentList extends StatelessWidget {
                         return FutureBuilder <DocumentSnapshot>(
                           future: sessions.doc(docIDs[index]).get(),
                           builder: (context, snapshot) {
+                            if(snapshot.hasData){
                             if(snapshot.connectionState == ConnectionState.done){
                               Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
+                              DateTime date = data['date_time_booked'].toDate();
+                              var date_booked = DateFormat('dd/MM/yyyy').format(date);
+                              var time_booked = DateFormat('HH:mm').format(date);
+                              DateTime created_at =data['created_at'].toDate();
+                              var day_of_booking = DateFormat('dd/MM/yyyy, HH:mm').format(created_at);
                               return AppointmentCard(
                                 regnumber: '${data['regnumber']}', 
-                                date_booked: '${data['date_booked']}', 
-                                time_booked: '${data['time_booked']}', 
+                                date_booked: date_booked, 
+                                time_booked: time_booked, 
                                 counselee_email: '${data['counselee_email']}',
-                                created_at: '${data['created_at']}',
+                                created_at: day_of_booking,
                                 counseleeID: '${data['counseleeID']}',
                                 docID: docIDs[index], 
                               );
                             }
-                            return Center(child: CircularProgressIndicator(),);
+                            }
+                            else if(!snapshot.hasData){
+                              return ErrorPage( "No Data");
+                            }
+                            return const Center(child: AlertDialog(content: Center(child: CircularProgressIndicator(),)));
                           },
                         );
                         
@@ -146,7 +158,7 @@ class AppointmentList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Divider(
                 height: 10,
-                color: Colors.deepPurple[200],
+                color: Colors.deepPurple[100],
                 thickness: 2.0,
               ),
             ),
@@ -168,20 +180,35 @@ class AppointmentList extends StatelessWidget {
                       return FutureBuilder <DocumentSnapshot>(
                         future: rescheduled_sessions.doc(rescheduleddocIDs[index]).get(),
                         builder: (context, snapshot) {
+                          if(snapshot.hasData)  {
                           if(snapshot.connectionState == ConnectionState.done){
-                            Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
+
+                           Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
+                            DateTime date_rescheduled = data['date_time_rescheduled'].toDate();
+                            var date_rescheduled_to = DateFormat('dd/MM/yyyy').format(date_rescheduled);
+                            var time_rescheduled_to = DateFormat('HH:mm').format(date_rescheduled);
+                            DateTime rescheduled_at = data['rescheduled_at'].toDate();
+                            var day_of_rescheduling = DateFormat('dd/MM/yyyy, HH:mm').format(rescheduled_at);
+                          
                             return RescheduleCard(
-                              regnumber: '${data['regnumber']}', 
-                              date_rescheduled: '${data['date_rescheduled']}', 
-                              time_rescheduled: '${data['time_rescheduled']}', 
+                              // regnumber: '${data['regnumber']}', 
+                              date_rescheduled: date_rescheduled_to, 
+                              time_rescheduled: time_rescheduled_to, 
                               counselee_email: '${data['counselee_email']}',
-                              rescheduled_at: '${data['rescheduled_at']}',
+                              rescheduled_at: day_of_rescheduling,
                               counseleeID: '${data['counseleeID']}',
                               reason: '${data['reason_for_reschedule']}',
                               docID: rescheduleddocIDs[index],
                             );
                           }
-                          return Center(child: CircularProgressIndicator(),);
+ 
+                         
+                          }
+                                                      else{
+return ErrorPage("No Data Exists");
+                          }
+                         
+                          return const Center(child: CircularProgressIndicator(),);
                         },
                       );
                       
@@ -197,7 +224,7 @@ class AppointmentList extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Divider(
                 height: 10,
-                color: Colors.deepPurple[200],
+                color: Colors.deepPurple[100],
                 thickness: 2.0,
               ),
             ),

@@ -5,6 +5,7 @@ import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:careapp/utilities/counselee_card.dart';
+import 'package:careapp/utilities/error_page.dart';
 import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,12 +20,12 @@ class Counselors_Page extends StatefulWidget {
   State<Counselors_Page> createState() => _Counselors_PageState();
 }
 
-class _Counselors_PageState extends State<Counselors_Page> {
-    // accessing the user details
-    final user = FirebaseAuth.instance.currentUser!;
 
     // creating a list of document IDs
     List <String> docIDs = [];
+class _Counselors_PageState extends State<Counselors_Page> {
+    // accessing the user details
+    final user = FirebaseAuth.instance.currentUser!;
 
     // Creaing function to retrieve the documents
     Future getdocIDs() async {
@@ -218,6 +219,7 @@ class _Counselors_PageState extends State<Counselors_Page> {
                           return FutureBuilder<DocumentSnapshot>(
                             future: counselee.doc(docIDs[index]).get(),
                             builder: (context, snapshot){
+                              if(snapshot.hasData){
                               if(snapshot.connectionState == ConnectionState.done){
                                 Map <String, dynamic> data = 
                                 snapshot.data!.data() as Map <String, dynamic>;
@@ -231,6 +233,10 @@ class _Counselors_PageState extends State<Counselors_Page> {
                                   counseleeID: docIDs[index], 
 
                                 );
+                              }
+                              }
+                              else if(!snapshot.hasData){
+return ErrorPage("No Data");
                               }
                               return Center(child: CircularProgressIndicator());
                             },

@@ -41,7 +41,8 @@ class _SessionBookingState extends State<SessionBooking> {
   // Connecting to firebase
   CollectionReference booking = FirebaseFirestore.instance.collection('bookings');
 
-  // Date
+  // Initial date and time Date
+  DateTime day_time = DateTime.now();
   // Creating date time variable
   DateTime _selectedDate = DateTime.now();
   DateTime _initialDate = DateTime.now();
@@ -60,6 +61,13 @@ class _SessionBookingState extends State<SessionBooking> {
     setState(() {
       _dateTimecontroller.text = date.toLocal().toString().split(" ")[0];
       dateHint = date.toLocal().toString().split(" ")[0];
+      day_time = new DateTime(
+        date.year,
+        date.month,
+        date.day,
+        day_time.hour,
+        day_time.minute,
+      );
     });
   } 
 }
@@ -67,6 +75,34 @@ class _SessionBookingState extends State<SessionBooking> {
   // Time
   // Creating date time variable
   TimeOfDay timeOfDay = TimeOfDay.now();
+
+  // Future displayDateTimePicker(BuildContext context) async {
+  //   var date_time = await DateTimePicker(
+  //       type: DateTimePickerType.dateTimeSeparate,
+  //       dateMask: 'd MMM, yyyy',
+  //       initialValue: DateTime.now().toString(),
+  //       firstDate: DateTime.now(),
+  //       lastDate: DateTime(2022),
+  //       icon: Icon(Icons.event),
+  //       dateLabelText: 'Date',
+  //       timeLabelText: "Hour",
+  //       selectableDayPredicate: (date) {
+  //         // Disable weekend days to select from the calendar
+  //         if (date.weekday == 6 || date.weekday == 7) {
+  //           return false;
+  //         }
+
+  //         return true;
+  //       },
+  //       onChanged: (val) => print(val),
+  //       validator: (val) {
+  //         print(val);
+  //         return null;
+  //       },
+  //       onSaved: (val) => print(val),
+  //     );
+
+  // }
 
   Future displayTimePicker(BuildContext context) async {
     var time = await showTimePicker(
@@ -81,6 +117,14 @@ class _SessionBookingState extends State<SessionBooking> {
       setState(() {
         // '${time.hour}:${time.minute}'
         timeHint = '${time.hour}:${time.minute}';
+        _timecontroller.text = '${time.hour}:${time.minute}';
+        day_time = new DateTime(
+          day_time.year,
+          day_time.month,
+          day_time.month,
+          time.hour,
+          time.minute,
+        );
       });
     }
   }
@@ -101,10 +145,13 @@ class _SessionBookingState extends State<SessionBooking> {
       // CollectionReference approvalRequest = FirebaseFirestore.instance.collection('bookings').where('regnumber', isEqualTo: _regnocontroller).get
       
       // Creating a document with counselee session booking information
+      // DateTime day_time = DateTime(_dateTimecontroller.text.Add(_timecontroller.text);)
+    // DateTime day_time = DateTime.parse(_dateTimecontroller.text.trim() _timecontroller.text.trim());
       bookUser(
         DateTime.parse(_dateTimecontroller.text.trim()),
         _timecontroller.text.trim(),
         DateTime.now(),
+        day_time,
       );
     }catch(e){
       await showDialog(context: context, builder: (context){
@@ -114,7 +161,7 @@ class _SessionBookingState extends State<SessionBooking> {
       });
     } 
   }     
-  Future bookUser(DateTime date, String time, DateTime now) async {
+  Future bookUser(DateTime date, String time, DateTime now, DateTime day_time) async {
     try{
     // Loading
     showDialog(
@@ -134,11 +181,12 @@ class _SessionBookingState extends State<SessionBooking> {
         'time_booked': time,
         'created_at': now, //DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now())
         'approval': 'Pending',
+        'date_time_booked': day_time,
       });
 
     await showDialog(context: context, builder: (context){
       return const AlertDialog(
-        content: Text('Booking Successful'),
+        content: Text('Booking Done Successfully'),
       );
     });
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
@@ -165,6 +213,8 @@ class _SessionBookingState extends State<SessionBooking> {
     _timecontroller.dispose();
     
   }
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,241 +229,263 @@ class _SessionBookingState extends State<SessionBooking> {
 
           // SingleChildScrollView removes the overflow
           child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Center(
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/flutter.png'),
-                    radius: 30.0,
-                  ),
-                ),
-                SizedBox(height: 10.0,),
-                // Text to display at the top
-                Center(
-                  child: Text(
-                    'Booking Counseling Session.',
-                    style: TextStyle(
-                      fontSize: 18.0,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage('assets/flutter.png'),
+                      radius: 30.0,
                     ),
                   ),
-                ),
-                Divider(
-                  height: 60.0,
-                  color: Colors.grey[400],
-                ),
-
-                // Reg number text field
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: TextField(
-                        textCapitalization: TextCapitalization.characters,
-                        controller: _regnocontroller,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Registration Number',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.0,),
-
-                // // Reason why you feel you need to talk to the counselor
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 25),
-                //   child: Text(
-                //     'Enter reason for booking the appointment',
-                //     style: TextStyle(
-                //       fontSize: 16,
-                //     ),
-                //   ),
-                // ),
-
-                // SizedBox(height: 10,),
-
-                // // Reason input text field
-                // Padding(
-                //   padding: EdgeInsets.symmetric(horizontal: 25.0),
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       color: Colors.grey[200],
-                //       border: Border.all(color: Colors.white),
-                //       borderRadius: BorderRadius.circular(25.0),
-                //     ),
-                //     child: Padding(
-                //       padding: EdgeInsets.only(left: 20.0),
-                //       child: TextField(
-                //         controller: _reasoncontroller,
-                //         keyboardType: TextInputType.multiline,
-                //         minLines: 3,
-                //         maxLines: null,
-                //         decoration: InputDecoration(
-                //           border: InputBorder.none,
-                //           hintText: 'How do you feel?',
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(height: 10.0,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
+                  SizedBox(height: 10.0,),
+                  // Text to display at the top
+                  Center(
                     child: Text(
-                      'Enter / Choose Date & Time',
+                      'Booking Counseling Session.',
                       style: TextStyle(
-                        letterSpacing: 1.0,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepPurple.shade500,
+                        fontSize: 18.0,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10.0,),
-          
-                // Date Time Pick text field
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
+                  Divider(
+                    height: 60.0,
+                    color: Colors.grey[400],
+                  ),
+
+                  //initial date
+                  // String init_date = DateTime(day_time.year, day_time.month, day_time.day, day_time.hour, day_time.minute).toString(); 
+            
+                  // Reg number text field
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.grey[200],
+                  //       border: Border.all(color: Colors.white),
+                  //       borderRadius: BorderRadius.circular(25.0),
+                  //     ),
+                  //     child: Padding(
+                  //       padding: EdgeInsets.only(left: 20.0),
+                  //       child: TextField(
+                  //         textCapitalization: TextCapitalization.characters,
+                  //         controller: _regnocontroller,
+                  //         decoration: InputDecoration(
+                  //           border: InputBorder.none,
+                  //           hintText: 'Registration Number',
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(height: 10.0,),
+            
+                  // // Reason why you feel you need to talk to the counselor
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 25),
+                  //   child: Text(
+                  //     'Enter reason for booking the appointment',
+                  //     style: TextStyle(
+                  //       fontSize: 16,
+                  //     ),
+                  //   ),
+                  // ),
+            
+                  // SizedBox(height: 10,),
+            
+                  // // Reason input text field
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  //   child: Container(
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.grey[200],
+                  //       border: Border.all(color: Colors.white),
+                  //       borderRadius: BorderRadius.circular(25.0),
+                  //     ),
+                  //     child: Padding(
+                  //       padding: EdgeInsets.only(left: 20.0),
+                  //       child: TextField(
+                  //         controller: _reasoncontroller,
+                  //         keyboardType: TextInputType.multiline,
+                  //         minLines: 3,
+                  //         maxLines: null,
+                  //         decoration: InputDecoration(
+                  //           border: InputBorder.none,
+                  //           hintText: 'How do you feel?',
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // SizedBox(height: 10.0,),
+            
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: TextField(
-                        controller: _dateTimecontroller,
-                        keyboardType: TextInputType.datetime,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: dateHint,
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        'Enter / Choose Date & Time',
+                        style: TextStyle(
+                          letterSpacing: 1.0,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple.shade500,
                         ),
                       ),
                     ),
                   ),
-                ),
-          
-                SizedBox(height: 5.0,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      MaterialButton(
-                        highlightColor: Colors.deepPurple[600],
-                        color: Colors.deepPurple[400],
-                        padding: EdgeInsets.all(10.0),
-                        onPressed: () => displayDatePicker(context),
-                        child: Text(
-                          'Choose Date',
-                          style: TextStyle(
-                            color: Colors.white,
-                            letterSpacing: 1.0,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10.0,),
-
-                // TimePicker field
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: TextField(
-                        controller: _timecontroller,
-                        keyboardType: TextInputType.datetime,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: timeHint,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-          
-                SizedBox(height: 5.0,),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      MaterialButton(
-                        highlightColor: Colors.deepPurple[600],
-                        color: Colors.deepPurple[400],
-                        padding: EdgeInsets.all(10.0),
-                        onPressed: () => displayTimePicker(context),
-                        child: Text(
-                          'Choose Time',
-                          style: TextStyle(
-                            color: Colors.white,
-                            letterSpacing: 1.0,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          ),
-                      ),
-                    ],
-                  ),
-                ),
-          
-                SizedBox(height: 10.0,),
-          
-                // Button to submit bookings
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(    
-                    onTap: (){
-                      bookSession();
-                    },             
+                  SizedBox(height: 10.0,),
+                      
+                  // Date Time Pick text field
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
-                      padding: EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
-                        color: Colors.deepPurple,
+                        color: Colors.grey[200],
+                        border: Border.all(color: Colors.white),
                         borderRadius: BorderRadius.circular(25.0),
                       ),
-                      child: Center(
-                        child: Text(
-                          'Book Session',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: TextFormField(
+                          controller: _dateTimecontroller,
+                          keyboardType: TextInputType.datetime,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: dateHint,
+                          ),
+                          validator: ((value) {
+                            if(value == null || value.isEmpty){
+                              return 'Date Cannot be empty';
+                            }else if(value.length < 10 || value.length > 10){
+                              return 'Enter date in the given format';
+                            }return null;
+                          }),
+                        ),
+                      ),
+                    ),
+                  ),
+                      
+                  SizedBox(height: 5.0,),
+            
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MaterialButton(
+                          highlightColor: Colors.deepPurple[600],
+                          color: Colors.deepPurple[400],
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () => displayDatePicker(context),
+                          child: Text(
+                            'Choose Date',
+                            style: TextStyle(
+                              color: Colors.white,
+                              letterSpacing: 1.0,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10.0,),
+            
+                  // TimePicker field
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        border: Border.all(color: Colors.white),
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: TextFormField(
+                          controller: _timecontroller,
+                          keyboardType: TextInputType.datetime,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: timeHint,
+                          ),
+                          validator: ((value) {
+                            if(value == null || value.isEmpty){
+                              return 'Time Cannot be empty';
+                            }else if(value.length < 4 || value.length > 5){
+                              return 'Enter time in the given format';
+                            }return null;
+                          }),
+                        ),
+                      ),
+                    ),
+                  ),
+                      
+                  SizedBox(height: 5.0,),
+            
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MaterialButton(
+                          highlightColor: Colors.deepPurple[600],
+                          color: Colors.deepPurple[400],
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () => displayTimePicker(context),
+                          child: Text(
+                            'Choose Time',
+                            style: TextStyle(
+                              color: Colors.white,
+                              letterSpacing: 1.0,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            ),
+                        ),
+                      ],
+                    ),
+                  ),
+                      
+                  SizedBox(height: 10.0,),
+                      
+                  // Button to submit bookings
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: GestureDetector(    
+                      onTap: (){
+                        if(_formKey.currentState!.validate()){
+                          bookSession();
+                        }
+                      },             
+                      child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Book Session',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 100.0,),
-              ],
+                  SizedBox(height: 100.0,),
+                ],
               ),
+            ),
             ),
           ),
         ],

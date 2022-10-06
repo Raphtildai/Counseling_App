@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:careapp/screens/home/Counselee/counselee.dart';
+import 'package:careapp/screens/home/Counselee/counselee_page.dart';
 import 'package:careapp/screens/home/Counselee/counselee_drawer.dart';
 import 'package:flutter/material.dart';
 

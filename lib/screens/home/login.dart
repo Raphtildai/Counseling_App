@@ -73,6 +73,9 @@ class _LoginPageState extends State<LoginPage> {
       }
       // Popping out the loading
       Navigator.of(context).pop();
+      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+      //   return MainPage();
+      // },),);
       return MainPage();
   }
 

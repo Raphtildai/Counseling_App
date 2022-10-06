@@ -11,13 +11,14 @@ class ApprovedList extends StatefulWidget {
 }
 
 List<String> approveddocIDs = [];
+List<DateTime> dates = [];
 
 
 class _ApprovedListState extends State<ApprovedList> {
   // Function to retrieve approved sessions
   Future getapproveddocIDs() async {
     await FirebaseFirestore.instance.collection('bookings').where('approval', isEqualTo: 'Approved').orderBy('date_booked').get().then((snapshot){
-      snapshot.docs.forEach((document) { 
+      snapshot.docs.forEach((document){
         approveddocIDs.add(document.reference.id);
       });
     });
@@ -61,7 +62,9 @@ class _ApprovedListState extends State<ApprovedList> {
                               //   subject: 'Counseling',
                               //   color: Colors.deepPurple,
                               // )); 
-                              return CalendarPage();
+                              dates.add(data['time_approved']);
+                              // return CalendarPage(dates: dates,);
+                              return Time();
                             }
                             return Center(child: CircularProgressIndicator(),);
                           },
@@ -74,6 +77,25 @@ class _ApprovedListState extends State<ApprovedList> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Time extends StatelessWidget {
+const Time({ Key? key,}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context){
+    return Container(
+      child: ListView(
+        children: [
+          ListTile(
+            title: Text(''
+              // DateTime.parse(DateTime(dates)).toString(),
+            ),
+          )
+        ],
       ),
     );
   }

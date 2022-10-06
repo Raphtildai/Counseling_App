@@ -30,7 +30,7 @@ final personal = TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounseleeProfile(counseleeID: FirebaseAuth.instance.currentUser!.uid)));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
       break;
       //Notifications
       case 1:

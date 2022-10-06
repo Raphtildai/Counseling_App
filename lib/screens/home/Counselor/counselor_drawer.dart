@@ -1,4 +1,5 @@
 import 'package:careapp/functionalities/appointments/appointment_list.dart';
+import 'package:careapp/functionalities/reports/reports_list.dart';
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
@@ -29,7 +30,7 @@ final personal = const TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorProfile(counselorID: FirebaseAuth.instance.currentUser!.uid)));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
       break;
       //Notifications
       case 1:
@@ -40,9 +41,9 @@ final personal = const TextStyle(
       Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
       break;
 
-      case 3:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
-      break;
+      // case 3:
+      // Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
+      // break;
 
       case 4:
       Navigator.push(context, MaterialPageRoute(builder: (context)=> CounseleeList()));
@@ -54,6 +55,12 @@ final personal = const TextStyle(
 
       case 6:
       Navigator.push(context, MaterialPageRoute(builder: (context)=>const Logout()));
+      break;
+
+      // Tracking counselee report
+
+      case 7:
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> ReportsList()));
       break;
 
       // case 7:
@@ -140,21 +147,13 @@ final personal = const TextStyle(
                   onPressed: ()=> onItemPressed(context, index: 2),
                 ),
           
-                const SizedBox(height: 20,),
+                // const SizedBox(height: 20,),
           
                 // DrawerItem(
-                //   Name: 'Chats', 
-                //   icon: Icons.chat, 
-                //   onPressed: ()=> onItemPressed(context, index: 2),
+                //   Name: 'Reschedule Session', 
+                //   icon: Icons.schedule, 
+                //   onPressed: ()=> onItemPressed(context, index: 3),
                 // ),
-          
-                const SizedBox(height: 20,),
-          
-                DrawerItem(
-                  Name: 'Reschedule Session', 
-                  icon: Icons.schedule, 
-                  onPressed: ()=> onItemPressed(context, index: 3),
-                ),
           
                 const SizedBox(height: 20,),
           
@@ -170,6 +169,14 @@ final personal = const TextStyle(
                   Name: 'Settings', 
                   icon: Icons.settings, 
                   onPressed: ()=> onItemPressed(context, index: 5),
+                ),
+          
+                const SizedBox(height: 20,),
+          
+                DrawerItem(
+                  Name: 'Track Counselee', 
+                  icon: Icons.book_outlined, 
+                  onPressed: ()=> onItemPressed(context, index: 7),
                 ),
           
                 const SizedBox(height: 20,),

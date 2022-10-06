@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -12,7 +13,6 @@ class CounselorProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String ID = counselorID; 
     // Retrieving the record of the specified counselor
     CollectionReference counselor = FirebaseFirestore.instance.collection('users');
     return FutureBuilder<DocumentSnapshot>(
@@ -20,10 +20,23 @@ class CounselorProfile extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         // Error handling conditions
         if(snapshot.hasError){
-          return Center(child: Text('Something went Wrong'));
+          Navigator.of(context).pop();
+          const AlertDialog(
+            content: Text('Something went Wrong'),
+          );
+          return MainPage();
+          // return Center(child: Text('Something went Wrong'));
         }
         if(snapshot.hasData && !snapshot.data!.exists){
-          return Center(child: Text('The counselor Record does not exist'),);
+          Navigator.of(context).pop();
+          const AlertDialog(
+            content: Text('The counselor Record does not exist'),
+          );
+          // return MainPage();
+          // const AlertDialog(
+          //   content: Text(''),
+          // );
+          // return Center(child: Text('The counselor Record does not exist'),);
         }
 
         // Outputting the data to the user
@@ -373,7 +386,8 @@ class CounselorProfile extends StatelessWidget {
           );
         }
         // Return loading to the user
-        return Center(child: CircularProgressIndicator());
+        return Center(child: const AlertDialog(content: Center(child: CircularProgressIndicator())));
+        // return Center(child: );
       },
     );
   }

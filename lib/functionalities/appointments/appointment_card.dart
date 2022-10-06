@@ -1,13 +1,10 @@
-import 'package:careapp/functionalities/appointments/appointment_list.dart';
-import 'package:careapp/functionalities/appointments/reschedule_card.dart';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
-import 'package:careapp/screens/home/Counselor/reschedule.dart';
-import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AppointmentCard extends StatelessWidget {
@@ -50,7 +47,6 @@ class AppointmentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     // final String datevalue  = DateFormat('E, d MMM yyyy HH:mm:ss').format(created_at).toString();
-    final String uid = counseleeID;
     final docid = docID;
     final email = Uri(
       scheme: 'mailto',
@@ -67,7 +63,7 @@ class AppointmentCard extends StatelessWidget {
         }
       }catch(e){
         showDialog(context: context, builder: (context){
-          return AlertDialog(
+          return const AlertDialog(
             content: Text('Error while launching email sender app'),
           );
         });
@@ -82,16 +78,16 @@ class AppointmentCard extends StatelessWidget {
     // Function to approve session
     Future approveSession(String docID) async {
       try{
-        final approval = await FirebaseFirestore.instance.collection('bookings')
-        .doc('$docID').update({
+        await FirebaseFirestore.instance.collection('bookings')
+        .doc(docID).update({
           'approval': "Approved",
           'counselorID' : FirebaseAuth.instance.currentUser!.uid,
           'time_approved': DateTime.now(), //DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now())
         });
         // const approveSession(docid);
         await showDialog(context: context, builder: (context){
-          return AlertDialog(
-            content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
+          return const AlertDialog(
+            content: Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
           );
         });
         _sendEmail();
@@ -120,20 +116,20 @@ class AppointmentCard extends StatelessWidget {
                 child: Column(
                   children: [
                     // Counselee's Reg number
-                    const Divider(
-                      // height: 10,
-                      thickness: 1.0,
-                      color: Colors.white,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Reg number:', style: titleStyle,),
-                        const SizedBox(width: 10,),
-                        Text(regnumber),
-                      ],
-                    ),
-                    const SizedBox(height: 10,),
+                    // const Divider(
+                    //   // height: 10,
+                    //   thickness: 1.0,
+                    //   color: Colors.white,
+                    // ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text('Reg number:', style: titleStyle,),
+                    //     const SizedBox(width: 10,),
+                    //     Text(regnumber),
+                    //   ],
+                    // ),
+                    // const SizedBox(height: 10,),
 
                     // Date booked
                     
@@ -145,7 +141,7 @@ class AppointmentCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Date Booked:', style: titleStyle,),
+                        const Text('Date Booked:', style: titleStyle,),
                         const SizedBox(width: 10,),
                         Text(date_booked),
                       ],
@@ -161,7 +157,7 @@ class AppointmentCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Time Booked:', style: titleStyle,),
+                        const Text('Time Booked:', style: titleStyle,),
                         const SizedBox(width: 10,),
                         Text(time_booked),
                       ],
@@ -172,7 +168,7 @@ class AppointmentCard extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return CounseleeProfile(counseleeID: this.counseleeID,);
+                          return CounseleeProfile(counseleeID: docID,);
                           
                         },));
                       },
@@ -203,30 +199,29 @@ class AppointmentCard extends StatelessWidget {
                           color: Colors.deepPurple,
                           textColor: Colors.white,
                           onPressed: (){
-                            print(docid);
                             approveSession(docid);
                           },
                           child: const Text('Approve'),
                         ),
-                        const SizedBox(width: 20,),
-                        MaterialButton(
-                          color: Colors.black,
-                          textColor: Colors.white,
-                          onPressed: (){
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context){
-                              return Reschedule(
-                              regnumber: this.regnumber, 
-                              date_booked: this.date_booked, 
-                              time_booked: this.time_booked, 
-                              counselee_email: this.counselee_email,
-                              created_at: this.created_at,
-                              counseleeID: this.counseleeID,
-                              docID: docid,
-                              );
-                            })));
-                          },
-                          child: const Text('Reschedule'),
-                        ),
+                        // const SizedBox(width: 20,),
+                        // MaterialButton(
+                        //   color: Colors.black,
+                        //   textColor: Colors.white,
+                        //   onPressed: (){
+                        //     Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context){
+                        //       return Reschedule(
+                        //       // regnumber: this.regnumber, 
+                        //       date_booked: this.date_booked, 
+                        //       time_booked: this.time_booked, 
+                        //       counselee_email: this.counselee_email,
+                        //       created_at: this.created_at,
+                        //       counseleeID: this.counseleeID,
+                        //       docID: docid,
+                        //       );
+                        //     })));
+                        //   },
+                        //   child: const Text('Reschedule'),
+                        // ),
                       ],
                     ),
                     const Divider(

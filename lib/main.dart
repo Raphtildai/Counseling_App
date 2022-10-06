@@ -35,7 +35,7 @@ const Main({ Key? key }) : super(key: key);
   Widget build(BuildContext context){
     return MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: Splash(),
+    home: MainPage(),
     theme: ThemeData(primarySwatch: Colors.deepPurple),
 
     );
@@ -53,6 +53,11 @@ class _MainState extends State<Splash> {
 
 
   Future getPage() async {
+    // Future.delayed(Duration.zero, () {
+    //   Navigator.of(context).pushAndRemoveUntil(
+    //     MaterialPageRoute(builder: (context) => MainPage()),
+    //     (route) => false);
+    // });
     // Future.delayed(Duration(seconds: 5), (() {
     //   Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => MainPage())));
     // }));

@@ -1,16 +1,19 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
+import 'package:careapp/functionalities/calendar/approved_list.dart';
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/utilities/category_card.dart';
+import 'package:careapp/utilities/error_page.dart';
+import 'package:careapp/utilities/session_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import '../../../utilities/counselors_card.dart';
 
 class CounseleePage extends StatefulWidget {
-  CounseleePage({Key? key}) : super(key: key);
+const  CounseleePage({Key? key}) : super(key: key);
   
   @override
   State<CounseleePage> createState() => _CounseleePageState();
@@ -23,11 +26,12 @@ class _CounseleePageState extends State<CounseleePage> {
 
   // creating a list of document IDs
   List <String> docIDs = [];
+  // DateTime date = DateTime.now();
 
   // Creaing function to retrieve the documents
   Future getdocIDs() async {
 
-    await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselor").get().then(
+    await FirebaseFirestore.instance.collection('bookings').where('counselee_email', isEqualTo: FirebaseAuth.instance.currentUser!.email).get().then(
       (snapshot) => snapshot.docs.forEach((document) {
         // adding the document to the list
         docIDs.add(document.reference.id);
@@ -167,78 +171,93 @@ class _CounseleePageState extends State<CounseleePage> {
               ),
         
               SizedBox(height: 10.0,),
-            
-              // Counselors list
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       Text(
-              //         'Counselors List',
-              //         style: TextStyle(
-              //           fontWeight: FontWeight.bold,
-              //           fontSize: 18.0,
-              //         ),
-              //       ),
-              //       GestureDetector(
-              //         onTap: (){
-              //           Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
-              //         },
-              //         child: Text(
-              //           'See All',
-              //           style: TextStyle(
-              //             color: Colors.blue,
-              //             fontSize: 16.0,
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              
-              // SizedBox(height: 15.0,),
 
-              // FutureBuilder(
-              //   future: getdocIDs(),
-              //   builder:((context, snapshot){
-              //     // Counselors
-              //     return Container(
-              //       height: 200,
-              //       child: Expanded(
-              //         child: ListView.builder(
-              //           primary: false,
-              //           scrollDirection: Axis.horizontal,
-              //           itemCount: 3,
-              //           itemBuilder: (context, index) {
-              //             // Get collection
-              //             CollectionReference counselor = FirebaseFirestore.instance.collection('users');
-              //             return FutureBuilder<DocumentSnapshot>(
-              //               future: counselor.doc(docIDs[index]).get(),
-              //               builder: (context, snapshot){
-              //                 if(snapshot.connectionState == ConnectionState.done){
-              //                   Map <String, dynamic> data = 
-              //                   snapshot.data!.data() as Map <String, dynamic>;
-              //                   return CounselorCard(
-              //                     counselorImage: 'assets/bg.jpg',
-              //                     counselorRating: '${data['rating']}',
-              //                     counselorName: '${data['firstname']}',
-              //                     counselorProfession: '${data['profession']}',
-              //                     counselorEmail: '${data['email']}',
-              //                     counselorPhone: '${data['pnumber']}',
-              //                     counselorID: docIDs[index],
-              //                   );
-              //                 }
-              //                 return Center(child: CircularProgressIndicator());
-                              
-              //               },
-              //             );
+              // Booked counseling sessions
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'My bookings',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
+                      },
+                      child: Text(
+                        'See All',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              
+              SizedBox(height: 15.0,),
+
+              FutureBuilder(
+                future: getdocIDs(),
+                builder:((context, snapshot){
+                  // Counselors
+                  return Container(
+                    height: 300,
+                    child: Expanded(
+                      child: ListView.builder(
+                        primary: false,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: docIDs.length,
+                        itemBuilder: (context, index) {
+                          // Get collection
+                          CollectionReference bookings = FirebaseFirestore.instance.collection('bookings');
+                          return FutureBuilder<DocumentSnapshot>(
+                            future: bookings.doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.done){
+                                Map <String, dynamic> data = 
+                                snapshot.data!.data() as Map <String, dynamic>;
+                                if(snapshot.hasData && snapshot.data!.exists){
+                                  if(data.isEmpty){
+                                    return ErrorPage( 'No Bookings found');
+                                  }else if(data.isNotEmpty){
+                                    DateTime date = data['date_time_booked'].toDate();
+                                    var date_booked = DateFormat('dd/MM/yyyy').format(date);
+                                    var time_booked = DateFormat('HH:mm').format(date);
+                                    DateTime creatation_date = data['created_at'].toDate();
+                                    var created_at = DateFormat('dd/MM/yyyy, HH:mm').format(creatation_date);
+
+                                    return SessionCard(
+                                      date_booked: date_booked.toString(), //${data['final']}
+                                      time_booked: time_booked.toString(),
+                                      status: '${data['approval']}',
+                                      // time_booked: data['time_booked'], 
+                                      counselorID: '${data['counselorID']}', 
+                                      counselor_email: '${data['counselor_email']}', 
+                                      date_created: created_at,
+                                    );
+                                  }else{
+                                    return ErrorPage( 'You\'ve not made any bookings');
+                                  }
+                                }else{
+                                  return ErrorPage('You\'ve not made any bookings');
+                                }
+                              }
+                              return Center(child: const AlertDialog(content: Center(child: CircularProgressIndicator())));
+                            },
+                          );
                           
-              //           }),
-              //         ),
-              //     );
-              //   }),
-              // ),
+                        }),
+                      ),
+                  );
+                }),
+              ),
               SizedBox(height: 30,),
             ],
           ),

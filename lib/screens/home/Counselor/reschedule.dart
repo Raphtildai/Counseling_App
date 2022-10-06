@@ -1,6 +1,5 @@
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
-import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,22 +14,20 @@ class Reschedule extends StatefulWidget {
   static const textStyle = TextStyle(
     fontSize: 14,
   );
-  final String regnumber;
+  // final String regnumber;
   final String date_booked;
   final String time_booked;
-  final String counselee_email;
   final String created_at;
-  final String counseleeID;
+  final String counselor_email;
   final String docID;
 
 const Reschedule({ 
     Key? key,
-    required this.regnumber,
+    // required this.regnumber,
     required this.date_booked,
     required this.time_booked,
-    required this.counselee_email,
     required this.created_at, 
-    required this.counseleeID,
+    required this.counselor_email,
     required this.docID
   }) : super(key: key);
 
@@ -61,11 +58,12 @@ final _reasoncontroller = TextEditingController();
 String DateHint = 'Date Format YYYY-MM-DD';
  String TimeHint = 'Time Format HH:MM';
 
-  // Date
+  // Date rescheduled to 
+  DateTime date_time_rescheduled_to = DateTime.now();
   // Creating date time variable
-  DateTime _selectedDate = DateTime.now();
-  DateTime _initialDate = DateTime.now();
-  DateTime _lastDate = DateTime(2023);
+  final DateTime _selectedDate = DateTime.now();
+  final DateTime _initialDate = DateTime.now();
+  final DateTime _lastDate = DateTime(2023);
 
   Future displayDatePicker(BuildContext context) async {
 
@@ -79,6 +77,11 @@ String DateHint = 'Date Format YYYY-MM-DD';
   if(date != null){
     setState(() {
       _dateController.text = date.toLocal().toString().split(" ")[0];
+      date_time_rescheduled_to = DateTime(
+        date.year,
+        date.month,
+        date.day,
+      );
     });
   } 
 }
@@ -93,12 +96,16 @@ String DateHint = 'Date Format YYYY-MM-DD';
       initialTime: timeOfDay, 
     );
     if(time == null){
-      return AlertDialog(
+      return const AlertDialog(
         content: SnackBar(content: Text('Time cannot be empty')),
       );
     }else{
       setState(() {
         _timecontroller.text = '${time.hour}:${time.minute}';
+        date_time_rescheduled_to = DateTime(
+          time.hour,
+          time.minute,
+        );
       });
     }
   }
@@ -110,19 +117,17 @@ String DateHint = 'Date Format YYYY-MM-DD';
       showDialog(
         context: context, 
         builder: (context){
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       );
       // Pop out the loading widget
       Navigator.of(context).pop();
 
       reschedule(
-        _dateController.text.trim(),
-        _timecontroller.text.trim(),
+        date_time_rescheduled_to,
         _reasoncontroller.text.trim(),
       );
     }catch(e){
-      print(e);
       showDialog(context: context, builder: (context){
         return AlertDialog(
           content: Text(e.toString()),
@@ -130,7 +135,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
       });
     }
   }
-  Future reschedule(String date_rescheduled, String time_rescheduled, String reason) async{
+  Future reschedule(DateTime dateRescheduledTo, String reason) async{
     try{
       // Loading
     showDialog(
@@ -143,26 +148,25 @@ String DateHint = 'Date Format YYYY-MM-DD';
     Navigator.of(context).pop();
     //Creating user information with email and registration
 
-    var reschedule = await FirebaseFirestore.instance.collection('bookings').doc(this.widget.docID).update({
+    await FirebaseFirestore.instance.collection('bookings').doc(widget.docID).update({
         // Add the user to the collection
-        'date_rescheduled': date_rescheduled,
-        'time_rescheduled': time_rescheduled,
+        'date_time_rescheduled': dateRescheduledTo,
         'reason_for_reschedule': reason,
         'rescheduled_at': DateFormat.yMMMEd().format(DateTime.now()),
         'approval': 'Rescheduled',
       });
     
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return Home();
+        return MainPage();
     }));
 
-    showDialog(context: context, builder: (context){
+    await showDialog(context: context, builder: (context){
       return const AlertDialog(
         content: Text('Session Rescheduled Successful\n Wait for Approval.'),
       );
     });
+    // _sendEmail();
     }on FirebaseAuthException catch(e){
-      print(e);
         showDialog(context: context, builder: (context){
           return AlertDialog(
             content: Text(e.message.toString()),
@@ -172,7 +176,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
         Navigator.of(context).pop();
       } 
     return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return Home();
+        return MainPage();
     }));
   }
 
@@ -198,10 +202,10 @@ String DateHint = 'Date Format YYYY-MM-DD';
   Widget build(BuildContext context){
     final email = Uri(
       scheme: 'mailto',
-      path: widget.counselee_email,
+      path: widget.counselor_email,
       query: encodeQueryParameters(<String, String>{
-        'subject': 'Your Counseling Session was Rescheduled Successfully',
-        'body': 'Hello,\n Your Counseling Session which you booked on ${widget.created_at}, for date: ${widget.date_booked} time: ${widget.time_booked}, has been approved.\n You\'ll be contacted by one of our counselors soon.\n\n Kind regards',
+        'subject': 'Request to reschedule the counseling session',
+        'body': 'Hello,\n I wish to reschedule the counseling session I booked on ${widget.created_at}, to date: ${_dateController.text} time: ${_timecontroller.text}. \n This is because,.\n ${_reasoncontroller.text}\n\n Kind regards',
       }),
     );
     Future<void>_sendEmail() async{
@@ -211,7 +215,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
         }
       }catch(e){
         showDialog(context: context, builder: (context){
-          return AlertDialog(
+          return const AlertDialog(
             content: Text('Error while launching email sender app'),
           );
         });
@@ -223,34 +227,34 @@ String DateHint = 'Date Format YYYY-MM-DD';
       //   return Home();
       // },));
     }
-    // Function to approve session
-    Future approveSession(String docID) async {
-      try{
-        final approval = await FirebaseFirestore.instance.collection('bookings')
-        .doc('$docID').update({
-          'approval': "Approved",
-          'counselorID': FirebaseAuth.instance.currentUser?.uid,
-          'counseleeID' : FirebaseAuth.instance.currentUser!.uid,
-          'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
-        });
-        // const approveSession(docid);
-        showDialog(context: context, builder: (context){
-          return AlertDialog(
-            content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
-          );
-        });
-        _sendEmail();
-      }
-      catch(e){
-        // Alerting the user on errors which might arise on the app
-        showDialog(context: context, builder: (context){
-          return AlertDialog(
-            content: Text(e.toString()),
-          );
-        });
-      }
-      return MainPage();
-    }
+    // // Function to approve session
+    // Future approveSession(String docID) async {
+    //   try{
+    //     final approval = await FirebaseFirestore.instance.collection('bookings')
+    //     .doc('$docID').update({
+    //       'approval': "Approved",
+    //       'counselorID': FirebaseAuth.instance.currentUser?.uid,
+    //       'counseleeID' : FirebaseAuth.instance.currentUser!.uid,
+    //       'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
+    //     });
+    //     // const approveSession(docid);
+    //     showDialog(context: context, builder: (context){
+    //       return AlertDialog(
+    //         content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
+    //       );
+    //     });
+    //     _sendEmail();
+    //   }
+    //   catch(e){
+    //     // Alerting the user on errors which might arise on the app
+    //     showDialog(context: context, builder: (context){
+    //       return AlertDialog(
+    //         content: Text(e.toString()),
+    //       );
+    //     });
+    //   }
+    //   return MainPage();
+    // }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reschedule Booked session'),
@@ -262,7 +266,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('Choose date and time you wish to reschedule to'),
+              const Text('Choose date and time you wish to reschedule to'),
 
               // Date they wish to reschedule to
               Padding(
@@ -294,7 +298,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
                   child: MaterialButton(
                     highlightColor: Colors.deepPurple[600],
                     color: Colors.deepPurple[400],
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     onPressed: () => displayDatePicker(context),
                     child: const Text(
                       'Choose Date',
@@ -337,9 +341,9 @@ String DateHint = 'Date Format YYYY-MM-DD';
                   child: MaterialButton(
                     highlightColor: Colors.deepPurple[600],
                     color: Colors.deepPurple[400],
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     onPressed: () => displayTimePicker(context),
-                    child: Text(
+                    child: const Text(
                       'Choose Time',
                       style: TextStyle(
                         color: Colors.white,
@@ -355,7 +359,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
 
               // Reason Why you are rescheduling the session
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
@@ -369,7 +373,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
                       keyboardType: TextInputType.text,
                       minLines: 2,
                       maxLines: null,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Enter the reason why you are \nrescheduling the Counseling \nsession you had booked earlier.',
                       ),
@@ -378,22 +382,22 @@ String DateHint = 'Date Format YYYY-MM-DD';
                 ),
               ),
 
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
 
               // Button to submit bookings
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: GestureDetector(    
                     onTap: (){
                       rescheduleSession();
                     },             
                     child: Container(
-                      padding: EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                         color: Colors.deepPurple,
                         borderRadius: BorderRadius.circular(25.0),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Reschedule Session',
                           style: TextStyle(

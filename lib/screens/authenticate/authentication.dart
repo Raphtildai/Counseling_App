@@ -31,9 +31,14 @@ class _MainPageState extends State<MainPage> {
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
               // Error handling conditions
               if(snapshot.hasError){
-                return const AlertDialog(
-                  content: Text('Something went Wrong.'),
-                );
+                showDialog(context: context, builder: (context){
+                  return const AlertDialog(
+                    content: Text('Something went Wrong.'),
+                  );
+                });
+                // return const AlertDialog(
+                //   content: Text('Something went Wrong.'),
+                // );
               }
               if(snapshot.hasData && !snapshot.data!.exists){
                 showDialog(context: context, builder: (context){
@@ -54,7 +59,7 @@ class _MainPageState extends State<MainPage> {
                   return const CounseleeHome();
                 }
               }
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: AlertDialog(content: Center(child: CircularProgressIndicator())));
             }
           );        
         }else{

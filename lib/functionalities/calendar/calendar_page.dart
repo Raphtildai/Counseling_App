@@ -1,13 +1,38 @@
 import 'package:careapp/functionalities/calendar/approved_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-class CalendarPage extends StatelessWidget {
-CalendarPage({ Key? key, }) : super(key: key);
+class CalendarPage extends StatefulWidget {
+CalendarPage({ Key? key,}) : super(key: key);
+
+  @override
+  State<CalendarPage> createState() => _CalendarPageState();
+}
+
+ 
+   List<DateTime> datescalendar =[];
+
+class _CalendarPageState extends State<CalendarPage> {
+    
+  @override
+  void initState() {
+    // TODO: implement initState
+      getapprovedDocIDs();
+    super.initState();
+   
+ 
+  }
 // List<String> approveddocIDs = [];
   @override
   Widget build(BuildContext context){
+    //datescalendar=[];
+  //  getapprovedDocIDs();
+  setState(() {
+    datescalendar =datescalendar;
+  });
+    
   // final DateTime today = DateTime(date.year, date.month, date.day, date.hour, date.minute, date.second);
   // final DateTime startTime = DateTime(date.year, date.month, date.day, date.hour, date.minute, date.second);
   // final DateTime endTime = startTime.add(const Duration(hours: 2));
@@ -19,67 +44,73 @@ CalendarPage({ Key? key, }) : super(key: key);
       body: SfCalendar(
         view: CalendarView.week,
         // dataSource: ApprovedList(),
-        dataSource: MeetingDataSource(getAppointments()),
+        dataSource: MeetingDataSource(getAppointments(datescalendar)),
       ),
     );
   }
 }
 
-List<Appointment> getAppointments(){
-  // List<Appointment> meetings = <Appointment>[];
-  // FutureBuilder(
-  //   future: getapprovedDocIDs(),
-  //   builder: (context, snapshot) {
-  //     return Container(
-  //       height: MediaQuery.of(context).size.height,
-  //       child: Expanded(
-  //         child: ListView.builder(
-  //           primary: false,
-  //           itemCount: approveddocIDs.length,
-  //           scrollDirection: Axis.vertical,
-  //           itemBuilder: ((context, index) {
-  //             // We get the collection of the appointments
-  //             CollectionReference sessions = FirebaseFirestore.instance.collection('bookings');
-  //             return FutureBuilder <DocumentSnapshot>(
-  //               future: sessions.doc(approveddocIDs[index]).get(),
-  //               builder: (context, snapshot) {
-  //                 if(snapshot.connectionState == ConnectionState.done){
-  //                   Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
-  //                   List<Appointment> meetings = <Appointment>[];
-  //                   final DateTime today = DateTime(data['time_booked']);
-  //                   final DateTime startTime = DateTime(today.year, today.month, today.day, today.hour, today.minute, today.second);
-  //                   final DateTime endTime = startTime.add(const Duration(hours: 2));
-  //                 }
-  //                 return Center(child: CircularProgressIndicator(),);
-  //               },
-  //             );
-  //           }),
-  //         ),
-  //       ),
-  //     );
-  //   },
-  // );
+
+
+
+Future Trysomething()async{
+  var userid = FirebaseAuth.instance.currentUser!.uid;
+
+  var coll2 =await FirebaseFirestore.instance.collection("users").doc(userid).get();
+  var name=coll2.data()!['name'];
+  var regnumber = coll2.data()!['pnumber'];
   
+
+     var coll1=await FirebaseFirestore.instance.collection("bookings").doc(userid).get();
+
+
+  
+
+
+}
+List<Appointment> getAppointments(List<DateTime> dateTime){
+
+  ///var dateTime  = await getapprovedDocIDs();
+
   List<Appointment> meetings = <Appointment>[];
-  // final DateTime startTime = DateTime(date.year, date.month, date.day, date.hour, date.minute, date.second);
-  // final DateTime endTime = startTime.add(const Duration(hours: 2));
-  //   meetings.add(Appointment(
-  //     startTime: startTime,
-  //     endTime: endTime,
-  //     subject: 'Counseling',
-  //     color: Colors.deepPurple,
-  //   )); 
+  final date = dateTime;
+  for(int i=0;i<date.length;i++){
+    final DateTime startTime = DateTime(date[i].year, date[i].month, date[i].day, date[i].hour, date[i].minute, date[i].second);
+    final DateTime endTime = startTime.add(const Duration(hours: 2));
+      meetings.add(Appointment(
+        startTime: startTime,
+        endTime: endTime,
+        subject: 'Counseling',
+        color: Colors.deepPurple,
+      )); 
+  }
     return meetings;
   // return meetings;
   // return ApprovedList();
 }
 
-getapprovedDocIDs() async{
-  await FirebaseFirestore.instance.collection('bookings').where('approval', isEqualTo: 'Approved').orderBy('date_booked').get().then((snapshot){
-    snapshot.docs.forEach((document) { 
-      approveddocIDs.add(document.reference.id);
-    });
-  });
+Future<List<DateTime>>getapprovedDocIDs() async{
+//  datescalendar=[];
+
+try {
+  var result =  await FirebaseFirestore.instance.collection('bookings').where('approval', isEqualTo: 'Approved').get();
+  var datesfound =  result.docs;
+
+  for(var date in datesfound){
+    //var stringdate = date.data()['date_time_booked'];
+      DateTime rescheduled_at = date.data()['date_time_booked'].toDate();
+      //var day_of_rescheduling = DateFormat('dd/MM/yyyy, HH:mm').format(rescheduled_at);
+                            
+    //var datefound =  rescheduled_at;//DateTime.fromMillisecondsSinceEpoch(stringdate*1000);
+    datescalendar.add(rescheduled_at);
+  }
+  return datescalendar;
+} catch (e) {
+ return datescalendar;
+  print(e);
+}
+
+ 
 }
 
 class MeetingDataSource extends CalendarDataSource{

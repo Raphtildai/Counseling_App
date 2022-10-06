@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -10,13 +11,16 @@ class ReportPdfExport extends StatelessWidget {
   final String regnumber;
   final String date_booked;
   final String time_booked;
+  final String CounselorID;
+  // final DateTime approved;
 ReportPdfExport({ Key? key, 
 required this.regnumber, 
 required this.date_booked, 
 required this.time_booked ,
-required this.doc
+required this.doc,
+required this.CounselorID,
+// required this.approved,
 }) : super(key: key);
-
 
 final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
 
@@ -68,16 +72,30 @@ pdf.addPage(
               ),
 
               pw.SizedBox(height: 20),
+
               pw.Padding(
                 padding: pw.EdgeInsets.all(1),
                 child: pw.Text(
-                  'Document ID ${doc}',
+                  'Counselee unique ID ${doc}',
                   style: pw.Theme.of(context).header3,
                   textAlign: pw.TextAlign.center,
                 )
               ),
 
               pw.SizedBox(height: 20),
+
+              // Counselor who approved your session
+              pw.Padding(
+                padding: pw.EdgeInsets.all(1),
+                child: pw.Text(
+                  'Counselor unique ID ${doc}',
+                  style: pw.Theme.of(context).header3,
+                  textAlign: pw.TextAlign.center,
+                )
+              ),
+
+              pw.SizedBox(height: 20),
+
 
 
               // Content of the Report

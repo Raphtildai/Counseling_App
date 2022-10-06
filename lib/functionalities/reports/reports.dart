@@ -1,4 +1,5 @@
 import 'package:careapp/functionalities/reports/report_pdf_export.dart';
+import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:flutter/material.dart';
 
 class Reports extends StatelessWidget {
@@ -17,7 +18,9 @@ Reports({
   required this.regnumber, 
   required this.date_booked, 
   required this.time_booked, 
-  required String counseleeID 
+  required String counseleeID,
+  required String counselorID,
+  required DateTime approved,
   }) : super(key: key);
 
   @override
@@ -26,12 +29,18 @@ Reports({
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: GestureDetector(
-          onTap: (() {
+          onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context){
-              return ReportPdfExport(regnumber: regnumber, date_booked: date_booked, time_booked: time_booked, doc: doc, );
+              return ReportPdfExport(
+                regnumber: regnumber, 
+                date_booked: date_booked, 
+                time_booked: time_booked, 
+                doc: doc, 
+                CounselorID: '${counseleeID}',
+              );
     
             }));
-          }),
+          },
           child: Column(
             children: [
               SizedBox(height: 10,),

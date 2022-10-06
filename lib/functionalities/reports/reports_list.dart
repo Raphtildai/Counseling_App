@@ -119,12 +119,19 @@ Future getReports() async {
                                 Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
                                 return Expanded(
                                   child: GestureDetector(
-                                    onTap: (() {
+                                    onTap: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context){
-                                        return ReportPdfExport(regnumber: '${data['regnumber']}', date_booked: data['date_booked'], time_booked: '${data['time_booked']}', doc: '${docIDs[index]}', );
+                                        return ReportPdfExport(
+                                          regnumber: '${data['regnumber']}', 
+                                          date_booked: data['date_booked'], 
+                                          time_booked: '${data['time_booked']}', 
+                                          doc: '${docIDs[index]}', 
+                                          CounselorID: '${data['counselorID']}',
+                                          // approved: data['date_approved'],
+                                        );
                               
                                       }));
-                                    }),
+                                    },
                                     child: Column(
                                       children: [
                                         Table(
