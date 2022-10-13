@@ -1,3 +1,4 @@
+import 'package:careapp/functionalities/calendar/calendar_page.dart';
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +15,7 @@ class Reschedule extends StatefulWidget {
   static const textStyle = TextStyle(
     fontSize: 14,
   );
-  // final String regnumber;
+
   final String date_booked;
   final String time_booked;
   final String created_at;
@@ -23,7 +24,6 @@ class Reschedule extends StatefulWidget {
 
 const Reschedule({ 
     Key? key,
-    // required this.regnumber,
     required this.date_booked,
     required this.time_booked,
     required this.created_at, 
@@ -55,8 +55,9 @@ final _dateController = TextEditingController();
 final _timecontroller = TextEditingController();
 final _reasoncontroller = TextEditingController();
 
-String DateHint = 'Date Format YYYY-MM-DD';
- String TimeHint = 'Time Format HH:MM';
+  String DateHint = 'Choose date';
+  String TimeHint = 'Choose time';
+  String reason = 'Reason';
 
   // Date rescheduled to 
   DateTime date_time_rescheduled_to = DateTime.now();
@@ -109,77 +110,7 @@ String DateHint = 'Date Format YYYY-MM-DD';
       });
     }
   }
-
-  // Function to reschedule session
-  Future rescheduleSession() async {
-    try{
-      // Loading
-      showDialog(
-        context: context, 
-        builder: (context){
-          return const Center(child: CircularProgressIndicator());
-        }
-      );
-      // Pop out the loading widget
-      Navigator.of(context).pop();
-
-      reschedule(
-        date_time_rescheduled_to,
-        _reasoncontroller.text.trim(),
-      );
-    }catch(e){
-      showDialog(context: context, builder: (context){
-        return AlertDialog(
-          content: Text(e.toString()),
-        );
-      });
-    }
-  }
-  Future reschedule(DateTime dateRescheduledTo, String reason) async{
-    try{
-      // Loading
-    showDialog(
-      context: context, 
-      builder: (context){
-        return const Center(child: CircularProgressIndicator());
-      }
-    );
-    // Pop out the loading widget
-    Navigator.of(context).pop();
-    //Creating user information with email and registration
-
-    await FirebaseFirestore.instance.collection('bookings').doc(widget.docID).update({
-        // Add the user to the collection
-        'date_time_rescheduled': dateRescheduledTo,
-        'reason_for_reschedule': reason,
-        'rescheduled_at': DateFormat.yMMMEd().format(DateTime.now()),
-        'approval': 'Rescheduled',
-      });
-    
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return MainPage();
-    }));
-
-    await showDialog(context: context, builder: (context){
-      return const AlertDialog(
-        content: Text('Session Rescheduled Successful\n Wait for Approval.'),
-      );
-    });
-    // _sendEmail();
-    }on FirebaseAuthException catch(e){
-        showDialog(context: context, builder: (context){
-          return AlertDialog(
-            content: Text(e.message.toString()),
-          );
-        });
-        // Pop out the loading widget
-        Navigator.of(context).pop();
-      } 
-    return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return MainPage();
-    }));
-  }
-
+  
   
 // Disposing the values of the controllers
 @override
@@ -202,10 +133,10 @@ String DateHint = 'Date Format YYYY-MM-DD';
   Widget build(BuildContext context){
     final email = Uri(
       scheme: 'mailto',
-      path: widget.counselor_email,
+      path: '${widget.counselor_email}',
       query: encodeQueryParameters(<String, String>{
         'subject': 'Request to reschedule the counseling session',
-        'body': 'Hello,\n I wish to reschedule the counseling session I booked on ${widget.created_at}, to date: ${_dateController.text} time: ${_timecontroller.text}. \n This is because,.\n ${_reasoncontroller.text}\n\n Kind regards',
+        'body': 'Hello,\n\n I wish to reschedule the counseling session I booked on ${widget.created_at}, to:\n\n date: ${_dateController.text} \n time: ${_timecontroller.text}. \n This is because,\n $reason.\n\n Kind regards',
       }),
     );
     Future<void>_sendEmail() async{
@@ -223,38 +154,84 @@ String DateHint = 'Date Format YYYY-MM-DD';
         //   const SnackBar(content: const Text('Error while launching email sender app')),
         // );
       }
-      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-      //   return Home();
-      // },));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return MainPage();
+      },));
     }
-    // // Function to approve session
-    // Future approveSession(String docID) async {
-    //   try{
-    //     final approval = await FirebaseFirestore.instance.collection('bookings')
-    //     .doc('$docID').update({
-    //       'approval': "Approved",
-    //       'counselorID': FirebaseAuth.instance.currentUser?.uid,
-    //       'counseleeID' : FirebaseAuth.instance.currentUser!.uid,
-    //       'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
-    //     });
-    //     // const approveSession(docid);
-    //     showDialog(context: context, builder: (context){
-    //       return AlertDialog(
-    //         content: const Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
-    //       );
-    //     });
-    //     _sendEmail();
-    //   }
-    //   catch(e){
-    //     // Alerting the user on errors which might arise on the app
-    //     showDialog(context: context, builder: (context){
-    //       return AlertDialog(
-    //         content: Text(e.toString()),
-    //       );
-    //     });
-    //   }
-    //   return MainPage();
-    // }
+    // Function to reschedule session
+    
+    Future reschedule(DateTime dateRescheduledTo, String reason) async{
+      try{
+        // Loading
+      showDialog(
+        context: context, 
+        builder: (context){
+          return const Center(child: CircularProgressIndicator());
+        }
+      );
+      // Pop out the loading widget
+      Navigator.of(context).pop();
+      //Creating user information with email and registration
+
+      await FirebaseFirestore.instance.collection('bookings').doc(widget.docID).update({
+          // Add the user to the collection
+          'date_time_rescheduled': dateRescheduledTo,
+          'reason_for_reschedule': reason,
+          'rescheduled_at': DateTime.now(),
+          'approval': 'Rescheduled',
+        });
+      
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+          return MainPage();
+      }));
+
+      await showDialog(context: context, builder: (context){
+        return const AlertDialog(
+          content: Text('Session Rescheduled Successful\n Kindly Confirm email before sending and Wait for Approval.'),
+        );
+      });
+      _sendEmail();
+      }on FirebaseAuthException catch(e){
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              content: Text(e.message.toString()),
+            );
+          });
+          // Pop out the loading widget
+          Navigator.of(context).pop();
+        } 
+      return Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+          return MainPage();
+      }));
+    }
+
+    Future rescheduleSession() async {
+      try{
+        // Loading
+        showDialog(
+          context: context, 
+          builder: (context){
+            return const Center(child: CircularProgressIndicator());
+          }
+        );
+        // Pop out the loading widget
+        Navigator.of(context).pop();
+
+        reschedule(
+          date_time_rescheduled_to,
+          _reasoncontroller.text.trim(),
+        );
+      }catch(e){
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            content: Text(e.toString()),
+          );
+        });
+      }
+    }
+
+
+    final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reschedule Booked session'),
@@ -262,156 +239,193 @@ String DateHint = 'Date Format YYYY-MM-DD';
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('Choose date and time you wish to reschedule to'),
-
-              // Date they wish to reschedule to
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+              
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: TextField(
-                      controller: _dateController,
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: DateHint,
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      'Choose Date & Time to reschedule',
+                      style: TextStyle(
+                        letterSpacing: 1.0,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple.shade500,
                       ),
                     ),
                   ),
                 ),
-              ),
+                // const Text('Choose date and time you wish to reschedule to'),
           
-                // SizedBox(height: 5.0,),
-
+                const SizedBox(height: 10,),
+          
+                // Button to ask the Counselee check Counselor Schedule
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: MaterialButton(
-                    highlightColor: Colors.deepPurple[600],
-                    color: Colors.deepPurple[400],
-                    padding: const EdgeInsets.all(10.0),
-                    onPressed: () => displayDatePicker(context),
-                    child: const Text(
-                      'Choose Date',
-                      style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 1.0,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                  ),
-                ),
-                const SizedBox(height: 10.0,),
-
-              // Time they wish to reschedule to
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: TextField(
-                      controller: _timecontroller,
-                      keyboardType: TextInputType.datetime,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: TimeHint,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: MaterialButton(
-                    highlightColor: Colors.deepPurple[600],
-                    color: Colors.deepPurple[400],
-                    padding: const EdgeInsets.all(10.0),
-                    onPressed: () => displayTimePicker(context),
-                    child: const Text(
-                      'Choose Time',
-                      style: TextStyle(
-                        color: Colors.white,
-                        letterSpacing: 1.0,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      ),
-                  ),
-                ),
-
-                const SizedBox(height: 10.0,),
-
-              // Reason Why you are rescheduling the session
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextField(
-                      controller: _reasoncontroller,
-                      keyboardType: TextInputType.text,
-                      minLines: 2,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Enter the reason why you are \nrescheduling the Counseling \nsession you had booked earlier.',
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 20,),
-
-              // Button to submit bookings
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: GestureDetector(    
-                    onTap: (){
-                      rescheduleSession();
-                    },             
-                    child: Container(
-                      padding: const EdgeInsets.all(20.0),
-                      decoration: BoxDecoration(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      MaterialButton(
+                        highlightColor: Colors.deepPurple[600],
                         color: Colors.deepPurple,
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Reschedule Session',
+                        padding: const EdgeInsets.all(10.0),
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> const CalendarPage()));
+                        },
+                        child: const Text(
+                          'Counselor\'s Calendar',
                           style: TextStyle(
-                            fontSize: 18.0,
                             color: Colors.white,
+                            letterSpacing: 1.0,
+                            fontSize: 18.0,
                             fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          
+                // Date they wish to reschedule to
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: TextFormField(
+                        onTap: () => displayDatePicker(context),
+                        readOnly: true,
+                        controller: _dateController,
+                        keyboardType: TextInputType.datetime,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: DateHint,
+                        ),
+                        validator: ((value) {
+                          if(value == null || value.isEmpty){
+                            return 'Date Cannot be empty';
+                          }else if(value.length < 10 || value.length > 10){
+                            return 'Enter date in the given format';
+                          }return null;
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(height: 10.0,),
+          
+                // Time they wish to reschedule to
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      border: Border.all(color: Colors.white),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: TextFormField(
+                        onTap: () => displayTimePicker(context),
+                        readOnly: true,
+                        controller: _timecontroller,
+                        keyboardType: TextInputType.datetime,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: TimeHint,
+                        ),
+                        validator: ((value) {
+                          if(value == null || value.isEmpty){
+                            return 'Time Cannot be empty';
+                          }else if(value.length < 4 || value.length > 5){
+                            return 'Enter time in the given format';
+                          }return null;
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+          
+                const SizedBox(height: 10.0,),
+          
+                // Reason Why you are rescheduling the session
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextFormField(
+                        controller: _reasoncontroller,
+                        keyboardType: TextInputType.text,
+                        minLines: 2,
+                        maxLines: null,
+                        onEditingComplete: () => setState(() {
+                          reason = _reasoncontroller.text;
+                        }),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Enter the reason why you are \nrescheduling the Counseling \nsession you had booked earlier.',
+                        ),
+                        validator: (value) {
+                          if(value == null || value.isEmpty){
+                            return 'This field cannot be empty';
+                          }return null;
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+          
+                const SizedBox(height: 20,),
+
+                // Button to reschedule bookings
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: GestureDetector(    
+                      onTap: (){
+                        if(_formKey.currentState!.validate()){
+                          rescheduleSession();
+                        }
+                      },             
+                      child: Container(
+                        padding: const EdgeInsets.all(20.0),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Reschedule Session',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-
-            ],
+          
+              ],
+            ),
           ),
         ),
       ),

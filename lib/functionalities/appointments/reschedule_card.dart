@@ -15,7 +15,7 @@ class RescheduleCard extends StatelessWidget {
   static const textStyle = TextStyle(
     fontSize: 14,
   );
-  // final String regnumber;
+
   final String date_rescheduled;
   final String time_rescheduled;
   final String counselee_email;
@@ -26,14 +26,13 @@ class RescheduleCard extends StatelessWidget {
 
   const RescheduleCard({
     Key? key,
-    // required this.regnumber,
     required this.date_rescheduled,
     required this.time_rescheduled,
     required this.counselee_email,
     required this.rescheduled_at, 
     required this.counseleeID,
     required this.reason,
-    required this.docID
+    required this.docID,
   }) : super(key: key);
 
   // Sending email to the counselee informing them on their approval status
@@ -46,10 +45,6 @@ String? encodeQueryParameters(Map<String, String>params){
 
   @override
   Widget build(BuildContext context){
-    // DateTime date = day_time_booked;
-    // var date_rescheduled_at = DateFormat('dd/MM/yyyy, HH:mm').format(date);
-    // var date_rescheduled_to = DateFormat('dd/MM/yyyy').format(date);
-    // var time_rescheduled_to = DateFormat('HH:mm').format(date);
     final String uid = counseleeID;
     final docid = docID;
     final email = Uri(
@@ -60,6 +55,7 @@ String? encodeQueryParameters(Map<String, String>params){
         'body': 'Hello,\n Your Counseling Session which you rescheduled on $rescheduled_at, for\n\n\t Date: $date_rescheduled \nTime: $time_rescheduled\n\n has been approved.\n\n You\'ll be contacted by one of our counselors soon.\n\n Kind regards\nBest Counseling App.',
       }),
     );
+
     Future<void>_sendEmail() async{
       try{
         if(await canLaunchUrl(email)){
@@ -83,7 +79,9 @@ String? encodeQueryParameters(Map<String, String>params){
         .doc('$docID').update({
           'approval': "Approved",
           'counselor_ID' : FirebaseAuth.instance.currentUser!.uid,
-          'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
+          'counselor_email': FirebaseAuth.instance.currentUser!.email,
+          'time_approved': DateTime.now(),
+          'date_time_booked': DateTime.now(),
         });
         // const approveSession(docid);
         await showDialog(context: context, builder: (context){
@@ -119,23 +117,6 @@ String? encodeQueryParameters(Map<String, String>params){
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    // Counselee's Reg number
-                    // const Divider(
-                    //   // height: 10,
-                    //   thickness: 1.0,
-                    //   color: Colors.white,
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text('Reg number:', style: titleStyle,),
-                    //     const SizedBox(width: 10,),
-                    //     Text(regnumber),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 10,),
-
-                    // Date booked
                     
                     const Divider(
                       // height: 10,
@@ -216,30 +197,11 @@ String? encodeQueryParameters(Map<String, String>params){
                           color: Colors.deepPurple,
                           textColor: Colors.white,
                           onPressed: (){
-                            print(docid);
                             approveSession(docid);
                           },
                           child: const Text('Approve'),
                         ),
                         const SizedBox(width: 20,),
-                        // MaterialButton(
-                        //   color: Colors.black,
-                        //   textColor: Colors.white,
-                        //   onPressed: (){
-                        //     Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context){
-                        //       return Reschedule(
-                        //       // regnumber: this.regnumber, 
-                        //       date_booked: this.date_rescheduled, 
-                        //       time_booked: this.time_rescheduled, 
-                        //       counselee_email: this.counselee_email,
-                        //       created_at: this.rescheduled_at,
-                        //       counseleeID: this.counseleeID,
-                        //       docID: docid,
-                        //       );
-                        //     })));
-                        //   },
-                        //   child: const Text('Reschedule'),
-                        // ),
                       ],
                     ),
                     const Divider(

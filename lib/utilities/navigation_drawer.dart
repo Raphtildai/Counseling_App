@@ -95,6 +95,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser!;

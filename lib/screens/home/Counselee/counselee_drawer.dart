@@ -72,8 +72,6 @@ final personal = TextStyle(
   @override
   Widget build(BuildContext context){
     final user = FirebaseAuth.instance.currentUser!;
-    // Url To the profile picture
-    const url = 'https://photos.google.com/photo/AF1QipP-L6Wi5Ud3mPpdnmyy1dZrleOhYaIwyrkae6ju';
     return Drawer(
       child: Material(
         color: Colors.deepPurple,
@@ -85,9 +83,10 @@ final personal = TextStyle(
                 // Headers
                 Row(
                   children: [
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(url),
+                    Icon(
+                      Icons.person_pin,
+                      color: Colors.white,
+                      size: 60.0,
                     ),
                     const SizedBox(width: 20,),
                     Expanded(
@@ -125,15 +124,15 @@ final personal = TextStyle(
                   onPressed: ()=> onItemPressed(context, index: 0),
                 ),
           
+                // const SizedBox(height: 20,),
+          
+                // DrawerItem(
+                //   Name: 'Notifications', 
+                //   icon: Icons.notifications, 
+                //   onPressed: ()=> onItemPressed(context, index: 1),
+                // ),
+          
                 const SizedBox(height: 20,),
-          
-                DrawerItem(
-                  Name: 'Notifications', 
-                  icon: Icons.notifications, 
-                  onPressed: ()=> onItemPressed(context, index: 1),
-                ),
-          
-                const SizedBox(height: 40,),
           
                 DrawerItem(
                   Name: 'Book Session', 
@@ -141,7 +140,7 @@ final personal = TextStyle(
                   onPressed: ()=> onItemPressed(context, index: 2),
                 ),
           
-                const SizedBox(height: 20,),
+                // const SizedBox(height: 20,),
           
                 // DrawerItem(
                 //   Name: 'Chats', 
@@ -149,21 +148,21 @@ final personal = TextStyle(
                 //   onPressed: ()=> onItemPressed(context, index: 3),
                 // ),
           
-                const SizedBox(height: 20,),
+                // const SizedBox(height: 20,),
           
-                DrawerItem(
-                  Name: 'Reschedule Session', 
-                  icon: Icons.schedule, 
-                  onPressed: ()=> onItemPressed(context, index: 4),
-                ),
+                // DrawerItem(
+                //   Name: 'Reschedule Session', 
+                //   icon: Icons.schedule, 
+                //   onPressed: ()=> onItemPressed(context, index: 4),
+                // ),
           
-                const SizedBox(height: 20,),
+                // const SizedBox(height: 20,),
           
-                DrawerItem(
-                  Name: 'Counselors List', 
-                  icon: Icons.people, 
-                  onPressed: ()=> onItemPressed(context, index: 5),
-                ),
+                // DrawerItem(
+                //   Name: 'Counselors List', 
+                //   icon: Icons.people, 
+                //   onPressed: ()=> onItemPressed(context, index: 5),
+                // ),
           
                 const SizedBox(height: 20,),
           

@@ -1,9 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings, prefer_const_constructors_in_immutables, unused_field, unused_element, unused_local_variable
-import 'package:careapp/screens/home/Counselee/counselee_page.dart';
-import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
-import 'package:careapp/screens/home/message.dart';
-import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/utilities/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 

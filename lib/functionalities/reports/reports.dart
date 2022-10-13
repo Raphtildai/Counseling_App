@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class Reports extends StatelessWidget {
   final String doc;
   final String regnumber;
-  final String date_booked;
+  final DateTime date_booked;
   final String time_booked;
 
   TextStyle header = const TextStyle(
@@ -32,11 +32,11 @@ Reports({
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context){
               return ReportPdfExport(
-                regnumber: regnumber, 
-                date_booked: date_booked, 
+                // regnumber: regnumber, 
+                // date_booked: date_booked, 
                 time_booked: time_booked, 
                 doc: doc, 
-                CounselorID: '${counseleeID}',
+                counselorID: '${counseleeID}',
               );
     
             }));
@@ -105,7 +105,7 @@ Reports({
                         padding: EdgeInsets.all(5),
                         child: Expanded(
                           child: Text(
-                            date_booked,
+                            date_booked.toString(),
                             style: header,
                             textAlign: TextAlign.center,
                           )

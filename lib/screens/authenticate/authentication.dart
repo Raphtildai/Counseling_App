@@ -1,4 +1,5 @@
 // import 'package:careapp/hidden_drawer.dart';
+import 'package:careapp/models/auth_service.dart';
 import 'package:careapp/screens/authenticate/auth.dart';
 import 'package:careapp/screens/home/Counselee/counselee_home.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
@@ -15,6 +16,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    // AuthenticationService().signOut();
+    super.initState();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -59,7 +65,7 @@ class _MainPageState extends State<MainPage> {
                   return const CounseleeHome();
                 }
               }
-              return const Center(child: AlertDialog(content: Center(child: CircularProgressIndicator())));
+              return const Scaffold(body: Center(child: CircularProgressIndicator()));
             }
           );        
         }else{

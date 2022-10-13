@@ -1,8 +1,12 @@
 // ignore_for_file: camel_case_types, prefer_final_fields, annotate_overrides, unused_local_variable
 
+import 'package:careapp/models/database_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class UserAccount extends StatefulWidget {
 
@@ -13,10 +17,71 @@ const UserAccount({ Key? key }) : super(key: key);
 }
 
 class _UserAccountState extends State<UserAccount> {
+  String imageUrl = "";
+  File? image;
+
+  final _fnamecontroller = TextEditingController();
+  final _lnamecontroller = TextEditingController();
+  final _pnumbercontroller = TextEditingController();
+  final _aboutcontroller = TextEditingController();
+  
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+
+  // This function updates the user data once we update it
+  updateUserData(String fname, String lname, int pnumber, String about, userId) async {
+    await DatabaseManager().updateUserData(fname, lname, pnumber, about, userId);
+  }
+
+    // Function to upload the image to firebase
+    void pickUploadImage(ImageSource source)async {
+      try {
+        final image = await ImagePicker().pickImage(
+          source: source,
+          maxHeight: 512,
+          maxWidth: 512,
+          imageQuality: 75,
+        );
+
+        if(image == null) return;
+        final imageTemporary = File(image.path);//temporarily stores our image in local cache
+        // final imagePermanent = await saveImagePermanently(image.path);//saves the image permanently
+        // this.image = imageTemporary;
+        setState(() {
+          this.image = imageTemporary;
+          // this.image = imagePermanent;
+        });
+
+        // Initializing the reference
+        // Reference ref = FirebaseFirestore.instance.ref().child("profilepic.jpg");
+
+        // Uploading the image
+        // await ref.putFile(File(image!.path));
+
+        // Getting the image url
+        // ref.getDownloadURL().then((value){
+        //   print(value);
+        //   setState(() {
+        //     imageUrl = value;
+        //   });
+        // });
+        
+      } on PlatformException catch (e) {
+        print('Failed to pick image: $e');                
+      }
+    }
+
+    // Method to save the image permanently
+    // Future<File> saveImagePermanently(String imagePath) async {
+    //   final directory = await getApplicationDocumentsDirectory();
+    //   final name = basename(imagePath);
+    //   final Image = File('${directory.path}/$name');
+
+    //   return File(imagePath).copy(imagePath);
+    // }
+
 final FirebaseAuth auth = FirebaseAuth.instance;
 @override
   Widget build(BuildContext context){
-    final userId = FirebaseAuth.instance.currentUser!.uid;
     CollectionReference userData = FirebaseFirestore.instance.collection('users');
     const headingStyle = TextStyle(
       fontSize: 16,
@@ -26,7 +91,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
       fontSize: 14,
     );
     return FutureBuilder <DocumentSnapshot>(
-      future: userData.doc(userId).get(),
+      future: userData.doc(userId).get(), //userData.doc(userId).get()
       builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
         // Error handling conditions
         if(snapshot.hasError){
@@ -40,7 +105,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
             appBar: AppBar(
-              title: Text('${data['firstname']} ' '${data['lastname']}\'s Profile '),
+              title: Text('${data['firstname']} ' ' ${data['lastname']}\'s Profile '),
               centerTitle: true,
             ),
             body: SafeArea(
@@ -66,19 +131,35 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                             const SizedBox(height: 20,),
                             ClipRRect(
                               borderRadius: const BorderRadius.all(Radius.circular(50)),
-                              child: Image.asset(
+                              child: imageUrl != " " ? 
+                              // const Icon(Icons.person, size: 80, color: Colors.white,)
+                              Image.asset(
                                 'assets/raph.PNG',
                                 // height: 100,
                                 width: MediaQuery.of(context).size.width,
-                              ),
+                              ) 
+                              : 
+                              const Icon(Icons.person, size: 80, color: Colors.black,)
+                              //ClipOval(child: Image.network(imageUrl)),
+                              // Image.file(
+                              //   image!,
+                              //   width: 160,
+                              //   height: 160,
+                              //   fit: BoxFit.cover,
+                              // )
                             ),
                             const SizedBox(height: 10,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               // ignore: prefer_const_literals_to_create_immutables
                               children: [
-                                const Icon(
-                                  Icons.edit,
+                                GestureDetector(
+                                  onTap: () {
+                                    pickUploadImage(ImageSource.gallery);
+                                  },
+                                  child: const Icon(
+                                    Icons.edit,
+                                  ),
                                 ),
                                 // const SizedBox(width: 10,),
                                 const Text('Change Account Picture'),
@@ -291,6 +372,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                       padding: const EdgeInsets.symmetric(horizontal: 50.0),
                       child: GestureDetector(    
                         onTap: (){
+                          onShowDialog(context);
                         },             
                         child: Container(
                           padding: const EdgeInsets.all(20.0),
@@ -318,8 +400,8 @@ final FirebaseAuth auth = FirebaseAuth.instance;
           );
         }
         // Return loading to the user
-        return Scaffold(
-          body: const Center(
+        return const Scaffold(
+          body: Center(
             child: CircularProgressIndicator(
               backgroundColor: Colors.white,
               color: Colors.deepPurple,
@@ -328,5 +410,107 @@ final FirebaseAuth auth = FirebaseAuth.instance;
         );
       },
     );     
+  }
+  onShowDialog(context){
+    final _formKey = GlobalKey<FormState>();
+    return showDialog(context: context, builder: (context){
+      return Form(
+        key: _formKey,
+        child: AlertDialog(
+          title: const Text('Edit your profile'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _fnamecontroller,
+                  decoration: const InputDecoration(hintText: 'First Name'),
+                  validator: (text){
+                    if(text == null || text.isEmpty){
+                      return 'First Name field is empty';
+                    }else if(text.length < 2 || text.length > 20){
+                      return 'Name is not Valid';
+                    }else if(text.contains(RegExp(r'[0-9]'))){
+                      return 'Name Should not Contain numbers';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _lnamecontroller,
+                  decoration: const InputDecoration(hintText: 'Last Name'),
+                  validator: (text){
+                    if(text == null || text.isEmpty){
+                      return 'Last Name field is empty';
+                    }else if(text.length < 2 || text.length > 20){
+                      return 'Name is not Valid';
+                    }else if(text.contains(RegExp(r'[0-9]'))){
+                      return 'Name Should not Contain numbers';
+                    }
+                    return null;
+                  },
+                ),
+                
+                TextFormField(
+                  controller: _aboutcontroller,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 2,
+                  maxLines: null,
+                  decoration: const InputDecoration(hintText: 'About'),
+                  validator: (text){
+                    if(text == null || text.isEmpty){
+                      return 'Please Write Something!!';
+                    }return null;
+                  },
+                ),
+                TextFormField(
+                  controller: _pnumbercontroller,
+                  decoration: const InputDecoration(hintText: 'Phone Number'),
+                  validator: (text){
+                    if(text == null || text.isEmpty){
+                      return 'Phone Number field is empty';
+                    }else if(!text.contains(RegExp(r'[0-9]'))){
+                      return 'Should Contain numbers';
+                    }else if(text.contains(RegExp(r'[A-Z]')) || text.contains(RegExp(r'[a-z]'))){
+                      return 'Phone no. cannot contain characters';
+                    }else if(text.contains(RegExp(r'[!@#$%^&*()_"|:;,.?=~\`-]'))){
+                      return 'Invalid characters';
+                    }else if(text.length != 10){
+                      return 'Phone no. Digits should be 10 characters';
+                    }
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            MaterialButton(
+              onPressed: (){
+                if(_formKey.currentState!.validate()){
+                  submitAction(context);
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text('Update'),
+            ),
+            MaterialButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  // Method to update your profile
+  submitAction(context){
+    updateUserData(_fnamecontroller.text, _lnamecontroller.text, int.parse(_pnumbercontroller.text), _aboutcontroller.text, userId);
+    _fnamecontroller.clear();
+    _lnamecontroller.clear();
+    _aboutcontroller.clear();
+    _pnumbercontroller.clear();
   }
 }

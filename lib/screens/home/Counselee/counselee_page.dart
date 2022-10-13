@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
-import 'package:careapp/functionalities/calendar/approved_list.dart';
+import 'package:careapp/functionalities/calendar/approved_Dates_list.dart';
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/utilities/category_card.dart';
@@ -220,34 +220,28 @@ class _CounseleePageState extends State<CounseleePage> {
                           return FutureBuilder<DocumentSnapshot>(
                             future: bookings.doc(FirebaseAuth.instance.currentUser!.uid).get(),
                             builder: (context, snapshot){
-                              if(snapshot.connectionState == ConnectionState.done){
-                                Map <String, dynamic> data = 
-                                snapshot.data!.data() as Map <String, dynamic>;
-                                if(snapshot.hasData && snapshot.data!.exists){
-                                  if(data.isEmpty){
-                                    return ErrorPage( 'No Bookings found');
-                                  }else if(data.isNotEmpty){
-                                    DateTime date = data['date_time_booked'].toDate();
-                                    var date_booked = DateFormat('dd/MM/yyyy').format(date);
-                                    var time_booked = DateFormat('HH:mm').format(date);
-                                    DateTime creatation_date = data['created_at'].toDate();
-                                    var created_at = DateFormat('dd/MM/yyyy, HH:mm').format(creatation_date);
+                              if(snapshot.hasData == true){
+                                if(snapshot.connectionState == ConnectionState.done){
+                                  Map <String, dynamic> data = 
+                                  snapshot.data!.data() as Map <String, dynamic>;
+                                  DateTime date = data['date_time_booked'].toDate();
+                                  var date_booked = DateFormat('dd/MM/yyyy').format(date);
+                                  var time_booked = DateFormat('HH:mm').format(date);
+                                  DateTime creatation_date = data['created_at'].toDate();
+                                  var created_at = DateFormat('dd/MM/yyyy, HH:mm').format(creatation_date);
 
-                                    return SessionCard(
-                                      date_booked: date_booked.toString(), //${data['final']}
-                                      time_booked: time_booked.toString(),
-                                      status: '${data['approval']}',
-                                      // time_booked: data['time_booked'], 
-                                      counselorID: '${data['counselorID']}', 
-                                      counselor_email: '${data['counselor_email']}', 
-                                      date_created: created_at,
-                                    );
-                                  }else{
-                                    return ErrorPage( 'You\'ve not made any bookings');
-                                  }
-                                }else{
-                                  return ErrorPage('You\'ve not made any bookings');
+                                  return SessionCard(
+                                    date_booked: date_booked.toString(), //${data['final']}
+                                    time_booked: time_booked.toString(),
+                                    status: '${data['approval']}',
+                                    // time_booked: data['time_booked'], 
+                                    counselorID: '${data['counselorID']}', 
+                                    counselor_email: '${data['counselor_email']}', 
+                                    date_created: created_at,
+                                  );
                                 }
+                              }else{
+                                return ErrorPage('No Bookings available');
                               }
                               return Center(child: const AlertDialog(content: Center(child: CircularProgressIndicator())));
                             },

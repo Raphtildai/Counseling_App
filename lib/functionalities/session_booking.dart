@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 
+import 'package:careapp/functionalities/calendar/calendar_page.dart';
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,8 +34,8 @@ class _SessionBookingState extends State<SessionBooking> {
   final _regnocontroller = TextEditingController();
 
   // hint text to show on the date text field
-  String dateHint = 'Date format YYYY-MM-DD'; 
-  String timeHint = 'Time format HH:MM';
+  String dateHint = 'Choose date'; 
+  String timeHint = 'choose time';
 
     // Calling the email of the user that is logged in
   User user = FirebaseAuth.instance.currentUser!;
@@ -44,9 +45,9 @@ class _SessionBookingState extends State<SessionBooking> {
   // Initial date and time Date
   DateTime day_time = DateTime.now();
   // Creating date time variable
-  DateTime _selectedDate = DateTime.now();
-  DateTime _initialDate = DateTime.now();
-  DateTime _lastDate = DateTime(2023);
+  final DateTime _selectedDate = DateTime.now();
+  final DateTime _initialDate = DateTime.now();
+  final DateTime _lastDate = DateTime(2023);
 
   Future displayDatePicker(BuildContext context) async {
 
@@ -61,7 +62,7 @@ class _SessionBookingState extends State<SessionBooking> {
     setState(() {
       _dateTimecontroller.text = date.toLocal().toString().split(" ")[0];
       dateHint = date.toLocal().toString().split(" ")[0];
-      day_time = new DateTime(
+      day_time = DateTime(
         date.year,
         date.month,
         date.day,
@@ -72,38 +73,10 @@ class _SessionBookingState extends State<SessionBooking> {
   } 
 }
 
-  // Time
   // Creating date time variable
   TimeOfDay timeOfDay = TimeOfDay.now();
 
-  // Future displayDateTimePicker(BuildContext context) async {
-  //   var date_time = await DateTimePicker(
-  //       type: DateTimePickerType.dateTimeSeparate,
-  //       dateMask: 'd MMM, yyyy',
-  //       initialValue: DateTime.now().toString(),
-  //       firstDate: DateTime.now(),
-  //       lastDate: DateTime(2022),
-  //       icon: Icon(Icons.event),
-  //       dateLabelText: 'Date',
-  //       timeLabelText: "Hour",
-  //       selectableDayPredicate: (date) {
-  //         // Disable weekend days to select from the calendar
-  //         if (date.weekday == 6 || date.weekday == 7) {
-  //           return false;
-  //         }
-
-  //         return true;
-  //       },
-  //       onChanged: (val) => print(val),
-  //       validator: (val) {
-  //         print(val);
-  //         return null;
-  //       },
-  //       onSaved: (val) => print(val),
-  //     );
-
-  // }
-
+  // Time Function to show date picker
   Future displayTimePicker(BuildContext context) async {
     var time = await showTimePicker(
       context: context, 
@@ -115,13 +88,12 @@ class _SessionBookingState extends State<SessionBooking> {
       );
     }else{
       setState(() {
-        // '${time.hour}:${time.minute}'
         timeHint = '${time.hour}:${time.minute}';
         _timecontroller.text = '${time.hour}:${time.minute}';
-        day_time = new DateTime(
+        day_time = DateTime(
           day_time.year,
           day_time.month,
-          day_time.month,
+          day_time.minute,
           time.hour,
           time.minute,
         );
@@ -141,12 +113,6 @@ class _SessionBookingState extends State<SessionBooking> {
       // Pop out the loading widget
       Navigator.of(context).pop();
 
-      // Checking whether the user has pending approval
-      // CollectionReference approvalRequest = FirebaseFirestore.instance.collection('bookings').where('regnumber', isEqualTo: _regnocontroller).get
-      
-      // Creating a document with counselee session booking information
-      // DateTime day_time = DateTime(_dateTimecontroller.text.Add(_timecontroller.text);)
-    // DateTime day_time = DateTime.parse(_dateTimecontroller.text.trim() _timecontroller.text.trim());
       bookUser(
         DateTime.parse(_dateTimecontroller.text.trim()),
         _timecontroller.text.trim(),
@@ -237,8 +203,8 @@ class _SessionBookingState extends State<SessionBooking> {
                 children: [
                   Center(
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/flutter.png'),
-                      radius: 30.0,
+                      backgroundImage: AssetImage('assets/logo1.png'),
+                      radius: 70.0,
                     ),
                   ),
                   SizedBox(height: 10.0,),
@@ -256,78 +222,14 @@ class _SessionBookingState extends State<SessionBooking> {
                     color: Colors.grey[400],
                   ),
 
-                  //initial date
-                  // String init_date = DateTime(day_time.year, day_time.month, day_time.day, day_time.hour, day_time.minute).toString(); 
-            
-                  // Reg number text field
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.grey[200],
-                  //       border: Border.all(color: Colors.white),
-                  //       borderRadius: BorderRadius.circular(25.0),
-                  //     ),
-                  //     child: Padding(
-                  //       padding: EdgeInsets.only(left: 20.0),
-                  //       child: TextField(
-                  //         textCapitalization: TextCapitalization.characters,
-                  //         controller: _regnocontroller,
-                  //         decoration: InputDecoration(
-                  //           border: InputBorder.none,
-                  //           hintText: 'Registration Number',
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(height: 10.0,),
-            
-                  // // Reason why you feel you need to talk to the counselor
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 25),
-                  //   child: Text(
-                  //     'Enter reason for booking the appointment',
-                  //     style: TextStyle(
-                  //       fontSize: 16,
-                  //     ),
-                  //   ),
-                  // ),
-            
-                  // SizedBox(height: 10,),
-            
-                  // // Reason input text field
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.grey[200],
-                  //       border: Border.all(color: Colors.white),
-                  //       borderRadius: BorderRadius.circular(25.0),
-                  //     ),
-                  //     child: Padding(
-                  //       padding: EdgeInsets.only(left: 20.0),
-                  //       child: TextField(
-                  //         controller: _reasoncontroller,
-                  //         keyboardType: TextInputType.multiline,
-                  //         minLines: 3,
-                  //         maxLines: null,
-                  //         decoration: InputDecoration(
-                  //           border: InputBorder.none,
-                  //           hintText: 'How do you feel?',
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // SizedBox(height: 10.0,),
             
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20.0),
                       child: Text(
-                        'Enter / Choose Date & Time',
+                        'Choose Date & Time to book',
                         style: TextStyle(
                           letterSpacing: 1.0,
                           fontSize: 16,
@@ -337,6 +239,36 @@ class _SessionBookingState extends State<SessionBooking> {
                       ),
                     ),
                   ),
+
+                  SizedBox(height: 10.0,),
+
+                  // Button to ask the Counselee check Counselor Schedule
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MaterialButton(
+                          highlightColor: Colors.deepPurple[600],
+                          color: Colors.deepPurple,
+                          padding: EdgeInsets.all(10.0),
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> CalendarPage()));
+                          },
+                          child: Text(
+                            'Counselor\'s Calendar',
+                            style: TextStyle(
+                              color: Colors.white,
+                              letterSpacing: 1.0,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
                   SizedBox(height: 10.0,),
                       
                   // Date Time Pick text field
@@ -351,6 +283,8 @@ class _SessionBookingState extends State<SessionBooking> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 20.0),
                         child: TextFormField(
+                          onTap: () => displayDatePicker(context),
+                          readOnly: true,
                           controller: _dateTimecontroller,
                           keyboardType: TextInputType.datetime,
                           decoration: InputDecoration(
@@ -368,33 +302,7 @@ class _SessionBookingState extends State<SessionBooking> {
                       ),
                     ),
                   ),
-                      
-                  SizedBox(height: 5.0,),
-            
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        MaterialButton(
-                          highlightColor: Colors.deepPurple[600],
-                          color: Colors.deepPurple[400],
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () => displayDatePicker(context),
-                          child: Text(
-                            'Choose Date',
-                            style: TextStyle(
-                              color: Colors.white,
-                              letterSpacing: 1.0,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10.0,),
+                  SizedBox(height: 20.0,),
             
                   // TimePicker field
                   Padding(
@@ -408,6 +316,8 @@ class _SessionBookingState extends State<SessionBooking> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 20.0),
                         child: TextFormField(
+                          onTap: () => displayTimePicker(context),
+                          readOnly: true,
                           controller: _timecontroller,
                           keyboardType: TextInputType.datetime,
                           decoration: InputDecoration(
@@ -426,33 +336,33 @@ class _SessionBookingState extends State<SessionBooking> {
                     ),
                   ),
                       
-                  SizedBox(height: 5.0,),
+                  SizedBox(height: 20.0,),
             
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        MaterialButton(
-                          highlightColor: Colors.deepPurple[600],
-                          color: Colors.deepPurple[400],
-                          padding: EdgeInsets.all(10.0),
-                          onPressed: () => displayTimePicker(context),
-                          child: Text(
-                            'Choose Time',
-                            style: TextStyle(
-                              color: Colors.white,
-                              letterSpacing: 1.0,
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.end,
+                  //     children: [
+                  //       MaterialButton(
+                  //         highlightColor: Colors.deepPurple[600],
+                  //         color: Colors.deepPurple,
+                  //         padding: EdgeInsets.all(10.0),
+                  //         onPressed: () => displayDatePicker(context),
+                  //         child: Text(
+                  //           'Date',
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             letterSpacing: 1.0,
+                  //             fontSize: 18.0,
+                  //             fontWeight: FontWeight.bold,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                       
-                  SizedBox(height: 10.0,),
+                  SizedBox(height: 20.0,),
                       
                   // Button to submit bookings
                   Padding(

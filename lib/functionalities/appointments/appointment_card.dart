@@ -53,7 +53,7 @@ class AppointmentCard extends StatelessWidget {
       path: counselee_email,
       query: encodeQueryParameters(<String, String>{
         'subject': 'Your Counseling Session was Approved',
-        'body': 'Hello $regnumber,\n Your Counseling Session which you booked on $created_at, for\n\n Date: $date_booked \nTime: $time_booked\n has been approved.\n\n You\'ll be contacted by one of our counselors soon.\n\n Kind regards\nBest Counseling App.',
+        'body': 'Hello,\n Your Counseling Session which you booked on $created_at, for\n\n Date: $date_booked \nTime: $time_booked\n has been approved.\n\n You\'ll be contacted by one of our counselors soon.\n\n Kind regards\nBest Counseling App.',
       }),
     );
     Future<void>_sendEmail() async{
@@ -82,6 +82,7 @@ class AppointmentCard extends StatelessWidget {
         .doc(docID).update({
           'approval': "Approved",
           'counselorID' : FirebaseAuth.instance.currentUser!.uid,
+          'counselor_email': FirebaseAuth.instance.currentUser!.email,
           'time_approved': DateTime.now(), //DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now())
         });
         // const approveSession(docid);
@@ -115,22 +116,6 @@ class AppointmentCard extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Column(
                   children: [
-                    // Counselee's Reg number
-                    // const Divider(
-                    //   // height: 10,
-                    //   thickness: 1.0,
-                    //   color: Colors.white,
-                    // ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text('Reg number:', style: titleStyle,),
-                    //     const SizedBox(width: 10,),
-                    //     Text(regnumber),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 10,),
-
                     // Date booked
                     
                     const Divider(
@@ -203,25 +188,6 @@ class AppointmentCard extends StatelessWidget {
                           },
                           child: const Text('Approve'),
                         ),
-                        // const SizedBox(width: 20,),
-                        // MaterialButton(
-                        //   color: Colors.black,
-                        //   textColor: Colors.white,
-                        //   onPressed: (){
-                        //     Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context){
-                        //       return Reschedule(
-                        //       // regnumber: this.regnumber, 
-                        //       date_booked: this.date_booked, 
-                        //       time_booked: this.time_booked, 
-                        //       counselee_email: this.counselee_email,
-                        //       created_at: this.created_at,
-                        //       counseleeID: this.counseleeID,
-                        //       docID: docid,
-                        //       );
-                        //     })));
-                        //   },
-                        //   child: const Text('Reschedule'),
-                        // ),
                       ],
                     ),
                     const Divider(

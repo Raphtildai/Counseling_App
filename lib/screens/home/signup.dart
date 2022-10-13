@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, non_constant_identifier_names, use_build_context_synchronously
 
-import 'package:careapp/screens/authenticate/auth.dart';
+import 'package:careapp/models/auth_service.dart';
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 // void main(List<String> args) {
 //   runApp(MaterialApp(
@@ -30,7 +29,6 @@ class _SignUpState extends State<SignUp> {
   final _passwordcontroller = TextEditingController();
   final _pnumbercontroller = TextEditingController();
   final _admissioncontroller = TextEditingController();
-  bool _validate = false;
   bool passwordVisible = false;
 
   // // Function to choose the year
@@ -45,7 +43,7 @@ class _SignUpState extends State<SignUp> {
       showDialog(
         context: context, 
         builder: (context){
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         );
         // Pop out the loading widget
@@ -186,7 +184,7 @@ class _SignUpState extends State<SignUp> {
                         padding: const EdgeInsets.only(left: 20.0),
                         child: TextFormField(
                           controller: _firstnamecontroller,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'First Name',
                           ),
@@ -452,6 +450,8 @@ class _SignUpState extends State<SignUp> {
                     child: GestureDetector(    
                       onTap: (){
                         if(_formKey.currentState!.validate()){
+
+                          // AuthenticationService().createUser(_firstnamecontroller.text, _emailcontroller.text, _passwordcontroller.text);
                           signingUp();
                         }
                       },             

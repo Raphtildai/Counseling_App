@@ -1,3 +1,4 @@
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/screens/home/Counselor/counselor_home.dart';
@@ -57,10 +58,7 @@ class _BookedSessionState extends State<BookedSession> {
     final String date_booked = widget.date_booked;
     final String time_booked = widget.time_booked;
     final String documentID = widget.docID;
-    // Retrieving the date and formatting it
-    // var dateCreated = '${data['created_at']}';
-    // String date = DateFormat.yMMMEd().format(data['created_at']);
-    // DateTime createdat = DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime(created_at));
+
     final email = Uri(
       scheme: 'mailto',
       path: counselee_email,
@@ -85,7 +83,7 @@ class _BookedSessionState extends State<BookedSession> {
         // );
       }
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-        return const Home();
+        return MainPage();
       },));
     }
     // Function to approve session
@@ -96,7 +94,7 @@ class _BookedSessionState extends State<BookedSession> {
           'approval': "Approved",
           'counselorID' : FirebaseAuth.instance.currentUser!.uid,
           'counselor_email': FirebaseAuth.instance.currentUser!.email,
-          'time_approved': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
+          'time_approved': DateTime.now,
         });
         const ApproveSession();
         showDialog(context: context, builder: (context){
@@ -179,25 +177,24 @@ class _BookedSessionState extends State<BookedSession> {
                     ),
                     const SizedBox(height: 10,),
 
-                    // // Reading more about the counselee
-                    // const Divider(
-                    //   // height: 10,
-                    //   thickness: 1.0,
-                    //   color: Colors.white,
-                    // ),
-                    // MaterialButton(
-                    //   color: Colors.deepPurple,
-                    //   textColor: Colors.white,
-                    //   onPressed: (){
-                    //     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    //       print(documentID);
-                    //       return CounseleeProfile(counseleeID: '',);
-                    //     },));
-                    //   },
-                    //   child: const Text('Counselee Profile'),
-                    // ),
+                    // Reading more about the counselee
+                    const Divider(
+                      // height: 10,
+                      thickness: 1.0,
+                      color: Colors.white,
+                    ),
+                    MaterialButton(
+                      color: Colors.deepPurple,
+                      textColor: Colors.white,
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return CounseleeProfile(counseleeID: widget.docID,);
+                        },));
+                      },
+                      child: const Text('Counselee Profile'),
+                    ),
                     
-                    // const SizedBox(height: 10,),
+                    const SizedBox(height: 10,),
 
                     // Approval Buttons
                     const Divider(
@@ -213,20 +210,10 @@ class _BookedSessionState extends State<BookedSession> {
                           color: Colors.deepPurple,
                           textColor: Colors.white,
                           onPressed: (){
-                            print(documentID);
                             approveSession(documentID);
                           },
                           child: const Text('Approve'),
                         ),
-                        // const SizedBox(width: 20,),
-                        // MaterialButton(
-                        //   color: Colors.black,
-                        //   textColor: Colors.white,
-                        //   onPressed: (){
-                        //     // Navigator.p
-                        //   },
-                        //   child: const Text('Reschedule'),
-                        // ),
                       ],
                     ),
                     const Divider(

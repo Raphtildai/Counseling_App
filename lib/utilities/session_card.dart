@@ -13,7 +13,6 @@ class SessionCard extends StatelessWidget {
   final String date_booked;
   final String time_booked;
   final String status;
-  // final DateTime time_booked;
   final String counselorID;
   final String counselor_email;
   final String date_created;
@@ -23,7 +22,6 @@ class SessionCard extends StatelessWidget {
     required this.date_booked,
     required this.time_booked,
     required this.status,
-    // required this.time_booked,
     required this.counselorID,
     required this.counselor_email,
     required this.date_created,
@@ -88,11 +86,6 @@ class SessionCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5,),
-
-            // checking to see if the session is approved or not
-            // if(approval_status == 'Pending'){
-
-            // }
       
             //Read more button
             GestureDetector(
@@ -120,6 +113,7 @@ class SessionCard extends StatelessWidget {
               thickness: 1.0,
               color: Colors.white,
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -128,9 +122,8 @@ class SessionCard extends StatelessWidget {
                   color: Colors.black,
                   textColor: Colors.white,
                   onPressed: (){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context){
+                    Navigator.push(context, MaterialPageRoute(builder: ((context){
                       return Reschedule(
-                      // regnumber: this.regnumber, 
                       date_booked: this.date_booked, 
                       time_booked: this.time_booked,
                       counselor_email: counselor_email, 

@@ -1,3 +1,4 @@
+import 'package:careapp/models/auth_service.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,7 +58,20 @@ class _CounseleeRegisterState extends State<CounseleeRegister> {
       password: _passwordcontroller.text.trim(),
     );
 
-    // adding user details by calling the function
+    // // adding user details by calling the function
+    // await AuthenticationService().createNewCounselee(
+    //   _firstnamecontroller.text.trim(),
+    //   _lastnamecontroller.text.trim(),
+    //   _emailcontroller.text.trim(),
+    //   int.parse(_pnumbercontroller.text.toString()),
+    //   _passwordcontroller.text.trim(),
+    //   _aboutcontroller.text.trim(),
+    //   _regnumbercontroller.text.trim(),
+    //   int.parse(_agecontroller.text.toString()),
+    //   _schoolcontroller.text.trim(),
+    //   _coursecontroller.text.trim(),
+    //   int.parse(_year_of_studycontroller.text.toString()),
+    // );
     addUserDetails(
       _firstnamecontroller.text.trim(),
       _lastnamecontroller.text.trim(),
@@ -124,7 +138,6 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
     'year_of_study': year_of_study,
     'role': "counselee",
     'date_CounseleeRegistered': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
-
   });
     
 }
@@ -581,7 +594,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
                   child: GestureDetector(    
                     onTap: (){
                       if(_formKey.currentState!.validate()){
-                        signingUp();
+                        // signingUp();
                       }
                     },             
                     child: Container(

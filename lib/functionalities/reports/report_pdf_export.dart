@@ -1,26 +1,54 @@
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 
-class ReportPdfExport extends StatelessWidget {
+class ReportPdfExport extends StatefulWidget {
   final String doc;
-  final String regnumber;
-  final String date_booked;
+  // final String regnumber;
+  // final DateTime date_booked;
   final String time_booked;
-  final String CounselorID;
+  final String counselorID;
   // final DateTime approved;
 ReportPdfExport({ Key? key, 
-required this.regnumber, 
-required this.date_booked, 
+// required this.regnumber, 
+// required this.date_booked, 
 required this.time_booked ,
 required this.doc,
-required this.CounselorID,
+required this.counselorID,
 // required this.approved,
 }) : super(key: key);
+
+  @override
+  State<ReportPdfExport> createState() => _ReportPdfExportState();
+}
+
+var counselee_name = '';
+var regNumber = '';
+var about_counselee = '';
+var school = '';
+var course = '';
+
+
+class _ReportPdfExportState extends State<ReportPdfExport> {
+  getUserData() async {
+    var coll2 = await FirebaseFirestore.instance.collection('users').doc(widget.doc).get();
+    setState(() {
+      counselee_name = coll2.data()!['firstname'];
+      regNumber = coll2.data()!['regnumber'];
+      about_counselee = coll2.data()!['about'];
+      school = coll2.data()!['school'];
+      course = coll2.data()!['Course'];
+    });
+  }
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
 
 final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
 
@@ -65,7 +93,20 @@ pdf.addPage(
               pw.Padding(
                 padding: pw.EdgeInsets.all(1),
                 child: pw.Text(
-                  '${regnumber} Detailed Report',
+                  '${regNumber} Detailed Report',
+                  style: pw.Theme.of(context).header3,
+                  textAlign: pw.TextAlign.center,
+                )
+              ),
+
+              // Name
+
+              pw.SizedBox(height: 20),
+
+              pw.Padding(
+                padding: pw.EdgeInsets.all(1),
+                child: pw.Text(
+                  'Counselee Name $counselee_name',
                   style: pw.Theme.of(context).header3,
                   textAlign: pw.TextAlign.center,
                 )
@@ -76,7 +117,7 @@ pdf.addPage(
               pw.Padding(
                 padding: pw.EdgeInsets.all(1),
                 child: pw.Text(
-                  'Counselee unique ID ${doc}',
+                  'Counselee unique ID ${widget.doc}',
                   style: pw.Theme.of(context).header3,
                   textAlign: pw.TextAlign.center,
                 )
@@ -88,7 +129,7 @@ pdf.addPage(
               pw.Padding(
                 padding: pw.EdgeInsets.all(1),
                 child: pw.Text(
-                  'Counselor unique ID ${doc}',
+                  'Counselor unique ID ${widget.doc}',
                   style: pw.Theme.of(context).header3,
                   textAlign: pw.TextAlign.center,
                 )
@@ -140,7 +181,7 @@ pdf.addPage(
                         padding: pw.EdgeInsets.all(5),
                         child: pw.Expanded(
                           child: pw.Text(
-                            'Raph',
+                            '$counselee_name',
                             style: pw.Theme.of(context).header4,
                             textAlign: pw.TextAlign.center,
                           )
@@ -150,7 +191,7 @@ pdf.addPage(
                         padding: pw.EdgeInsets.all(5),
                         child: pw.Expanded(
                           child: pw.Text(
-                            regnumber,
+                            '$regNumber',
                             style: pw.Theme.of(context).header4,
                             textAlign: pw.TextAlign.center,
                           )
@@ -160,7 +201,7 @@ pdf.addPage(
                         padding: pw.EdgeInsets.all(5),
                         child: pw.Expanded(
                           child: pw.Text(
-                            date_booked,
+                            school,
                             style: pw.Theme.of(context).header4,
                             textAlign: pw.TextAlign.center,
                           )
@@ -196,7 +237,8 @@ pdf.addPage(
   );
   return pdf.save();
 }
-void generatePdf()async{
+
+void generatePdf(String cname, String regnumber)async{
   const title = 'Booking Session Reports';
   await Printing.layoutPdf(onLayout: ((format) => _generatePdf(format, title)));
 }
@@ -214,6 +256,7 @@ void _displayPdf(){
     )
   );
 }
+
 //Function to create pdf & print it
 void _createPdf() async{
   final doc = pw.Document();
@@ -244,32 +287,19 @@ void _createPdf() async{
   // final file = File('${output.path}/example.pdf');
   // await file.writeAsBytes(await doc.save());
 }
-
-
 //Convert a pdf to images, one image per page, get only pages 1 and 2 at 72 dpi
-// void _convertPdfToImages(pw.Document.doc)asyn{
-//   await for(var page in Printing.raster(await doc.save(), pages: [0, 1], dpi: 72)){
-//     final image = page.toImage(); //...or page.toPng()
-//     print(image);
-//   }
-// }
-
-// //Print an existing Pdf file from a Flutter asset
-// void _printExistingPdf()async{
-//   // import 'package:flutter/services.dart';
-//   // final pdf = await rootBundle.load('assets/document.pdf');
-//   // await Printing.layoutPdf(onLayout: (_) => pdf.buffer.asUint8List());
-// }
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text('${regnumber} Detailed Report'),
+        title: Text('${regNumber} Detailed Report'),
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => generatePdf(),
+          onPressed: () {
+            generatePdf(counselee_name, regNumber);
+            print('Name is $counselee_name');
+          },
           child: Text('Generate Report'),
         ),
       ),

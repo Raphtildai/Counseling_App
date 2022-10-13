@@ -3,6 +3,7 @@
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
+import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:careapp/utilities/counselee_card.dart';
 import 'package:careapp/utilities/error_page.dart';
@@ -10,8 +11,7 @@ import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../../../utilities/booking_card.dart';
+import 'package:careapp/utilities/booking_card.dart';
 
 class Counselors_Page extends StatefulWidget {
   const Counselors_Page({Key? key}) : super(key: key);
@@ -21,13 +21,13 @@ class Counselors_Page extends StatefulWidget {
 }
 
 
-    // creating a list of document IDs
-    List <String> docIDs = [];
+// creating a list of document IDs
+List <String> docIDs = [];
 class _Counselors_PageState extends State<Counselors_Page> {
     // accessing the user details
     final user = FirebaseAuth.instance.currentUser!;
 
-    // Creaing function to retrieve the documents
+    // Creating function to retrieve the documents
     Future getdocIDs() async {
 
       await FirebaseFirestore.instance.collection('users').where('role', isEqualTo: "counselee").get().then(
@@ -36,14 +36,10 @@ class _Counselors_PageState extends State<Counselors_Page> {
           docIDs.add(document.reference.id);
         }));
     }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   title: const Text('counselor\'s Dashboard'),
-      //   centerTitle: true,
-      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -220,23 +216,22 @@ class _Counselors_PageState extends State<Counselors_Page> {
                             future: counselee.doc(docIDs[index]).get(),
                             builder: (context, snapshot){
                               if(snapshot.hasData){
-                              if(snapshot.connectionState == ConnectionState.done){
-                                Map <String, dynamic> data = 
-                                snapshot.data!.data() as Map <String, dynamic>;
-                                return CounseleeCard(
-                                  counseleeImage: 'assets/bg.jpg',
-                                  counseleeReg: '${data['regnumber']}',
-                                  counseleeName: '${data['firstname']}',
-                                  counseleeCourse: '${data['Course']}',
-                                  counseleeEmail: '${data['email']}',
-                                  counseleePhone: '${data['pnumber']}',
-                                  counseleeID: docIDs[index], 
+                                if(snapshot.connectionState == ConnectionState.done){
+                                  Map <String, dynamic> data = 
+                                  snapshot.data!.data() as Map <String, dynamic>;
+                                  return CounseleeCard(
+                                    counseleeImage: 'assets/bg.jpg',
+                                    counseleeReg: '${data['regnumber']}',
+                                    counseleeName: '${data['firstname']}',
+                                    counseleeCourse: '${data['Course']}',
+                                    counseleeEmail: '${data['email']}',
+                                    counseleePhone: '${data['pnumber']}',
+                                    counseleeID: docIDs[index], 
 
-                                );
-                              }
-                              }
-                              else if(!snapshot.hasData){
-return ErrorPage("No Data");
+                                  );
+                                }
+                              }else if(!snapshot.hasData){
+                                return ErrorPage("No Counselee Record exists");
                               }
                               return Center(child: CircularProgressIndicator());
                             },

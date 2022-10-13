@@ -50,6 +50,8 @@ dependencies:
   pdf: ^3.8.3
   printing: ^5.9.3
   syncfusion_flutter_calendar: ^20.2.49
+  firebase_storage: ^10.3.11
+  path_provider: ^2.0.11
 
 dev_dependencies:
   flutter_test:

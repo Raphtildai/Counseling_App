@@ -39,7 +39,7 @@ class Logout extends StatelessWidget {
                           showDialog(
                             context: context, 
                             builder: (context){
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(child: CircularProgressIndicator());
                             }
                             );
                             // Pop out the loading widget
@@ -58,7 +58,7 @@ class Logout extends StatelessWidget {
                           showDialog(
                             context: context, 
                             builder: (context){
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(child: CircularProgressIndicator());
                             }
                           );
                           // Pop out the loading widget
