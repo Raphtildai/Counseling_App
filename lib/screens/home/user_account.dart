@@ -197,7 +197,9 @@ class _UserAccountState extends State<UserAccount> {
                               height: 10,
                             ),
                             GestureDetector(
-                              onTap: () => pickUploadImage(ImageSource.gallery),
+                              onTap: () {
+                                onShowMethod(context);
+                              },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 // ignore: prefer_const_literals_to_create_immutables
@@ -636,6 +638,44 @@ class _UserAccountState extends State<UserAccount> {
                 ),
               ],
             ),
+          );
+        });
+  }
+
+  // To ;et user choose or take a photo using camera
+  onShowMethod(context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: const Text('Take or Choose a picture'),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  MaterialButton(
+                    onPressed: () {
+                      pickUploadImage(ImageSource.camera);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Camera'),
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      pickUploadImage(ImageSource.gallery);
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Gallery'),
+                  ),
+                  MaterialButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              ),
+            ],
           );
         });
   }

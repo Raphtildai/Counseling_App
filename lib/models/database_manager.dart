@@ -100,7 +100,7 @@ class DatabaseManager {
   Future getBookingsData() async {
     List bookingList = [];
     try {
-      await bookings.get().then((QuerySnapshot) {
+      await bookings.orderBy('approval').get().then((QuerySnapshot) {
         QuerySnapshot.docs.forEach((element) { 
           // We get the list of items inside our collection
           bookingList.add(element.data());

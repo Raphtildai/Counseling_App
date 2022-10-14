@@ -99,8 +99,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser!;
-    // Url To the profile picture
-    const url = 'https://photos.google.com/photo/AF1QipP-L6Wi5Ud3mPpdnmyy1dZrleOhYaIwyrkae6ju';
     return Drawer(
       child: Material(
         color: Colors.deepPurple,
@@ -112,9 +110,10 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                 // Headers
                 Row(
                   children: [
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(url),
+                    Icon(
+                      Icons.person_pin,
+                      color: Colors.white,
+                      size: 60.0,
                     ),
                     const SizedBox(width: 10,),
                     Expanded(

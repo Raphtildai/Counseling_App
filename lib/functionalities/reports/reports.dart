@@ -36,7 +36,12 @@ Reports({
                 // date_booked: date_booked, 
                 time_booked: time_booked, 
                 doc: doc, 
-                counselorID: '${counseleeID}',
+                counselorID: '${counseleeID}', 
+                time_rescheduled: '', 
+                date_rescheduled: '', 
+                counselee_email: '', 
+                date_booked: '',
+                status: '',
               );
     
             }));

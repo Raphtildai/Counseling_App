@@ -209,46 +209,44 @@ class _CounseleePageState extends State<CounseleePage> {
                   // Counselors
                   return Container(
                     height: 300,
-                    child: Expanded(
-                      child: ListView.builder(
-                        primary: false,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: docIDs.length,
-                        itemBuilder: (context, index) {
-                          // Get collection
-                          CollectionReference bookings = FirebaseFirestore.instance.collection('bookings');
-                          return FutureBuilder<DocumentSnapshot>(
-                            future: bookings.doc(FirebaseAuth.instance.currentUser!.uid).get(),
-                            builder: (context, snapshot){
-                              if(snapshot.hasData == true){
-                                if(snapshot.connectionState == ConnectionState.done){
-                                  Map <String, dynamic> data = 
-                                  snapshot.data!.data() as Map <String, dynamic>;
-                                  DateTime date = data['date_time_booked'].toDate();
-                                  var date_booked = DateFormat('dd/MM/yyyy').format(date);
-                                  var time_booked = DateFormat('HH:mm').format(date);
-                                  DateTime creatation_date = data['created_at'].toDate();
-                                  var created_at = DateFormat('dd/MM/yyyy, HH:mm').format(creatation_date);
+                    child: ListView.builder(
+                      primary: false,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: docIDs.length,
+                      itemBuilder: (context, index) {
+                        // Get collection
+                        CollectionReference bookings = FirebaseFirestore.instance.collection('bookings');
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: bookings.doc(FirebaseAuth.instance.currentUser!.uid).get(),
+                          builder: (context, snapshot){
+                            if(snapshot.hasData == true){
+                              if(snapshot.connectionState == ConnectionState.done){
+                                Map <String, dynamic> data = 
+                                snapshot.data!.data() as Map <String, dynamic>;
+                                DateTime date = data['date_time_booked'].toDate();
+                                var date_booked = DateFormat('dd/MM/yyyy').format(date);
+                                var time_booked = DateFormat('HH:mm').format(date);
+                                DateTime creatation_date = data['created_at'].toDate();
+                                var created_at = DateFormat('dd/MM/yyyy, HH:mm').format(creatation_date);
 
-                                  return SessionCard(
-                                    date_booked: date_booked.toString(), //${data['final']}
-                                    time_booked: time_booked.toString(),
-                                    status: '${data['approval']}',
-                                    // time_booked: data['time_booked'], 
-                                    counselorID: '${data['counselorID']}', 
-                                    counselor_email: '${data['counselor_email']}', 
-                                    date_created: created_at,
-                                  );
-                                }
-                              }else{
-                                return ErrorPage('No Bookings available');
+                                return SessionCard(
+                                  date_booked: date_booked.toString(), //${data['final']}
+                                  time_booked: time_booked.toString(),
+                                  status: '${data['approval']}',
+                                  // time_booked: data['time_booked'], 
+                                  counselorID: '${data['counselorID']}', 
+                                  counselor_email: '${data['counselor_email']}', 
+                                  date_created: created_at,
+                                );
                               }
-                              return Center(child: const AlertDialog(content: Center(child: CircularProgressIndicator())));
-                            },
-                          );
-                          
-                        }),
-                      ),
+                            }else{
+                              return ErrorPage('No Bookings available');
+                            }
+                            return Center(child: const AlertDialog(content: Center(child: CircularProgressIndicator())));
+                          },
+                        );
+                        
+                      }),
                   );
                 }),
               ),

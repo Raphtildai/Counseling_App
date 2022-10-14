@@ -30,7 +30,7 @@ final personal = const TextStyle(
     switch(index){
       //Account
       case 0:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> UserAccount()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> const UserAccount()));
       break;
       //Notifications
       case 1:
@@ -78,8 +78,6 @@ final personal = const TextStyle(
   @override
   Widget build(BuildContext context){
     final user = FirebaseAuth.instance.currentUser!;
-    // Url To the profile picture
-    const url = 'https://photos.google.com/photo/AF1QipP-L6Wi5Ud3mPpdnmyy1dZrleOhYaIwyrkae6ju';
     return Drawer(
       child: Material(
         color: Colors.deepPurple,
@@ -91,9 +89,10 @@ final personal = const TextStyle(
                 // Headers
                 Row(
                   children: [
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(url),
+                    const Icon(
+                      Icons.person_pin,
+                      color: Colors.white,
+                      size: 60.0,
                     ),
                     const SizedBox(width: 20,),
                     Expanded(

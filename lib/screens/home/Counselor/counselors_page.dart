@@ -233,42 +233,40 @@ class _Counselors_PageState extends State<Counselors_Page> {
                 // Counselee
                 return Container(
                   height: 250,
-                  child: Expanded(
-                    child: ListView.builder(
-                      primary: false,
-                      itemCount: 3,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        // Get collection of counselee records
-                        CollectionReference counselee =
-                            FirebaseFirestore.instance.collection('users');
-                        return FutureBuilder<DocumentSnapshot>(
-                          future: counselee.doc(docIDs[index]).get(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                Map<String, dynamic> data = snapshot.data!
-                                    .data() as Map<String, dynamic>;
-                                // getImage(docIDs[index]);
-                                return CounseleeCard(
-                                  counseleeImage: '',
-                                  counseleeReg: '${data['regnumber']}',
-                                  counseleeName: '${data['firstname']}',
-                                  counseleeCourse: '${data['Course']}',
-                                  counseleeEmail: '${data['email']}',
-                                  counseleePhone: '${data['pnumber']}',
-                                  counseleeID: docIDs[index],
-                                );
-                              }
-                            } else if (!snapshot.hasData) {
-                              return ErrorPage("No Counselee Record exists");
+                  child: ListView.builder(
+                    primary: false,
+                    itemCount: 3,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      // Get collection of counselee records
+                      CollectionReference counselee =
+                          FirebaseFirestore.instance.collection('users');
+                      return FutureBuilder<DocumentSnapshot>(
+                        future: counselee.doc(docIDs[index]).get(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              Map<String, dynamic> data =
+                                  snapshot.data!.data() as Map<String, dynamic>;
+                              // getImage(docIDs[index]);
+                              return CounseleeCard(
+                                counseleeImage: '',
+                                counseleeReg: '${data['regnumber']}',
+                                counseleeName: '${data['firstname']}',
+                                counseleeCourse: '${data['Course']}',
+                                counseleeEmail: '${data['email']}',
+                                counseleePhone: '${data['pnumber']}',
+                                counseleeID: docIDs[index],
+                              );
                             }
-                            return Center(child: CircularProgressIndicator());
-                          },
-                        );
-                      },
-                    ),
+                          } else if (!snapshot.hasData) {
+                            return ErrorPage("No Counselee Record exists");
+                          }
+                          return Center(child: CircularProgressIndicator());
+                        },
+                      );
+                    },
                   ),
                 );
               }),

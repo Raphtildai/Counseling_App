@@ -88,7 +88,7 @@ class SessionCard extends StatelessWidget {
             const SizedBox(height: 5,),
       
             //Read more button
-            GestureDetector(
+            status == "Approved" ? GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return CounselorProfile(counselorID: this.counselorID,);
@@ -105,7 +105,8 @@ class SessionCard extends StatelessWidget {
                   child: Text('Check Counselor Profile', style: TextStyle(color: Colors.white),),
                 ),
               ),
-            ),
+            )
+            : Row(children: []),
 
             // Button to reschedule the session
             const Divider(

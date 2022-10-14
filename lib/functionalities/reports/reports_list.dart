@@ -9,13 +9,14 @@ import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/models/database_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 
 class ReportsList extends StatefulWidget {
-ReportsList({ Key? key }) : super(key: key);
+  ReportsList({Key? key}) : super(key: key);
 
   @override
   State<ReportsList> createState() => _ReportsListState();
@@ -33,55 +34,58 @@ class _ReportsListState extends State<ReportsList> {
   );
 
 // creating a table
-Widget PaddedText(
-  final String text, {
+  Widget PaddedText(
+    final String text, {
     final TextAlign align = TextAlign.left,
-  }
-) => Padding(padding: EdgeInsets.all(10),
-child: Text(
-  text,
-  textAlign: align,
-),);
+  }) =>
+      Padding(
+        padding: EdgeInsets.all(10),
+        child: Text(
+          text,
+          textAlign: align,
+        ),
+      );
 
-final List<String> docIDs = [];
-final List userData = [];
+  final List<String> docIDs = [];
+  final List userData = [];
 
-Future getReports() async {
-  var doc =await FirebaseFirestore.instance.collection('bookings')
-  .where('approval', isEqualTo: 'Approved')
-  .get().then((snapshot){
-    snapshot.docs.forEach((doc) {
-      docIDs.add(doc.reference.id);
+  Future getReports() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('bookings')
+        .orderBy('approval')
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) {
+        docIDs.add(doc.reference.id);
+      });
     });
-  });
-}
+  }
 
 // List of bookings in the database
-List booking = [];
-List user = [];  
+  List booking = [];
+  List user = [];
 
-@override
+  @override
   void initState() {
     super.initState();
-    fetchBookingList();
+    List docIDs = [];
   }
 
   // Function to fetch the list of bookings
-  fetchBookingList() async{
+  fetchBookingList() async {
     dynamic resultant = await DatabaseManager().getBookingsData();
 
-    if(resultant == null){
+    if (resultant == null) {
       print('No bookings found');
-    }else{
+    } else {
       setState(() {
         booking = resultant;
       });
     }
   }
 
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Reports'),
@@ -93,141 +97,190 @@ List user = [];
           child: Column(
             children: [
               const Text(
-                'Report on Counselee Session Booking', 
+                'Report on Counselee Session Booking',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Table(
-                border: TableBorder.all(
-                  color: Colors.black),
+                border: TableBorder.all(color: Colors.black),
                 children: [
-                    // The first Row contains the table head
-                  TableRow(
-                    children: [
-                      Padding(
+                  // The first Row contains the table head
+                  TableRow(children: [
+                    Padding(
                         padding: EdgeInsets.all(1),
                         child: Text(
-                          'Name',
+                          'Counselee Email',
                           style: header,
                           textAlign: TextAlign.center,
-                        )
-                      ),
-                      Padding(
+                        )),
+                    Padding(
                         padding: EdgeInsets.all(1),
                         child: Text(
-                          'Registration Number',
+                          'Status',
                           style: header,
                           textAlign: TextAlign.center,
-                        )
-                      ),
-                      Padding(
+                        )),
+                    Padding(
                         padding: EdgeInsets.all(5),
                         child: Text(
                           'Date Booked',
                           style: header,
                           textAlign: TextAlign.center,
-                        )
-                      ),
-                    ]
-                  ),
+                        )),
+                    Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Text(
+                          'Time Booked',
+                          style: header,
+                          textAlign: TextAlign.center,
+                        )),
+                  ]),
                 ],
               ),
               FutureBuilder(
                 future: getReports(),
                 builder: (context, snapshot) {
-                  return Container(
-                    height: 300,
-                    child: Expanded(
+                  return SizedBox(
+                      height: MediaQuery.of(context).size.height,
                       child: ListView.builder(
                         primary: false,
-                        itemCount: booking.length,
+                        itemCount: docIDs.length,
                         scrollDirection: Axis.vertical,
                         itemBuilder: ((context, index) {
-                          return Expanded(
-                            child: GestureDetector(
-                              onTap: (){
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => 
-                                // Testing(docID: docIDs[index],)));
-                                Navigator.push(context, MaterialPageRoute(builder: (context){
-                                  return ReportPdfExport(
-                                    // regnumber: '${data['regnumber']}', 
-                                    // date_booked: data['date_booked'], 
-                                    time_booked: '${booking[index]['time_booked']}', 
-                                    doc: '${booking[index]}', 
-                                    counselorID: '${booking[index]['counselorID']}',
-                                    // approved: data['date_approved'],
-                                  );
-                        
-                                }));
-                              },
-                              child: Column(
-                                children: [
-                                  Table(
-                                    border: TableBorder.all(
-                                      color: Colors.black),
-                                    children: [
-                                      TableRow(
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(5),
-                                            child: Expanded(
-                                              child: Text(
-                                                // userData[index]['firstname'],
-                                                'Raph',
-                                                style: body,
-                                                textAlign: TextAlign.center,
-                                              )
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.all(5),
-                                            child: Expanded(
-                                              child: Text(
-                                                booking[index]['approval'],
-                                                // data['approval'],
-                                                style: body,
-                                                textAlign: TextAlign.center,
-                                              )
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.all(5),
-                                            child: Expanded(
-                                              child: Text(
-                                                booking[index]['time_booked'], //data['date_booked']
-                                                style: body,
-                                                textAlign: TextAlign.center,
-                                              )
-                                            ),
-                                          ),
-                                        ]
+                          CollectionReference counselee =
+                              FirebaseFirestore.instance.collection('bookings');
+                          return FutureBuilder<DocumentSnapshot>(
+                            future: counselee.doc(docIDs[index]).get(),
+                            builder: ((context, snapshot) {
+                              Map<String, dynamic> data =
+                                  snapshot.data!.data() as Map<String, dynamic>;
+                              DateTime date_booked = data
+                                              ['approval'] ==
+                                          'Approved' ||
+                                      data['approval'] == 'Pending'
+                                  ? data['date_time_booked'].toDate()
+                                  : data['date_time_rescheduled']
+                                      .toDate();
+                              var date_time_booked =
+                                  DateFormat('dd/MM/yyyy').format(date_booked);
+                              var time_booked =
+                                  DateFormat('HH:mm').format(date_booked);
+                              DateTime date_rescheduled = data
+                                              ['approval'] ==
+                                          'Approved' ||
+                                      data['approval'] == 'Pending'
+                                  ? data['date_time_booked'].toDate()
+                                  : data['date_time_rescheduled']
+                                      .toDate();
+                              var date_rescheduled_to = DateFormat('dd/MM/yyyy')
+                                  .format(date_rescheduled);
+                              var time_rescheduled_to =
+                                  DateFormat('HH:mm').format(date_rescheduled);
+                              return GestureDetector(
+                                onTap: () {
+                                  // Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                  // Testing(docID: docIDs[index],)));
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return ReportPdfExport(
+                                      // regnumber: '${data['regnumber']}',
+                                      // date_booked: data['date_booked'],
+                                      time_booked: '$time_booked',
+                                      doc: '${docIDs[index]}',
+                                      counselorID:
+                                          '${data['counselorID']}',
+                                      date_rescheduled: '$date_rescheduled_to',
+                                      time_rescheduled: '$time_rescheduled_to',
+                                      counselee_email:
+                                          '${data['counselee_email']}',
+                                      date_booked: '${date_time_booked}',
+                                      status: '${data['approval']}',
+
+                                      // approved: data['date_approved'],
+                                    );
+                                  }));
+                                },
+                                child: Table(
+                                  border: TableBorder.all(color: Colors.black),
+                                  children: [
+                                    TableRow(children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          // userData[index]['firstname'],
+                                          data['counselee_email'],
+                                          style: body,
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                                      Padding(
+                                        padding: EdgeInsets.all(5),
+                                        child: Text(
+                                          data['approval'],
+                                          // data['approval'],
+                                          style: body,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      data['approval'] == 'Approved'
+                                          ? Padding(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                date_time_booked, //data['date_booked']
+                                                style: body,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                date_rescheduled_to, //data['date_booked']
+                                                style: body,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                      data['status'] == 'Approved'
+                                          ? Padding(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                time_booked, //data['date_booked']
+                                                style: body,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding: EdgeInsets.all(5),
+                                              child: Text(
+                                                time_rescheduled_to, //data['date_booked']
+                                                style: body,
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                    ]),
+                                  ],
+                                ),
+                              );
+                              // // We get the collection of the appointments
+                              // CollectionReference sessions = FirebaseFirestore.instance.collection('bookings');
+                              // return FutureBuilder <DocumentSnapshot>(
+                              //   future: sessions.doc(data).get(),
+                              //   builder: (context, snapshot) {
+                              //     if(snapshot.connectionState == ConnectionState.done){
+                              //       Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
+
+                              //     }
+                              //     return Center(child: CircularProgressIndicator(),);
+                              //   },
+                              // );
+                            }),
                           );
-                          // // We get the collection of the appointments
-                          // CollectionReference sessions = FirebaseFirestore.instance.collection('bookings');
-                          // return FutureBuilder <DocumentSnapshot>(
-                          //   future: sessions.doc(booking[index]).get(),
-                          //   builder: (context, snapshot) {
-                          //     if(snapshot.connectionState == ConnectionState.done){
-                          //       Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
-                                
-                          //     }
-                          //     return Center(child: CircularProgressIndicator(),);
-                          //   },
-                          // );
-                          
                         }),
-                      ),
-                    ),
-                  );
+                      ));
                 },
               ),
             ],
