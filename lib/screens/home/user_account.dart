@@ -1,16 +1,20 @@
 // ignore_for_file: camel_case_types, prefer_final_fields, annotate_overrides, unused_local_variable
 
 import 'package:careapp/models/database_manager.dart';
+import 'package:careapp/utilities/error_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class UserAccount extends StatefulWidget {
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
-const UserAccount({ Key? key }) : super(key: key);
+class UserAccount extends StatefulWidget {
+  const UserAccount({Key? key}) : super(key: key);
 
   @override
   State<UserAccount> createState() => _UserAccountState();
@@ -24,65 +28,95 @@ class _UserAccountState extends State<UserAccount> {
   final _lnamecontroller = TextEditingController();
   final _pnumbercontroller = TextEditingController();
   final _aboutcontroller = TextEditingController();
-  
+
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
   // This function updates the user data once we update it
-  updateUserData(String fname, String lname, int pnumber, String about, userId) async {
-    await DatabaseManager().updateUserData(fname, lname, pnumber, about, userId);
+  updateUserData(
+      String fname, String lname, int pnumber, String about, userId) async {
+    await DatabaseManager()
+        .updateUserData(fname, lname, pnumber, about, userId);
   }
 
-    // Function to upload the image to firebase
-    void pickUploadImage(ImageSource source)async {
-      try {
-        final image = await ImagePicker().pickImage(
-          source: source,
-          maxHeight: 512,
-          maxWidth: 512,
-          imageQuality: 75,
-        );
+  // Function to get the user image
+  Future getImage(String userId) async {
+    try {
+      Reference ref = await FirebaseStorage.instance.ref().child("$userId.jpg");
+      if (ref != true) {
+        // Getting the image url
+        ref.getDownloadURL().then((value) {
+          print(value);
+          setState(() {
+            imageUrl = value;
+          });
+        });
+      } else {
+        setState(() {
+          image == null;
+        });
+        return null;
+      }
+    } catch (e) {
+      ErrorPage('Failed to pick image: $e');
+    }
+  }
 
-        if(image == null) return;
-        final imageTemporary = File(image.path);//temporarily stores our image in local cache
-        // final imagePermanent = await saveImagePermanently(image.path);//saves the image permanently
-        // this.image = imageTemporary;
+  // Function to upload the image to firebase
+  void pickUploadImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(
+        source: source,
+        maxHeight: 512,
+        maxWidth: 512,
+        imageQuality: 75,
+      );
+
+      if (image == null) return;
+      final imageTemporary =
+          File(image.path); //temporarily stores our image in local cache
+      // final imagePermanent = await saveImagePermanently(image.path);//saves the image permanently
+      setState(() {
+        this.image = imageTemporary;
+        // this.image = imagePermanent;
+      });
+
+      // Initializing the reference
+      Reference ref = FirebaseStorage.instance.ref().child("$userId.jpg");
+
+      // Uploading the image
+      await ref.putFile(File(image.path));
+
+      // Getting the image url
+      ref.getDownloadURL().then((value) {
         setState(() {
           this.image = imageTemporary;
-          // this.image = imagePermanent;
+          imageUrl = value;
         });
-
-        // Initializing the reference
-        // Reference ref = FirebaseFirestore.instance.ref().child("profilepic.jpg");
-
-        // Uploading the image
-        // await ref.putFile(File(image!.path));
-
-        // Getting the image url
-        // ref.getDownloadURL().then((value){
-        //   print(value);
-        //   setState(() {
-        //     imageUrl = value;
-        //   });
-        // });
-        
-      } on PlatformException catch (e) {
-        print('Failed to pick image: $e');                
-      }
+      });
+    } on PlatformException catch (e) {
+      ErrorPage('Failed to pick image: $e');
     }
+  }
 
-    // Method to save the image permanently
-    // Future<File> saveImagePermanently(String imagePath) async {
-    //   final directory = await getApplicationDocumentsDirectory();
-    //   final name = basename(imagePath);
-    //   final Image = File('${directory.path}/$name');
+  // Method to save the image permanently
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final Image = File('${directory.path}/$name');
+    return File(imagePath).copy(imagePath);
+  }
 
-    //   return File(imagePath).copy(imagePath);
-    // }
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  @override
+  void initState() {
+    super.initState();
+    getImage(userId);
+  }
 
-final FirebaseAuth auth = FirebaseAuth.instance;
-@override
-  Widget build(BuildContext context){
-    CollectionReference userData = FirebaseFirestore.instance.collection('users');
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference userData =
+        FirebaseFirestore.instance.collection('users');
     const headingStyle = TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
@@ -90,22 +124,27 @@ final FirebaseAuth auth = FirebaseAuth.instance;
     const textStyle = TextStyle(
       fontSize: 14,
     );
-    return FutureBuilder <DocumentSnapshot>(
+    return FutureBuilder<DocumentSnapshot>(
       future: userData.doc(userId).get(), //userData.doc(userId).get()
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot){
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         // Error handling conditions
-        if(snapshot.hasError){
+        if (snapshot.hasError) {
           return const Center(child: Text('Something went Wrong'));
         }
-        if(snapshot.hasData && !snapshot.data!.exists){
-          return const Center(child: Text('Your Account information could not be found'),);
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return const Center(
+            child: Text('Your Account information could not be found'),
+          );
         }
         //Outputting the data to the user if the connection is done
-        if(snapshot.connectionState == ConnectionState.done){
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
             appBar: AppBar(
-              title: Text('${data['firstname']} ' ' ${data['lastname']}\'s Profile '),
+              title: Text(
+                  '${data['firstname']} ' ' ${data['lastname']}\'s Profile '),
               centerTitle: true,
             ),
             body: SafeArea(
@@ -116,7 +155,8 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                   children: [
                     // Account profile picture
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 25, vertical: 10),
                       child: Container(
                         // height: MediaQuery.of(context).size.height - 200,
                         padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -128,50 +168,58 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                           crossAxisAlignment: CrossAxisAlignment.center,
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            const SizedBox(height: 20,),
-                            ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(50)),
-                              child: imageUrl != " " ? 
-                              // const Icon(Icons.person, size: 80, color: Colors.white,)
-                              Image.asset(
-                                'assets/raph.PNG',
-                                // height: 100,
-                                width: MediaQuery.of(context).size.width,
-                              ) 
-                              : 
-                              const Icon(Icons.person, size: 80, color: Colors.black,)
-                              //ClipOval(child: Image.network(imageUrl)),
-                              // Image.file(
-                              //   image!,
-                              //   width: 160,
-                              //   height: 160,
-                              //   fit: BoxFit.cover,
-                              // )
+                            const SizedBox(
+                              height: 20,
                             ),
-                            const SizedBox(height: 10,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              // ignore: prefer_const_literals_to_create_immutables
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    pickUploadImage(ImageSource.gallery);
-                                  },
-                                  child: const Icon(
+                            ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(50)),
+                                child: imageUrl != ""
+                                    ? Image.network(imageUrl)
+                                    // Image.file(
+                                    //   image!,
+                                    //   width: 160,
+                                    //   height: 160,
+                                    //   fit: BoxFit.cover,
+                                    // )
+                                    // // const Icon(Icons.person, size: 80, color: Colors.white,)
+                                    // Image.asset(
+                                    //   'assets/raph.PNG',
+                                    //   // height: 100,
+                                    //   width: MediaQuery.of(context).size.width,
+                                    // )
+                                    : const Icon(
+                                        Icons.person,
+                                        size: 80,
+                                        color: Colors.black,
+                                      )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () => pickUploadImage(ImageSource.gallery),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                // ignore: prefer_const_literals_to_create_immutables
+                                children: [
+                                  const Icon(
                                     Icons.edit,
                                   ),
-                                ),
-                                // const SizedBox(width: 10,),
-                                const Text('Change Account Picture'),
-                              ],
+                                  // const SizedBox(width: 10,),
+                                  const Text('Change Account Picture'),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                           ],
                         ),
-                        
                       ),
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: Column(
@@ -179,13 +227,21 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                         crossAxisAlignment: CrossAxisAlignment.start,
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                          const Text('Personal Information', style: headingStyle,),
-                          const Text('This is what others will see on your Counseling profile.', style: textStyle,)
+                          const Text(
+                            'Personal Information',
+                            style: headingStyle,
+                          ),
+                          const Text(
+                            'This is what others will see on your Counseling profile.',
+                            style: textStyle,
+                          )
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10,),
-              
+                    const SizedBox(
+                      height: 10,
+                    ),
+
                     // Name and basic details
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -202,7 +258,9 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                           crossAxisAlignment: CrossAxisAlignment.start,
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -213,12 +271,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Name', style: headingStyle,),
+                                const Text(
+                                  'Name',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['firstname'] +' ' + data['lastname']}', style: textStyle,)
+                                Text(
+                                  '${data['firstname'] + ' ' + data['lastname']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -229,12 +295,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Email', style: headingStyle,),
+                                const Text(
+                                  'Email',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['email']}', style: textStyle,)
+                                Text(
+                                  '${data['email']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -245,12 +319,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Phone Number', style: headingStyle,),
+                                const Text(
+                                  'Phone Number',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['pnumber']}', style: textStyle,)
+                                Text(
+                                  '${data['pnumber']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -261,12 +343,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Registration Number', style: headingStyle,),
+                                const Text(
+                                  'Registration Number',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['regnumber']}', style: textStyle,)
+                                Text(
+                                  '${data['regnumber']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -277,12 +367,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('About', style: headingStyle,),
+                                const Text(
+                                  'About',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['about']}', style: textStyle,)
+                                Text(
+                                  '${data['about']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -290,12 +388,13 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                             ),
                           ],
                         ),
-                        
                       ),
                     ),
-                    
+
                     // Education Details
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: Column(
@@ -303,12 +402,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                         crossAxisAlignment: CrossAxisAlignment.start,
                         // ignore: prefer_const_literals_to_create_immutables
                         children: [
-                          const Text('Your Education Details', style: headingStyle,),
-                          const Text('This shows the school and the course you are enrolled at.', style: textStyle,)
+                          const Text(
+                            'Your Education Details',
+                            style: headingStyle,
+                          ),
+                          const Text(
+                            'This shows the school and the course you are enrolled at.',
+                            style: textStyle,
+                          )
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: Container(
@@ -324,7 +431,9 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                           crossAxisAlignment: CrossAxisAlignment.start,
                           // ignore: prefer_const_literals_to_create_immutables
                           children: [
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -335,12 +444,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('School', style: headingStyle,),
+                                const Text(
+                                  'School',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['school']}', style: textStyle,)
+                                Text(
+                                  '${data['school']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -351,12 +468,20 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Course', style: headingStyle,),
+                                const Text(
+                                  'Course',
+                                  style: headingStyle,
+                                ),
                                 // const SizedBox(width: 5,),
-                                Text('${data['Course']}', style: textStyle,)
+                                Text(
+                                  '${data['Course']}',
+                                  style: textStyle,
+                                )
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             const Divider(
                               height: 20,
                               color: Colors.white,
@@ -366,14 +491,16 @@ final FirebaseAuth auth = FirebaseAuth.instance;
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     // Button
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: GestureDetector(    
-                        onTap: (){
+                      child: GestureDetector(
+                        onTap: () {
                           onShowDialog(context);
-                        },             
+                        },
                         child: Container(
                           padding: const EdgeInsets.all(20.0),
                           decoration: BoxDecoration(
@@ -409,105 +536,114 @@ final FirebaseAuth auth = FirebaseAuth.instance;
           ),
         );
       },
-    );     
+    );
   }
-  onShowDialog(context){
+
+  onShowDialog(context) {
     final _formKey = GlobalKey<FormState>();
-    return showDialog(context: context, builder: (context){
-      return Form(
-        key: _formKey,
-        child: AlertDialog(
-          title: const Text('Edit your profile'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _fnamecontroller,
-                  decoration: const InputDecoration(hintText: 'First Name'),
-                  validator: (text){
-                    if(text == null || text.isEmpty){
-                      return 'First Name field is empty';
-                    }else if(text.length < 2 || text.length > 20){
-                      return 'Name is not Valid';
-                    }else if(text.contains(RegExp(r'[0-9]'))){
-                      return 'Name Should not Contain numbers';
-                    }
-                    return null;
-                  },
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Form(
+            key: _formKey,
+            child: AlertDialog(
+              title: const Text('Edit your profile'),
+              content: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _fnamecontroller,
+                      decoration: const InputDecoration(hintText: 'First Name'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'First Name field is empty';
+                        } else if (text.length < 4 || text.length > 20) {
+                          return 'Name is not Valid';
+                        } else if (text.contains(RegExp(r'[0-9]'))) {
+                          return 'Name Should not Contain numbers';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _lnamecontroller,
+                      decoration: const InputDecoration(hintText: 'Last Name'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Last Name field is empty';
+                        } else if (text.length < 4 || text.length > 20) {
+                          return 'Name is not Valid';
+                        } else if (text.contains(RegExp(r'[0-9]'))) {
+                          return 'Name Should not Contain numbers';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _aboutcontroller,
+                      keyboardType: TextInputType.multiline,
+                      minLines: 2,
+                      maxLines: null,
+                      decoration: const InputDecoration(hintText: 'About'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Please Write Something!!';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _pnumbercontroller,
+                      keyboardType: TextInputType.phone,
+                      decoration:
+                          const InputDecoration(hintText: 'Phone Number'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Phone Number field is empty';
+                        } else if (!text.contains(RegExp(r'[0-9]'))) {
+                          return 'Should Contain numbers';
+                        } else if (text.contains(RegExp(r'[A-Z]')) ||
+                            text.contains(RegExp(r'[a-z]'))) {
+                          return 'Phone no. cannot contain characters';
+                        } else if (text
+                            .contains(RegExp(r'[!@#$%^&*()_"|:;,.?=~\`-]'))) {
+                          return 'Invalid characters';
+                        } else if (text.length != 10) {
+                          return 'Phone no. Digits should be 10 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
                 ),
-                TextFormField(
-                  controller: _lnamecontroller,
-                  decoration: const InputDecoration(hintText: 'Last Name'),
-                  validator: (text){
-                    if(text == null || text.isEmpty){
-                      return 'Last Name field is empty';
-                    }else if(text.length < 2 || text.length > 20){
-                      return 'Name is not Valid';
-                    }else if(text.contains(RegExp(r'[0-9]'))){
-                      return 'Name Should not Contain numbers';
+              ),
+              actions: [
+                MaterialButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      submitAction(context);
+                      Navigator.pop(context);
                     }
-                    return null;
                   },
+                  child: const Text('Update'),
                 ),
-                
-                TextFormField(
-                  controller: _aboutcontroller,
-                  keyboardType: TextInputType.multiline,
-                  minLines: 2,
-                  maxLines: null,
-                  decoration: const InputDecoration(hintText: 'About'),
-                  validator: (text){
-                    if(text == null || text.isEmpty){
-                      return 'Please Write Something!!';
-                    }return null;
+                MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
-                ),
-                TextFormField(
-                  controller: _pnumbercontroller,
-                  decoration: const InputDecoration(hintText: 'Phone Number'),
-                  validator: (text){
-                    if(text == null || text.isEmpty){
-                      return 'Phone Number field is empty';
-                    }else if(!text.contains(RegExp(r'[0-9]'))){
-                      return 'Should Contain numbers';
-                    }else if(text.contains(RegExp(r'[A-Z]')) || text.contains(RegExp(r'[a-z]'))){
-                      return 'Phone no. cannot contain characters';
-                    }else if(text.contains(RegExp(r'[!@#$%^&*()_"|:;,.?=~\`-]'))){
-                      return 'Invalid characters';
-                    }else if(text.length != 10){
-                      return 'Phone no. Digits should be 10 characters';
-                    }
-                    return null;
-                  },
+                  child: const Text('Cancel'),
                 ),
               ],
             ),
-          ),
-          actions: [
-            MaterialButton(
-              onPressed: (){
-                if(_formKey.currentState!.validate()){
-                  submitAction(context);
-                  Navigator.pop(context);
-                }
-              },
-              child: const Text('Update'),
-            ),
-            MaterialButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-          ],
-        ),
-      );
-    });
+          );
+        });
   }
 
   // Method to update your profile
-  submitAction(context){
-    updateUserData(_fnamecontroller.text, _lnamecontroller.text, int.parse(_pnumbercontroller.text), _aboutcontroller.text, userId);
+  submitAction(context) {
+    updateUserData(_fnamecontroller.text, _lnamecontroller.text,
+        int.parse(_pnumbercontroller.text), _aboutcontroller.text, userId);
     _fnamecontroller.clear();
     _lnamecontroller.clear();
     _aboutcontroller.clear();

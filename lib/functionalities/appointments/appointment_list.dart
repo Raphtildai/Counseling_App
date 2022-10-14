@@ -113,7 +113,7 @@ class AppointmentList extends StatelessWidget {
                   if(snapshot.hasError){
                     return ErrorPage('${snapshot.error}');
                   }else if(snapshot.hasData){
-                    return Container(
+                    return SizedBox(
                       height: 300,
                       child: Expanded(
                         child: ListView.builder(
@@ -126,8 +126,8 @@ class AppointmentList extends StatelessWidget {
                             return FutureBuilder <DocumentSnapshot>(
                               future: sessions.doc(docIDs[index]).get(),
                               builder: (context, snapshot) {
-                                if(snapshot.hasData){
-                                  if(snapshot.connectionState == ConnectionState.done){
+                                // if(snapshot.hasData){
+                                //   if(snapshot.connectionState == ConnectionState.done){
                                     Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
                                     DateTime date = data['date_time_booked'].toDate();
                                     var date_booked = DateFormat('dd/MM/yyyy').format(date);
@@ -143,8 +143,8 @@ class AppointmentList extends StatelessWidget {
                                       counseleeID: '${data['counseleeID']}',
                                       docID: docIDs[index], 
                                     );
-                                  }
-                                }
+                                //   }
+                                // }
                                 // else if(!snapshot.hasData){
                                 //   return ErrorPage( "No Data found");
                                 // }
@@ -194,7 +194,7 @@ class AppointmentList extends StatelessWidget {
                 //   if(snapshot.hasError){
                 //     return ErrorPage('${snapshot.error}');
                 //   }else if(snapshot.hasData){
-                    return Container(
+                    return SizedBox(
                       height: 350,
                       child: ListView.builder(
                         primary: false,
@@ -206,8 +206,8 @@ class AppointmentList extends StatelessWidget {
                           return FutureBuilder <DocumentSnapshot>(
                             future: rescheduled_sessions.doc(rescheduleddocIDs[index]).get(),
                             builder: (context, snapshot) {
-                              if(snapshot.hasData)  {
-                                if(snapshot.connectionState == ConnectionState.done){
+                              // if(snapshot.hasData)  {
+                              //   if(snapshot.connectionState == ConnectionState.done){
 
                                 Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
                                   DateTime date_rescheduled = data['date_time_rescheduled'].toDate();
@@ -225,10 +225,10 @@ class AppointmentList extends StatelessWidget {
                                     reason: '${data['reason_for_reschedule']}',
                                     docID: rescheduleddocIDs[index], 
                                   );
-                                }
-                              }else{
-                                return ErrorPage("No Data Exists");
-                              }
+                              //   }
+                              // }else{
+                              //   return ErrorPage("No Data Exists");
+                              // }
                               
                               return const Center(child: CircularProgressIndicator(),);
                             },

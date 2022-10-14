@@ -114,7 +114,7 @@ class SessionCard extends StatelessWidget {
               color: Colors.white,
             ),
 
-            Row(
+            status == "Pending" ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(width: 20,),
@@ -135,7 +135,8 @@ class SessionCard extends StatelessWidget {
                   child: const Text('Reschedule'),
                 ),
               ],
-            ),
+            )
+            : Row(children: const [Text('')],),
           ],
         ),
       ),
