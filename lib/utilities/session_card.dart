@@ -1,7 +1,7 @@
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/screens/home/Counselor/counselor_profile.dart';
-import 'package:careapp/screens/home/Counselor/reschedule.dart';
+import 'package:careapp/screens/home/Counselee/reschedule.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,7 @@ class SessionCard extends StatelessWidget {
                 ),
               ),
             )
-            : Row(children: []),
+            : Text(''),
 
             // Button to reschedule the session
             const Divider(

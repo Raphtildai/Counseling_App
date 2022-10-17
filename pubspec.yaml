@@ -52,7 +52,8 @@ dependencies:
   syncfusion_flutter_calendar: ^20.2.49
   firebase_storage: ^10.3.11
   path_provider: ^2.0.11
-  dropdownfield: ^1.0.3
+  dropdown_textfield: ^1.0.5
+  # dropdownfield: ^1.0.3
 
 dev_dependencies:
   flutter_test:

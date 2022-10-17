@@ -5,75 +5,35 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 
-class ReportPdfExport extends StatefulWidget {
-  final String doc;
-  final String time_booked;
-  final String date_booked;
-  final String counselorID;
-  final String counselee_email;
-  final String date_rescheduled;
-  final String time_rescheduled;
-  final String status;
-  var counselee_name;
-  var regNumber;
-  var pnumber;
-  var about_counselee;
-  var school;
-  var course;
-  var counselor_name;
-  ReportPdfExport({
+class PrintMainReport extends StatefulWidget {
+  PrintMainReport({
     Key? key,
-// required this.regnumber,
-    required this.date_booked,
-    required this.date_rescheduled,
-    required this.time_rescheduled,
-    required this.time_booked,
-    required this.counselee_email,
-    required this.status,
-    required this.doc,
-    required this.counselorID,
-// required this.approved,
   }) : super(key: key);
 
   @override
-  State<ReportPdfExport> createState() => _ReportPdfExportState();
+  State<PrintMainReport> createState() => _PrintMainReportState();
 }
 
-class _ReportPdfExportState extends State<ReportPdfExport> {
-  // Retrieving user data from users table
-  getUserData() async {
-    var coll2 = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.doc)
+class _PrintMainReportState extends State<PrintMainReport> {
+
+  final List<String> docIDs = [];
+
+  Future getReports() async {
+    await FirebaseFirestore.instance
+        .collection('bookings')
+        .orderBy('approval')
         .get()
-        .then((value) {
-      setState(() {
-        widget.counselee_name =
-            value.data()!['firstname'] + ' ' + value.data()!['lastname'];
-        widget.regNumber = value.data()!['regnumber'];
-        widget.about_counselee = value.data()!['about'];
-        widget.school = value.data()!['school'];
-        widget.course = value.data()!['Course'];
-        widget.pnumber = value.data()!['pnumber'];
-      });
-    });
-    var counselor = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(widget.counselorID)
-        .get()
-        .then((value) {
-      setState(() {
-        widget.counselor_name =
-            value.data()!['firstname'] + ' ' + value.data()!['lastname'];
-      });
+        .then((snapshot) {
+      for (var doc in snapshot.docs) {
+        docIDs.add(doc.reference.id);
+      }
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // print(widget.doc);
-    getUserData();
+    getReports();
   }
 
   final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
@@ -126,7 +86,7 @@ class _ReportPdfExportState extends State<ReportPdfExport> {
                     pw.Padding(
                         padding: pw.EdgeInsets.all(1),
                         child: pw.Text(
-                          '${widget.counselee_name}\'s Detailed Report',
+                          'General Counseling Report',
                           style: pw.Theme.of(context).header3,
                           textAlign: pw.TextAlign.center,
                         )),
@@ -233,21 +193,21 @@ class _ReportPdfExportState extends State<ReportPdfExport> {
                                 ? pw.Padding(
                                     padding: pw.EdgeInsets.all(1),
                                     child: pw.Text(
-                                      'Approval Status',
+                                      'Counselee Email',
                                       style: pw.Theme.of(context).header4,
                                       textAlign: pw.TextAlign.center,
                                     ))
                                 : pw.Padding(
                                     padding: pw.EdgeInsets.all(1),
                                     child: pw.Text(
-                                      'Approval Status ${widget.status}',
+                                      'Status',
                                       style: pw.Theme.of(context).header4,
                                       textAlign: pw.TextAlign.center,
                                     )),
                             pw.Padding(
                                 padding: pw.EdgeInsets.all(1),
                                 child: pw.Text(
-                                  'Date booked',
+                                  'Date Booked',
                                   style: pw.Theme.of(context).header4,
                                   textAlign: pw.TextAlign.center,
                                 )),
@@ -268,11 +228,30 @@ class _ReportPdfExportState extends State<ReportPdfExport> {
                           ]),
                           // Below is the list
                           pw.TableRow(children: [
+                            pw.ListView.builder(
+                              primary: false,
+                              itemCount: docIDs.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: ((context, index) {
+                            CollectionReference counselee = FirebaseFirestore
+                                .instance
+                                .collection('bookings');
+                            return FutureBuilder<DocumentSnapshot>(
+                              future: counselee.doc(docIDs[index]).get(),
+                              builder: ((context, snapshot) {
+                                if (snapshot.hasData) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const pw.Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.done) {
                             pw.Padding(
                               padding: pw.EdgeInsets.all(5),
                               child: pw.Expanded(
                                   child: pw.Text(
-                                '${widget.status}',
+                                '${data['counselee_email']}',
                                 style: pw.Theme.of(context).header4,
                                 textAlign: pw.TextAlign.center,
                               )),
@@ -312,6 +291,16 @@ class _ReportPdfExportState extends State<ReportPdfExport> {
                                     )),
                           ]),
                         ]),
+
+                                      }
+                                }else{
+                                  return pw.Text('No data found');
+                                }
+                              }));
+
+                              }
+
+                            );
                     pw.SizedBox(height: 20),
 
                     pw.Divider(
@@ -415,46 +404,3 @@ class _ReportPdfExportState extends State<ReportPdfExport> {
     );
   }
 }
-
-// import 'dart:typed_data';
-
-// import 'package:careapp/functionalities/reports/report.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:pdf/widgets.dart' as pw;
-// import 'package:pdf/pdf.dart';
-// import 'package:printing/printing.dart';
-
-// class Pdfexport {
-//   final report rep;
-
-//   const Pdfexport({required this.rep});
-//   Future<Uint8List?> makePdf(report rep) async{
-//   final imageLogo = pw.MemoryImage((await rootBundle.load('assets/logo1.png')).buffer.asUint8List());
-//     final pdf = pw.Document();
-//     pdf.addPage(
-//       pw.Page(
-//         build: (context){
-//           return pw.Column(
-//             children: [
-//               pw.Row(
-//                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   pw.Text(rep.counselee),
-//                   pw.Text(rep.regnumber),
-//                 ],
-//                 crossAxisAlignment: pw.CrossAxisAlignment.start
-//               ),
-//               pw.SizedBox(
-//                 height: 150,
-//                 width: 150,
-//                 child: pw.Image(imageLogo),
-//               ),
-//             ]
-//           );
-//         }
-//       ),
-//     );
-//     return pdf.save();
-//   }
-// }

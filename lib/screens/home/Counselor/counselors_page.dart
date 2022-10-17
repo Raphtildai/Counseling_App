@@ -1,18 +1,13 @@
 // ignore_for_file: camel_case_types, prefer_const_constructors, sized_box_for_whitespace
 
-import 'package:careapp/functionalities/session_booking.dart';
+import 'package:careapp/functionalities/appointments/appointment_list.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
-import 'package:careapp/screens/home/Counselor/approve_session.dart';
-import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/utilities/category_card.dart';
 import 'package:careapp/utilities/counselee_card.dart';
 import 'package:careapp/utilities/error_page.dart';
-import 'package:careapp/utilities/neumorphicbox.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:careapp/utilities/booking_card.dart';
 import 'package:flutter/services.dart';
 
 class Counselors_Page extends StatefulWidget {
@@ -112,7 +107,7 @@ class _Counselors_PageState extends State<Counselors_Page> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) {
-                                        return ApproveSession();
+                                        return AppointmentList();
                                       },
                                     ),
                                   );
@@ -238,34 +233,50 @@ class _Counselors_PageState extends State<Counselors_Page> {
                     itemCount: 3,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      // Get collection of counselee records
-                      CollectionReference counselee =
-                          FirebaseFirestore.instance.collection('users');
-                      return FutureBuilder<DocumentSnapshot>(
-                        future: counselee.doc(docIDs[index]).get(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              Map<String, dynamic> data =
-                                  snapshot.data!.data() as Map<String, dynamic>;
-                              // getImage(docIDs[index]);
-                              return CounseleeCard(
-                                counseleeImage: '',
-                                counseleeReg: '${data['regnumber']}',
-                                counseleeName: '${data['firstname']}',
-                                counseleeCourse: '${data['Course']}',
-                                counseleeEmail: '${data['email']}',
-                                counseleePhone: '${data['pnumber']}',
-                                counseleeID: docIDs[index],
-                              );
+                      if (docIDs.isEmpty) {
+                        return ErrorPage(
+                            'No Counselee registered at the moment');
+                      } else {
+                        // Get collection of counselee records
+                        CollectionReference counselee =
+                            FirebaseFirestore.instance.collection('users');
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: counselee.doc(docIDs[index]).get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                Map<String, dynamic> data = snapshot.data!
+                                    .data() as Map<String, dynamic>;
+                                // getImage(docIDs[index]);
+                                return CounseleeCard(
+                                  counseleeImage: '',
+                                  counseleeReg: '${data['regnumber']}',
+                                  counseleeName: '${data['firstname']}',
+                                  counseleeCourse: '${data['Course']}',
+                                  counseleeEmail: '${data['email']}',
+                                  counseleePhone: '${data['pnumber']}',
+                                  counseleeID: docIDs[index],
+                                );
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (!snapshot.hasData) {
+                                return ErrorPage(
+                                    "This Counselee Record has no data");
+                              }
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (!snapshot.hasData) {
+                              return ErrorPage(
+                                  "This Counselee Record has no data");
                             }
-                          } else if (!snapshot.hasData) {
-                            return ErrorPage("No Counselee Record exists");
-                          }
-                          return Center(child: CircularProgressIndicator());
-                        },
-                      );
+                            return Center(child: CircularProgressIndicator());
+                          },
+                        );
+                      }
                     },
                   ),
                 );

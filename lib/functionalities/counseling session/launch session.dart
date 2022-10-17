@@ -1,31 +1,46 @@
 import 'package:careapp/functionalities/counseling%20session/counseling%20session%20card.dart';
+import 'package:careapp/utilities/error_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LaunchSession extends StatefulWidget {
-LaunchSession({ Key? key }) : super(key: key);
+  const LaunchSession({Key? key}) : super(key: key);
 
   @override
   State<LaunchSession> createState() => _LaunchSessionState();
 }
-  List <String> approveddocIDs = [];
+
+List<String> approveddocIDs = [];
 
 class _LaunchSessionState extends State<LaunchSession> {
   // Function to retrieve approved sessions
   Future getapproveddocIDs() async {
-    await FirebaseFirestore.instance.collection('bookings').where('approval', isEqualTo: 'Approved').orderBy('date_booked').get().then((snapshot){
-      snapshot.docs.forEach((document) { 
+    await FirebaseFirestore.instance
+        .collection('bookings')
+        .where('approval', isEqualTo: 'Approved')
+        .orderBy('date_booked')
+        .get()
+        .then((snapshot) {
+      for (var document in snapshot.docs) {
         approveddocIDs.add(document.reference.id);
-      });
+      }
     });
   }
-var url = 'https://meet.google.com/?pli=1';
 
   @override
-  Widget build(BuildContext context){
+  void initState() {
+    approveddocIDs = [];
+    super.initState();
+  }
+
+  var url = 'https://meet.google.com/?pli=1';
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Launch Counseling Session'),
+        title: const Text('Launch Counseling Session'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -34,38 +49,50 @@ var url = 'https://meet.google.com/?pli=1';
             FutureBuilder(
               future: getapproveddocIDs(),
               builder: (context, snapshot) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  child: Expanded(
+                if (approveddocIDs.isEmpty) {
+                  return ErrorPage('No Approved Sessions to Launch found');
+                } else {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
                     child: ListView.builder(
                       primary: false,
                       itemCount: approveddocIDs.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: ((context, index) {
                         // We get the collection of the appointments
-                        CollectionReference sessions = FirebaseFirestore.instance.collection('bookings');
-                        return FutureBuilder <DocumentSnapshot>(
+                        CollectionReference sessions =
+                            FirebaseFirestore.instance.collection('bookings');
+                        return FutureBuilder<DocumentSnapshot>(
                           future: sessions.doc(approveddocIDs[index]).get(),
                           builder: (context, snapshot) {
-                            if(snapshot.connectionState == ConnectionState.done){
-                              Map <String, dynamic> data = snapshot.data!.data() as Map <String, dynamic>;
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              Map<String, dynamic> data = snapshot.data!
+                                  .data() as Map<String, dynamic>;
+
+                              DateTime dateBooked =
+                                  data['date_time_booked'].toDate();
+                              var dateTimeBooked =
+                                  DateFormat('dd/MM/yyyy').format(dateBooked);
+                              var timeBooked =
+                                  DateFormat('HH:mm').format(dateBooked);
                               return CounselingSessionCard(
-                                regnumber: '${data['regnumber']}', 
-                                date_booked: '${data['date_booked']}', 
-                                time_booked: '${data['time_booked']}', 
-                                counselee_email: '${data['counselee_email']}',
-                                created_at: '${data['created_at']}',
-                                counseleeID: '${data['counseleeID']}',
-                                docID: approveddocIDs[index], 
+                              date_booked: dateTimeBooked,
+                              time_booked: timeBooked,
+                              counselee_email: '${data['counselee_email']}',
+                              counseleeID: approveddocIDs[index],
+                              docID: approveddocIDs[index],
                               );
                             }
-                            return Center(child: CircularProgressIndicator(),);
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
                           },
                         );
                       }),
                     ),
-                  ),
-                );
+                  );
+                }
               },
             ),
           ],

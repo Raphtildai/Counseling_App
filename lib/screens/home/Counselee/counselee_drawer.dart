@@ -5,7 +5,7 @@ import 'package:careapp/functionalities/settings_page.dart';
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/Counselor/counselors_page.dart';
-import 'package:careapp/screens/home/Counselor/reschedule.dart';
+import 'package:careapp/screens/home/Counselee/reschedule.dart';
 import 'package:careapp/screens/home/logout.dart';
 import 'package:careapp/screens/home/message.dart';
 import 'package:careapp/screens/home/user_account.dart';

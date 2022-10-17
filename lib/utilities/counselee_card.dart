@@ -46,9 +46,12 @@ class _CounseleeCardState extends State<CounseleeCard> {
           });
         });
       } else {
-        return null;
+        return widget.imageUrl;
       }
     } catch (e) {
+      setState(() {
+        widget.imageUrl = "";
+      });
       return ErrorPage('$e');
     }
   }
@@ -114,7 +117,7 @@ class _CounseleeCardState extends State<CounseleeCard> {
 
             SizedBox(
                 width: 150,
-                child: Expanded(child: Text(widget.counseleeCourse))),
+                child: Text(widget.counseleeCourse)),
 
             const SizedBox(
               height: 5,
@@ -126,7 +129,7 @@ class _CounseleeCardState extends State<CounseleeCard> {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     return CounseleeProfile(
-                      counseleeID: this.widget.counseleeID,
+                      counseleeID: widget.counseleeID,
                     );
                   },
                 ));

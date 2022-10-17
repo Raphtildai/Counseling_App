@@ -2,7 +2,7 @@ import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
 import 'package:careapp/screens/home/Counselor/approve_session.dart';
 import 'package:careapp/screens/home/Counselor/counselor_home.dart';
-import 'package:careapp/screens/home/Counselor/reschedule.dart';
+import 'package:careapp/screens/home/Counselee/reschedule.dart';
 import 'package:careapp/screens/home/Counselor/reschedule_session.dart';
 import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

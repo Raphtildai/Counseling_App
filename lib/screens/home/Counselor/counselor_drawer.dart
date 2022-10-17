@@ -1,4 +1,5 @@
 import 'package:careapp/functionalities/appointments/appointment_list.dart';
+import 'package:careapp/functionalities/calendar/calendar_page.dart';
 import 'package:careapp/functionalities/reports/reports_list.dart';
 import 'package:careapp/functionalities/session_booking.dart';
 import 'package:careapp/functionalities/settings_page.dart';
@@ -34,7 +35,7 @@ final personal = const TextStyle(
       break;
       //Notifications
       case 1:
-      Navigator.push(context, MaterialPageRoute(builder: (context)=> AppointmentList()));
+      Navigator.push(context, MaterialPageRoute(builder: (context)=> CalendarPage()));
       break;
 
       case 2:
@@ -133,8 +134,8 @@ final personal = const TextStyle(
                 const SizedBox(height: 20,),
           
                 DrawerItem(
-                  Name: 'Notifications', 
-                  icon: Icons.notifications, 
+                  Name: 'My Calendar', 
+                  icon: Icons.calendar_month, 
                   onPressed: ()=> onItemPressed(context, index: 1),
                 ),
           

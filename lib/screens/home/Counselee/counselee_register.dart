@@ -37,6 +37,7 @@ class _CounseleeRegisterState extends State<CounseleeRegister> {
   final _schoolcontroller = TextEditingController();
   final _coursecontroller = TextEditingController();
   final _year_of_studycontroller = TextEditingController();
+  final _gendercontroller = TextEditingController();
   bool passwordVisible = false;
 
   // Sign up function
@@ -83,6 +84,7 @@ class _CounseleeRegisterState extends State<CounseleeRegister> {
       int.parse(_agecontroller.text.toString()),
       _schoolcontroller.text.trim(),
       _coursecontroller.text.trim(),
+      _gendercontroller.text.trim(),
       int.parse(_year_of_studycontroller.text.toString()),
     );
 
@@ -122,7 +124,7 @@ class _CounseleeRegisterState extends State<CounseleeRegister> {
 
 // function to add user details
 // We will pass the above controllers to the function
-Future addUserDetails(String fname, String lname, String email, int pnumber, String password, String about, String regnumber, int age, String school, String course, int year_of_study) async {
+Future addUserDetails(String fname, String lname, String email, int pnumber, String password, String about, String regnumber, int age, String school, String course, String gender, int year_of_study) async {
   await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).set({
     // We pass the above parameters inform of a map
     'firstname': fname,
@@ -135,6 +137,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
     'age': age,
     'school': school,
     'Course': course,
+    'gender': gender,
     'year_of_study': year_of_study,
     'role': "counselee",
     'date_CounseleeRegistered': DateFormat('E, d MMM yyyy HH:mm:ss').format(DateTime.now()),
@@ -155,6 +158,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
     _agecontroller.dispose();
     _schoolcontroller.dispose();
     _coursecontroller.dispose();
+    _gendercontroller.dispose();
     _year_of_studycontroller.dispose();
     super.dispose();
   }
@@ -594,7 +598,7 @@ Future addUserDetails(String fname, String lname, String email, int pnumber, Str
                   child: GestureDetector(    
                     onTap: (){
                       if(_formKey.currentState!.validate()){
-                        // signingUp();
+                        signingUp();
                       }
                     },             
                     child: Container(

@@ -201,29 +201,29 @@ class _CounselorProfileState extends State<CounselorProfile> {
                                     height: 12.0,
                                   ),
                                   Row(
-                                    // crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Expanded(
-                                          child: Column(
+                                      Column(
                                         children: [
-                                          Text(
-                                            'Specialization:',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            '${data['profession']}',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                            ),
-                                          ),
+                                      Text(
+                                        'Specialization:',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(
+                                        '${data['profession']}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                         ],
-                                      ))
+                                      )
                                     ],
                                   ),
                                   SizedBox(

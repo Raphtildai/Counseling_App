@@ -82,6 +82,8 @@ final _reasoncontroller = TextEditingController();
         date.year,
         date.month,
         date.day,
+        date_time_rescheduled_to.hour,
+        date_time_rescheduled_to.minute
       );
     });
   } 
@@ -104,6 +106,9 @@ final _reasoncontroller = TextEditingController();
       setState(() {
         _timecontroller.text = '${time.hour}:${time.minute}';
         date_time_rescheduled_to = DateTime(
+          date_time_rescheduled_to.year,
+          date_time_rescheduled_to.month,
+          date_time_rescheduled_to.day,
           time.hour,
           time.minute,
         );
@@ -251,7 +256,7 @@ final _reasoncontroller = TextEditingController();
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
-                      'Choose Date & Time to reschedule',
+                      'Check Counselor Schedule then Choose Date & Time to reschedule',
                       style: TextStyle(
                         letterSpacing: 1.0,
                         fontSize: 16,

@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';

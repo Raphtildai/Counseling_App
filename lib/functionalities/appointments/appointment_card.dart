@@ -56,6 +56,7 @@ class AppointmentCard extends StatelessWidget {
         'body': 'Hello,\n Your Counseling Session which you booked on $created_at, for\n\n Date: $date_booked \nTime: $time_booked\n has been approved.\n\n You\'ll be contacted by one of our counselors soon.\n\n Kind regards\nBest Counseling App.',
       }),
     );
+    // ignore: no_leading_underscores_for_local_identifiers
     Future<void>_sendEmail() async{
       try{
         if(await canLaunchUrl(email)){

@@ -1,10 +1,10 @@
+// ignore_for_file: non_constant_identifier_names, no_leading_underscores_for_local_identifiers
+
 import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselee/counselee_profile.dart';
-import 'package:careapp/screens/home/Counselor/reschedule.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RescheduleCard extends StatelessWidget {
@@ -45,7 +45,6 @@ String? encodeQueryParameters(Map<String, String>params){
 
   @override
   Widget build(BuildContext context){
-    final String uid = counseleeID;
     final docid = docID;
     final email = Uri(
       scheme: 'mailto',
@@ -75,8 +74,8 @@ String? encodeQueryParameters(Map<String, String>params){
     // Function to approve session
     Future approveSession(String docID) async {
       try{
-        final approval = await FirebaseFirestore.instance.collection('bookings')
-        .doc('$docID').update({
+        await FirebaseFirestore.instance.collection('bookings')
+        .doc(docID).update({
           'approval': "Approved",
           'counselor_ID' : FirebaseAuth.instance.currentUser!.uid,
           'counselor_email': FirebaseAuth.instance.currentUser!.email,
@@ -89,6 +88,7 @@ String? encodeQueryParameters(Map<String, String>params){
             content: Text('The session has been approved successfully.\n\n Open your email application to send the approval status below!'),
           );
         });
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
           return MainPage();
         },));
@@ -168,7 +168,7 @@ String? encodeQueryParameters(Map<String, String>params){
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return CounseleeProfile(counseleeID: this.docID,);
+                          return CounseleeProfile(counseleeID: docID,);
                           
                         },));
                       },
