@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SessionCard extends StatelessWidget {
 
@@ -29,6 +30,18 @@ class SessionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context){
+    
+  
+  //Function to launch more about counseling
+  final Uri url = Uri.parse('https://www.counseling.org/aca-community/learn-about-counseling/what-is-counseling');
+
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
+  }
+
     final String uid = counselorID;
     final String approval_status = status;
     // DateTime date = time_booked;
@@ -137,7 +150,15 @@ class SessionCard extends StatelessWidget {
                 ),
               ],
             )
-            : Row(children: const [Text('')],),
+            : Row( mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              ElevatedButton(
+                child: const Text('Read more about counseling'),
+                onPressed: () {
+                  _launchUrl();
+                },
+              )
+            ],),
           ],
         ),
       ),

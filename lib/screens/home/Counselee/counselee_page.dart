@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class CounseleePage extends StatefulWidget {
@@ -23,6 +24,16 @@ class _CounseleePageState extends State<CounseleePage> {
 
   // accessing the user details
   final user = FirebaseAuth.instance.currentUser!;
+  
+  //Function to launch more about counseling
+  final Uri url = Uri.parse('https://www.counseling.org/aca-community/learn-about-counseling/what-is-counseling');
+
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $url';
+    }
+  }
 
   // creating a list of document IDs
   List <String> docIDs = [];
@@ -185,18 +196,18 @@ class _CounseleePageState extends State<CounseleePage> {
                         fontSize: 14.0,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
-                      },
-                      child: Text(
-                        'See All',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: (){
+                    //     Navigator.push(context, MaterialPageRoute(builder: (context)=> CounselorList()));
+                    //   },
+                    //   child: Text(
+                    //     'See All',
+                    //     style: TextStyle(
+                    //       color: Colors.blue,
+                    //       fontSize: 16.0,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -206,7 +217,37 @@ class _CounseleePageState extends State<CounseleePage> {
               FutureBuilder(
                 future: getdocIDs(),
                 builder:((context, snapshot){
-                  // Counselors
+                  // List of counseling sessions booked
+                  if(docIDs.isEmpty){
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Container(
+                        height: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple[200],
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text('You haven\'t made any bookings yet'),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                child: const Text('Read about Counseling'),
+                                onPressed: () {
+                                  _launchUrl();
+                                },
+                              )
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }else{
                   return Container(
                     height: 300,
                     child: ListView.builder(
@@ -228,7 +269,7 @@ class _CounseleePageState extends State<CounseleePage> {
                                 var time_booked = DateFormat('HH:mm').format(date);
                                 DateTime creatation_date = data['created_at'].toDate();
                                 var created_at = DateFormat('dd/MM/yyyy, HH:mm').format(creatation_date);
-
+                                
                                 return SessionCard(
                                   date_booked: date_booked.toString(), //${data['final']}
                                   time_booked: time_booked.toString(),
@@ -248,6 +289,8 @@ class _CounseleePageState extends State<CounseleePage> {
                         
                       }),
                   );
+
+                  }
                 }),
               ),
               SizedBox(height: 30,),

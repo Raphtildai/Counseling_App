@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, unnecessary_null_comparison
 
 import 'package:careapp/screens/authenticate/auth.dart';
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselor/counselor_list.dart';
 import 'package:careapp/screens/home/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,7 +41,7 @@ class _CounselorRegisterState extends State<CounselorRegister> {
       showDialog(
         context: context, 
         builder: (context){
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
       );
       // Pop out the loading widget
@@ -71,7 +72,7 @@ class _CounselorRegisterState extends State<CounselorRegister> {
         );
       });
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-          return CounselorList();
+          return MainPage();
       }));
     }on FirebaseAuthException catch(e){
       if (e.code == 'weak-password') {

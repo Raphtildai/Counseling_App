@@ -76,15 +76,16 @@ final _reasoncontroller = TextEditingController();
     lastDate: _lastDate,
   );
   if(date != null){
-    setState(() {
-      _dateController.text = date.toLocal().toString().split(" ")[0];
-      date_time_rescheduled_to = DateTime(
+      final newDate = DateTime(
         date.year,
         date.month,
         date.day,
         date_time_rescheduled_to.hour,
         date_time_rescheduled_to.minute
       );
+    setState(() {
+      _dateController.text = date.toLocal().toString().split(" ")[0];
+      date_time_rescheduled_to = newDate;
     });
   } 
 }
@@ -103,15 +104,16 @@ final _reasoncontroller = TextEditingController();
         content: SnackBar(content: Text('Time cannot be empty')),
       );
     }else{
-      setState(() {
-        _timecontroller.text = '${time.hour}:${time.minute}';
-        date_time_rescheduled_to = DateTime(
+        final newDate = DateTime(
           date_time_rescheduled_to.year,
           date_time_rescheduled_to.month,
           date_time_rescheduled_to.day,
           time.hour,
           time.minute,
         );
+      setState(() {
+        _timecontroller.text = '${time.hour}:${time.minute}';
+        date_time_rescheduled_to = newDate;
       });
     }
   }
@@ -181,6 +183,7 @@ final _reasoncontroller = TextEditingController();
       await FirebaseFirestore.instance.collection('bookings').doc(widget.docID).update({
           // Add the user to the collection
           'date_time_rescheduled': dateRescheduledTo,
+          'date_time_booked': date_time_rescheduled_to,
           'reason_for_reschedule': reason,
           'rescheduled_at': DateTime.now(),
           'approval': 'Rescheduled',
@@ -406,6 +409,9 @@ final _reasoncontroller = TextEditingController();
                     child: GestureDetector(    
                       onTap: (){
                         if(_formKey.currentState!.validate()){
+                          setState(() {
+                            reason = _reasoncontroller.text;
+                          });
                           rescheduleSession();
                         }
                       },             

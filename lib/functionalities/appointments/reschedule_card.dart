@@ -77,10 +77,9 @@ String? encodeQueryParameters(Map<String, String>params){
         await FirebaseFirestore.instance.collection('bookings')
         .doc(docID).update({
           'approval': "Approved",
-          'counselor_ID' : FirebaseAuth.instance.currentUser!.uid,
+          'counselorID' : FirebaseAuth.instance.currentUser!.uid,
           'counselor_email': FirebaseAuth.instance.currentUser!.email,
           'time_approved': DateTime.now(),
-          'date_time_booked': DateTime.now(),
         });
         // const approveSession(docid);
         await showDialog(context: context, builder: (context){

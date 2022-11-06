@@ -43,7 +43,7 @@ class _SessionBookingState extends State<SessionBooking> {
   CollectionReference booking = FirebaseFirestore.instance.collection('bookings');
 
   // Initial date and time Date
-  DateTime day_time = DateTime.now();
+  DateTime day_time = DateTime(2022, 11, 7, 9, 30);
   // Creating date time variable
   final DateTime _selectedDate = DateTime.now();
   final DateTime _initialDate = DateTime.now();
@@ -59,10 +59,7 @@ class _SessionBookingState extends State<SessionBooking> {
     lastDate: _lastDate,
   );
   if(date != null){
-    setState(() {
-      _dateTimecontroller.text = date.toLocal().toString().split(" ")[0];
-      dateHint = date.toLocal().toString().split(" ")[0];
-      day_time = DateTime(
+      final newDate = DateTime(
         date.year,
         date.month,
         date.day,
@@ -70,6 +67,10 @@ class _SessionBookingState extends State<SessionBooking> {
         day_time.minute,
         
       );
+    setState(() {
+      _dateTimecontroller.text = date.toLocal().toString().split(" ")[0];
+      dateHint = date.toLocal().toString().split(" ")[0];
+      day_time = newDate;
     });
   } 
 }
@@ -88,16 +89,17 @@ class _SessionBookingState extends State<SessionBooking> {
         content: SnackBar(content: Text('Time cannot be empty')),
       );
     }else{
-      setState(() {
-        timeHint = '${time.hour}:${time.minute}';
-        _timecontroller.text = '${time.hour}:${time.minute}';
-        day_time = DateTime(
+        final newDate = DateTime(
           day_time.year,
           day_time.month,
-          day_time.minute,
+          day_time.day,
           time.hour,
           time.minute,
         );
+      setState(() {
+        timeHint = '${time.hour}:${time.minute}';
+        _timecontroller.text = '${time.hour}:${time.minute}';
+        day_time = newDate;
       });
     }
   }
@@ -141,7 +143,10 @@ class _SessionBookingState extends State<SessionBooking> {
     Navigator.of(context).pop();
     //Creating user information with email and registration
 
-    var book = await FirebaseFirestore.instance.collection('bookings').doc(FirebaseAuth.instance.currentUser!.uid).set({
+    var book = await FirebaseFirestore.instance
+    .collection('bookings')
+    .doc(FirebaseAuth.instance.currentUser!.uid)
+    .set({
         // Add the user to the collection
         'counselee_email': FirebaseAuth.instance.currentUser?.email,
         'date_booked': date,

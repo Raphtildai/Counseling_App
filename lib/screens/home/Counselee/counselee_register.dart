@@ -1,4 +1,5 @@
 import 'package:careapp/models/auth_service.dart';
+import 'package:careapp/screens/authenticate/authentication.dart';
 import 'package:careapp/screens/home/Counselee/counselee_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -94,7 +95,7 @@ class _CounseleeRegisterState extends State<CounseleeRegister> {
       );
     });
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return CounseleeList();
+        return MainPage();
     }));
   }on FirebaseAuthException catch(e){
     if (e.code == 'weak-password') {
